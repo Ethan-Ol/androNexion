@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+def AAVersion = '3.2'
+def parcelerVersion = '0.2.15'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // replace with the current version of the Android plugin
+        classpath 'com.android.tools.build:gradle:1.0.0'
+        // replace with the current version of the android-apt plugin
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+        resourcePackageName 'com.nexion.tchatroom'
+    }
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
+
+    defaultConfig {
+        applicationId "com.nexion.tchatroom"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.3'
+
+    // Square APIs
+    apt 'com.squareup.dagger:dagger-compiler:1.2.2' // DI
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    compile group:'com.squareup.picasso', name:'picasso', version:'2.4.0' // Picture manager API
+    compile 'com.squareup:otto:1.3.6' // Bus event API
+    compile 'com.jakewharton:butterknife:6.1.0' // View injection library
+}
