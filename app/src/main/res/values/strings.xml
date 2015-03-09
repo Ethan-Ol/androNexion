@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Nexion</string>
-    <string name="title_activity_main">MainActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="username_hint">Nom d\'utilisateur</string>
+    <string name="password_hint">Mot de passe</string>
     <string name="connection_btn">Connexion</string>
     <string name="text_no_username">Aucun nom d\'utilisateur</string>
     <string name="text_no_password">Aucun mot de passe</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
