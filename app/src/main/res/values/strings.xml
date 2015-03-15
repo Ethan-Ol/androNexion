@@ -8,4 +8,9 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_no_chat_room">Vous n\'êtes pas dans une salle</string>
+    <string name="tape_your_message">Tapez votre message !</string>
+    <string name="desc_send_btn">Button to send a message</string>
+    <string name="desc_logo">Application logo</string>
+    <string name="progress_login_msg">Connexion</string>
 </resources>

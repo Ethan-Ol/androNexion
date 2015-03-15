@@ -17,6 +17,7 @@ public class App extends Application {
 
         objectGraph = ObjectGraph.create(new AppModule(this));
         objectGraph.inject(this);
+        objectGraph.injectStatics();
     }
 
     public void inject(Object object) {

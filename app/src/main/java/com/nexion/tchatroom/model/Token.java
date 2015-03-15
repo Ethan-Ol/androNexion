@@ -3,8 +3,6 @@ package com.nexion.tchatroom.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Calendar;
-
 import javax.inject.Inject;
 
 /**
@@ -12,31 +10,25 @@ import javax.inject.Inject;
  */
 public class Token {
     private static final String PREF_FILE_MAIN = "main";
-    private static final String SAVED_TOKEN = "token";
-    private static final String SAVED_TOKEN_VALIDITY = "token_validity";
-    private static final String SAVED_USERNAME = "username";
+    private static final String SAVED_TOKEN = "key";
 
-    String token;
-    long validity;
-    String username;
+    String key;
 
     @Inject
     public Token(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(PREF_FILE_MAIN, Context.MODE_PRIVATE);
-        token = sharedPref.getString(SAVED_TOKEN, "");
-        validity = sharedPref.getLong(SAVED_TOKEN_VALIDITY, 0);
-        username = sharedPref.getString(SAVED_USERNAME, "");
+        key = sharedPref.getString(SAVED_TOKEN, "");
     }
 
     public boolean isEmpty() {
-        return token.isEmpty();
+        return key.isEmpty();
     }
 
-    public boolean isValid() {
-        return validity > Calendar.getInstance().getTimeInMillis();
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getUsername() {
-        return username;
+    public String getKey() {
+        return key;
     }
 }

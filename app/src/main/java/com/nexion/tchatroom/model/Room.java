@@ -1,10 +1,14 @@
 package com.nexion.tchatroom.model;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class Room extends AbstractEntity {
     String name;
     List<Beacon> beacons;
+    List<User> users;
     List<NexionMessage> messages;
 
     public String getName() {
@@ -29,5 +33,21 @@ public class Room extends AbstractEntity {
 
     public void setMessages(List<NexionMessage> messages) {
         this.messages = messages;
+    }
+
+    public void addMessage(NexionMessage message) {
+        messages.add(message);
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public int countMessages() {
+        return messages.size();
     }
 }
