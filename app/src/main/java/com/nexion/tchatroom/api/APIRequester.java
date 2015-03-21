@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.event.RoomJoinedEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
@@ -22,13 +23,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
+import javax.xml.transform.ErrorListener;
 
 /**
  * Created by DarzuL on 14/03/2015.
  */
 public class APIRequester {
 
-    private final String url = "api.com";
+    private final String url = "http://git.ethandev.fr/API";
+    private final Context mContext;
 
     @Inject
     Token token;
@@ -41,16 +44,25 @@ public class APIRequester {
     JSONFactory jsonFactory;
     JSONParser jsonParser;
 
+    Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            bus.post(new RequestFailedEvent(mContext, error.networkResponse.statusCode));
+        }
+    };
+
     @Inject
     public APIRequester(Context context) {
+        mContext = context;
         queue = Volley.newRequestQueue(context);
         jsonFactory = new JSONFactory();
         jsonParser = new JSONParser();
     }
 
     public void requestToken(String login, String password) throws JSONException {
+        String page = "getToken.php";
         JSONObject jsonObject = jsonFactory.createLoginJSON(login, password);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -63,17 +75,13 @@ public class APIRequester {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }));
+                errorListener));
     }
 
     public void requestUserInfo() throws JSONException {
+        String page = "getcurentuser.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -85,22 +93,19 @@ public class APIRequester {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }));
+                errorListener));
     }
 
     public void postMessage(String content) throws JSONException {
+        String page = "postmsg.php";
         JSONObject jsonObject = jsonFactory.createMessageJSON(content);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject, null, null));
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void joinRoom(final Room room, String password) throws JSONException {
+        String page = "jointchat.php";
         JSONObject jsonObject = jsonFactory.createRoomJSON(room, password);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -112,32 +117,31 @@ public class APIRequester {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }));
+                errorListener));
     }
 
     public void leaveRoom() throws JSONException {
+        String page = "leavetchat.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject, null, null));
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void clearRoom() throws JSONException {
+        String page = "cleartchat.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject, null, null));
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
-    public void leaveRoom(User user) throws JSONException {
+    public void kickUser(User user) throws JSONException {
+        String page = "kick.php";
         JSONObject jsonObject = jsonFactory.createUserJSON(user);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject, null, null));
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void requestRoomsInfo() throws JSONException {
+        String page = "getroominfo.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -149,11 +153,6 @@ public class APIRequester {
                         }
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }));
+                errorListener));
     }
 }

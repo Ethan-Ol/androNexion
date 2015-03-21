@@ -1,21 +1,24 @@
 package com.nexion.tchatroom.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.EndLoadingEvent;
 import com.nexion.tchatroom.event.LoadingEvent;
+import com.nexion.tchatroom.event.RequestFailedEvent;
+import com.nexion.tchatroom.model.Token;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -30,8 +33,8 @@ public class LoginFragment extends Fragment {
     public static final String TAG = "LoginFragment";
     private static final String ARG_USERNAME = "username";
 
-    @InjectView(R.id.progressBar)
-    ProgressBar mProgressBar;
+    @InjectView(R.id.loaderLayout)
+    LinearLayout mLoaderLayout;
 
     @InjectView(R.id.usernameEt)
     EditText mUsernameEt;
@@ -77,6 +80,24 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.inject(this, v);
+
+        mPasswordEt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mPasswordEt.getWindowToken(), 0);
+
+                        onLogin();
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
 
         return v;
     }
@@ -134,16 +155,21 @@ public class LoginFragment extends Fragment {
 
     @Subscribe
     public void onLoading(LoadingEvent event) {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoaderLayout.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
     public void onEndLoading(EndLoadingEvent event) {
-        mProgressBar.setVisibility(View.GONE);
+        mLoaderLayout.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onRequestFailedEvent(RequestFailedEvent event) {
+        Toast.makeText(getActivity(), event.toString(), Toast.LENGTH_SHORT).show();
+        mLoaderLayout.setVisibility(View.GONE);
     }
 
     public interface OnFragmentInteractionListener {
         public void onLogin(String username, String password);
     }
-
 }

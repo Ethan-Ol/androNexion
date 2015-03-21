@@ -9,30 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
         android:contentDescription="@string/desc_logo"
         android:src="@mipmap/ic_launcher" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@android:style/Widget.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone" />
-
     <LinearLayout
+        android:id="@+id/connectionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="48dp">
 
         <EditText
             android:id="@+id/usernameEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/username_hint" />
+            android:hint="@string/username_hint"
+            android:inputType="textVisiblePassword|textNoSuggestions" />
 
         <EditText
             android:id="@+id/passwordEt"
@@ -47,4 +40,29 @@
             android:layout_height="wrap_content"
             android:text="@string/connection_btn" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/connectionLayout"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dip"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/connection" />
+    </LinearLayout>
+
 </RelativeLayout>
