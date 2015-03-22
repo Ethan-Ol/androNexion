@@ -13,4 +13,8 @@
     <string name="desc_send_btn">Button to send a message</string>
     <string name="desc_logo">Application logo</string>
     <string name="progress_login_msg">Connexion</string>
+    <string name="title_activity_activity_test_beacon">ActivityTestBeacon</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
