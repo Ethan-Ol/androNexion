@@ -57,9 +57,9 @@ dependencies {
     compile 'com.squareup:otto:1.3.6' // Bus event API
     compile 'com.jakewharton:butterknife:6.1.0' // View injection library
 
-<<<<<<< HEAD
+
     compile 'org.altbeacon:android-beacon-library:2.1.4' //beacon library
-=======
+
     compile 'uk.co.chrisjenx:calligraphy:2.0.2' // Font style injection
->>>>>>> c8cd362ececc418e6a99daa554146e0df6da5866
+
 }
