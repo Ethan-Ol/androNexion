@@ -1,6 +1,7 @@
 package com.nexion.tchatroom.activity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +18,7 @@ import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
-import com.nexion.tchatroom.fragment.NoChatRoomFragment;
+import com.nexion.tchatroom.fragment.WelcomeFragment;
 import com.nexion.tchatroom.model.Token;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -25,6 +26,8 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONException;
 
 import javax.inject.Inject;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends FragmentActivity implements
         LoginFragment.OnFragmentInteractionListener,
@@ -59,6 +62,11 @@ public class MainActivity extends FragmentActivity implements
                 bus.post(new LoadingEvent());
             }
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -105,7 +113,7 @@ public class MainActivity extends FragmentActivity implements
     @Subscribe
     public void displayMainFragment(RoomsInfoReceivedEvent event) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new NoChatRoomFragment(), NoChatRoomFragment.TAG)
+                .replace(R.id.container, new WelcomeFragment(), WelcomeFragment.TAG)
                 .commit();
     }
 
@@ -113,6 +121,15 @@ public class MainActivity extends FragmentActivity implements
     public void sendMessage(String content) {
         try {
             apiRequester.postMessage(content);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void leaveRoom() {
+        try {
+            apiRequester.leaveRoom();
         } catch (JSONException e) {
             e.printStackTrace();
         }

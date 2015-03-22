@@ -18,7 +18,6 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.EndLoadingEvent;
 import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.event.RequestFailedEvent;
-import com.nexion.tchatroom.model.Token;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -120,7 +119,7 @@ public class LoginFragment extends Fragment {
         bus.unregister(this);
     }
 
-    @OnClick(R.id.connexionBtn)
+    @OnClick(R.id.connectionBtn)
     public void onLogin() {
         if (mListener != null) {
             String username = mUsernameEt.getText().toString();

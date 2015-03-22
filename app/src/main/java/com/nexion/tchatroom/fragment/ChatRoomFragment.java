@@ -110,6 +110,7 @@ public class ChatRoomFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         public void sendMessage(String content);
+        public void leaveRoom();
     }
 
 }

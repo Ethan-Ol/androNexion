@@ -29,7 +29,9 @@ public class BluetoothManager {
     }
 
     public void startDiscovering() {
-        mBluetoothAdapter.startDiscovery();
+        if(mBluetoothAdapter != null) {
+            mBluetoothAdapter.startDiscovery();
+        }
     }
 
     public BluetoothReceiver getBluetoothReceiver() {

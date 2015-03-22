@@ -28,6 +28,7 @@
             android:inputType="textVisiblePassword|textNoSuggestions" />
 
         <EditText
+            android:layout_marginTop="12dip"
             android:id="@+id/passwordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,10 +36,11 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/connexionBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/connection_btn" />
+            android:layout_marginTop="12dip"
+            style="@style/ActionBtn"
+            android:id="@+id/connectionBtn"
+            android:text="@string/connection_btn"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <LinearLayout

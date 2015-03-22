@@ -12,6 +12,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import dagger.ObjectGraph;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by DarzuL on 08/03/2015.
@@ -26,6 +27,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
 
         objectGraph = ObjectGraph.create(new AppModule(this));
         objectGraph.inject(this);
