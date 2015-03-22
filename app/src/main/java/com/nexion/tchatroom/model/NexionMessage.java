@@ -1,5 +1,6 @@
 package com.nexion.tchatroom.model;
 
+
 import java.util.Calendar;
 
 import javax.inject.Inject;

@@ -1,5 +1,6 @@
 package com.nexion.tchatroom.model;
 
+
 public class Beacon extends AbstractEntity {
     String UUID;
     Room room;
