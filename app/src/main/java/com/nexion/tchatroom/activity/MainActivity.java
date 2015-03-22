@@ -58,6 +58,9 @@ public class MainActivity extends FragmentActivity implements
                         .add(R.id.container, LoginFragment.newInstance(null), LoginFragment.TAG)
                         .commit();
             } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, WelcomeFragment.newInstance(), WelcomeFragment.TAG)
+                        .commit();
                 onTokenReceived(null);
                 bus.post(new LoadingEvent());
             }

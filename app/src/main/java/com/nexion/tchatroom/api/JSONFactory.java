@@ -15,8 +15,12 @@ import javax.inject.Inject;
  */
 public class JSONFactory extends JSONFields {
 
-    @Inject
     Token token;
+
+    @Inject
+    public JSONFactory(Token token) {
+        this.token = token;
+    }
 
     JSONObject createLoginJSON(String login, String password) throws JSONException {
         String str = "{"

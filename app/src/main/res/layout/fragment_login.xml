@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_margin="24dip"
         android:contentDescription="@string/desc_logo"
         android:src="@mipmap/ic_launcher" />
 
@@ -17,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:layout_marginBottom="48dp">
+        android:layout_marginBottom="48dp"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/usernameEt"
@@ -28,43 +29,25 @@
             android:inputType="textVisiblePassword|textNoSuggestions" />
 
         <EditText
-            android:layout_marginTop="12dip"
             android:id="@+id/passwordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dip"
             android:hint="@string/password_hint"
             android:inputType="textPassword" />
 
         <Button
-            android:layout_marginTop="12dip"
-            style="@style/ActionBtn"
             android:id="@+id/connectionBtn"
-            android:text="@string/connection_btn"
-            android:layout_gravity="center_horizontal"/>
+            style="@style/ActionBtn"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dip"
+            android:text="@string/connection_btn" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/loaderLayout"
+    <include
+        layout="@layout/loader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/connectionLayout"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@android:style/Widget.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dip"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/connection" />
-    </LinearLayout>
+        android:layout_below="@id/connectionLayout" />
 
 </RelativeLayout>

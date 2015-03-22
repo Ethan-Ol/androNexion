@@ -19,12 +19,16 @@ import javax.inject.Inject;
  */
 public class JSONParser extends JSONFields {
 
-    @Inject
     Token token;
-    @Inject
     User user;
-    @Inject
     List<Room> rooms;
+
+    @Inject
+    public JSONParser(Token token, User user, List<Room> rooms) {
+        this.token = token;
+        this.user = user;
+        this.rooms = rooms;
+    }
 
     void parseJSONTokenResponse(JSONObject jsonObject) throws JSONException {
         String key = jsonObject.getString(FIELD_TOKEN);

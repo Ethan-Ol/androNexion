@@ -4,9 +4,11 @@ import android.content.Context;
 
 import com.nexion.tchatroom.activity.MainActivity;
 import com.nexion.tchatroom.api.APIRequester;
+import com.nexion.tchatroom.api.JSONFactory;
 import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
+import com.nexion.tchatroom.fragment.WelcomeFragment;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.Token;
@@ -31,10 +33,12 @@ import dagger.Provides;
                 App.class,
                 MainActivity.class,
                 LoginFragment.class,
+                WelcomeFragment.class,
                 ChatRoomFragment.class,
                 Token.class,
                 APIRequester.class,
-                JSONParser.class
+                JSONParser.class,
+                JSONFactory.class
         }
 )
 public class AppModule {
@@ -62,16 +66,16 @@ public class AppModule {
         return new LinkedList<>();
     }
 
-    /*    @Provides
-        @Singleton
-        public Room provideCurrentRoom() {
-            return null;
-        }
-    */
-
     @Provides
     @Singleton
     public Bus provideBus() {
         return new AndroidBus();
     }
+
+        /*    @Provides
+        @Singleton
+        public Room provideCurrentRoom() {
+            return null;
+        }
+    */
 }
