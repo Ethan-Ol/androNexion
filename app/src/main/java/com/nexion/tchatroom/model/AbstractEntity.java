@@ -1,6 +1,8 @@
 package com.nexion.tchatroom.model;
 
-public abstract class AbstractEntity {
+import java.io.Serializable;
+
+public abstract class AbstractEntity implements Serializable {
     int id;
 
     public int getId() {

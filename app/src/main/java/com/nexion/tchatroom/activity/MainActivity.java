@@ -19,11 +19,19 @@ import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WelcomeFragment;
+import com.nexion.tchatroom.model.NexionMessage;
+import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.Token;
+import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,6 +52,11 @@ public class MainActivity extends FragmentActivity implements
     @Inject
     Bus bus;
 
+    @Inject
+    User user;
+
+    private boolean test = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,16 +66,21 @@ public class MainActivity extends FragmentActivity implements
         checkBluetooth();
 
         if (savedInstanceState == null) {
-            if (token.isEmpty()) {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, LoginFragment.newInstance(null), LoginFragment.TAG)
-                        .commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, WelcomeFragment.newInstance(), WelcomeFragment.TAG)
-                        .commit();
-                onTokenReceived(null);
-                bus.post(new LoadingEvent());
+
+            if(test)
+                test();
+            else {
+                if (token.isEmpty()) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, LoginFragment.newInstance(null), LoginFragment.TAG)
+                            .commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, WelcomeFragment.newInstance(), WelcomeFragment.TAG)
+                            .commit();
+                    onTokenReceived(null);
+                    bus.post(new LoadingEvent());
+                }
             }
         }
     }
@@ -164,5 +182,39 @@ public class MainActivity extends FragmentActivity implements
                 }
                 break;
         }
+    }
+
+    private void test() {
+        user.setPseudo("DarzuL");
+        User teacher = new User("Teacher", true);
+        User student = new User("Student", false);
+
+        List<User> users = new LinkedList<>();
+        users.add(user);
+        users.add(teacher);
+        users.add(student);
+
+        Room room = new Room();
+        room.setName("Room 1");
+        room.setUsers(users);
+        room.setMessages(new LinkedList<NexionMessage>());
+
+        Calendar calendar = Calendar.getInstance();
+
+        NexionMessage msg = new NexionMessage();
+        msg.setAuthor(teacher);
+        msg.setContent("Hey this is the teacher !");
+        msg.setSendAt(calendar);
+        room.addMessage(msg);
+
+        msg = new NexionMessage();
+        msg.setAuthor(student);
+        msg.setContent("I am a student !");
+        msg.setSendAt(calendar);
+        room.addMessage(msg);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, ChatRoomFragment.newInstance(room), ChatRoomFragment.TAG)
+                .commit();
     }
 }

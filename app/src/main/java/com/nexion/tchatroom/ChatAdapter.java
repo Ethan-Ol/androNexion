@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 
+import java.text.DateFormat;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -36,21 +38,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         View v;
         switch (viewType) {
             case NexionMessage.MESSAGE_FROM_USER:
-                v = layoutInflater.inflate(R.layout.message_item_from_user, viewGroup);
+                v = layoutInflater.inflate(R.layout.message_item_from_user, viewGroup, false);
                 return new ViewHolderUser(v);
 
             case NexionMessage.MESSAGE_FROM_TEACHER:
-                v = layoutInflater.inflate(R.layout.message_item_from_teacher, viewGroup);
+                v = layoutInflater.inflate(R.layout.message_item_from_teacher, viewGroup, false);
                 return new ViewHolderTeacher(v);
 
             case NexionMessage.MESSAGE_FROM_STUDENT:
-                v = layoutInflater.inflate(R.layout.message_item_from_student, viewGroup);
+                v = layoutInflater.inflate(R.layout.message_item_from_student, viewGroup, false);
                 return new ViewHolderStudent(v);
 
             default:
                 Log.e(TAG, "Message without type");
         }
-
 
         return null;
     }
@@ -73,8 +74,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @InjectView(R.id.pseudoTv)
+        TextView pseudoTv;
         @InjectView(R.id.messageTv)
         TextView messageTv;
+        @InjectView(R.id.dateTv)
+        TextView dateTv;
 
         public ViewHolder(View v) {
             super(v);
@@ -83,7 +88,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         void refreshView(NexionMessage message) {
+            pseudoTv.setText(message.getAuthor().getPseudo());
             messageTv.setText(message.getContent());
+            String dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
+            dateTv.setText(dateText);
         }
     }
 

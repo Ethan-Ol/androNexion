@@ -3,4 +3,7 @@
     <color name="selected_layer">#4FFF</color>
     <color name="action_btn">#ff068dbb</color>
     <color name="action_btn_selected">#A0068dbb</color>
+    <color name="user_msg">#4073bb86</color>
+    <color name="teacher_msg">#40bb8c4e</color>
+    <color name="student_msg">#406d9bbb</color>
 </resources>

@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-def AAVersion = '3.2'
-def parcelerVersion = '0.2.15'
 
 buildscript {
     repositories {
@@ -9,7 +7,7 @@ buildscript {
     }
     dependencies {
         // replace with the current version of the Android plugin
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.1.0'
         // replace with the current version of the android-apt plugin
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
@@ -24,7 +22,7 @@ apt {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.nexion.tchatroom"
@@ -48,9 +46,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
 
     compile 'com.mcxiaoke.volley:library:1.0.12'
-
-    compile "org.parceler:parceler-api:${parcelerVersion}"
-    provided "org.parceler:parceler:${parcelerVersion}"
 
     // Square APIs
     apt 'com.squareup.dagger:dagger-compiler:1.2.2' // DI
