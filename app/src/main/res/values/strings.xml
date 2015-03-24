@@ -29,5 +29,6 @@
     <string name="error_3xx">Erreur côté client</string>
 
     <string name="device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

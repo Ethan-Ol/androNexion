@@ -23,7 +23,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
             // Get the BluetoothDevice object from the Intent
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             // Add the name and address to an array adapter to show in a ListView
-            Log.d(TAG, device.getName() + "\n" + device.getAddress());
+            Log.d(TAG, device.getName() + "\n" + device.getUuids());
         }
         else {
             Log.d(TAG, "alarm received");
