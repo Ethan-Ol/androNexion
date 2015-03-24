@@ -23,6 +23,9 @@ public class Main2Activity extends Activity {
     @Inject
     List<Room> rooms;
 
+    @Inject
+    BeaconOrganizer manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +44,6 @@ public class Main2Activity extends Activity {
             rooms = new ArrayList<Room>();
         }
         rooms.add(a);
-
-
-        BeaconOrganizer manager = new BeaconOrganizer(getApplicationContext(),rooms);
 
         manager.start();
     }

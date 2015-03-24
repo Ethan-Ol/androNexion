@@ -66,6 +66,12 @@ public class AppModule {
 
     @Provides
     @Singleton
+    public Room provideRoom() {
+        return new Room();
+    }
+
+    @Provides
+    @Singleton
     public List<Room> provideRooms() {
         return new LinkedList<>();
     }
