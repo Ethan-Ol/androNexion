@@ -11,7 +11,7 @@ public class OnRoomAvailableEvent {
         mRoom=r;
     }
 
-    public Room getmRoom() {
+    public Room getRoom() {
         return mRoom;
     }
 }

@@ -47,4 +47,6 @@ public class Room extends AbstractEntity {
     public int countMessages() {
         return messages.size();
     }
+
+    public boolean isExist() {return name != null;}
 }
