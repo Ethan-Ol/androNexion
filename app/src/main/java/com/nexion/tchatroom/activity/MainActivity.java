@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
 
         ((App) getApplication()).inject(this);
-        checkBluetooth();
+        //checkBluetooth();
 
         if (savedInstanceState == null) {
 
@@ -164,7 +164,7 @@ public class MainActivity extends FragmentActivity implements
             }
         }
         else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT);
+            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
         }
     }
 

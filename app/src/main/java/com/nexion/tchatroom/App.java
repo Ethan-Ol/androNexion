@@ -38,7 +38,7 @@ public class App extends Application {
         objectGraph.inject(this);
         objectGraph.injectStatics();
 
-        init();
+        //init();
     }
 
     public void inject(Object object) {
