@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.nexion.beaconManagment.BeaconOrganizer;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
@@ -54,6 +55,9 @@ public class MainActivity extends FragmentActivity implements
 
     @Inject
     User user;
+
+    @Inject
+    BeaconOrganizer beaconOrganizer;
 
     private boolean test = false;
 
@@ -178,7 +182,7 @@ public class MainActivity extends FragmentActivity implements
         switch (requestCode) {
             case REQUEST_ENABLE_BT:
                 if (resultCode == RESULT_OK) {
-                    bus.post(new BluetoothEnabledEvent());
+                    beaconOrganizer.start();
                 }
                 break;
         }
