@@ -108,7 +108,7 @@ public class BeaconOrganizer implements BeaconConsumer{
                 if(currentRoom.isExist()) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         bus.post(new OnRoomUnavailableEvent(currentRoom));
-                        currentRoom.setName(null);
+                        currentRoom = new Room();
                     }
                 }
             }
@@ -120,7 +120,7 @@ public class BeaconOrganizer implements BeaconConsumer{
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         if(state==0){
                             bus.post(new OnRoomUnavailableEvent(currentRoom));
-                            currentRoom.setName(null);
+                            currentRoom = new Room();
                         }
                         return;
                     }

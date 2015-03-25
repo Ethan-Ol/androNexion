@@ -9,7 +9,7 @@ public class OnRoomUnavailableEvent {
     private Room mRoom;
     public OnRoomUnavailableEvent(Room r){mRoom = r;}
 
-    public Room getmRoom() {
+    public Room getRoom() {
         return mRoom;
     }
 }

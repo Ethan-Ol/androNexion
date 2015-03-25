@@ -3,13 +3,18 @@ package com.nexion.beaconManagment;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
+import com.nexion.tchatroom.event.OnRoomAvailableEvent;
+import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.Room;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import org.altbeacon.beacon.BeaconManager;
 
@@ -25,6 +30,9 @@ public class Main2Activity extends Activity {
 
     @Inject
     BeaconOrganizer manager;
+
+    @Inject
+    Bus bus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,5 +54,21 @@ public class Main2Activity extends Activity {
         rooms.add(a);
 
         manager.start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bus.register(this);
+    }
+
+    @Subscribe
+    public void OnRoomEntered(OnRoomAvailableEvent event){
+        Log.i("ROOM","Entered in " + event.getRoom().getName());
+    }
+
+    @Subscribe
+    public void OnRoomExited(OnRoomUnavailableEvent event){
+        Log.i("ROOM", "Exited of " + event.getRoom().getName());
     }
 }
