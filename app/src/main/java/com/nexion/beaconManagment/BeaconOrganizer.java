@@ -50,8 +50,8 @@ public class BeaconOrganizer implements BeaconConsumer{
     private org.altbeacon.beacon.BeaconManager m_manager;
 
     @Inject
-    BeaconOrganizer(Context m_context) {
-        this.m_context = m_context;
+    public BeaconOrganizer(Context context) {
+        this.m_context = context;
         m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(m_context);
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         m_manager.getBeaconParsers().add(new BeaconParser(). setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
