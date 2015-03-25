@@ -38,6 +38,7 @@ public class BeaconOrganizer implements BeaconConsumer{
     List<Room> rooms;
     @Inject
     Room currentRoom;
+
     Context m_context;
 
     private org.altbeacon.beacon.BeaconManager m_manager;

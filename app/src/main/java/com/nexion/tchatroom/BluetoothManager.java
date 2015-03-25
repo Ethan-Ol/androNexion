@@ -17,7 +17,6 @@ public class BluetoothManager {
 
     private BluetoothManager() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothReceiver = new BluetoothReceiver();
     }
 
     public boolean isBluetoothAvailable() {

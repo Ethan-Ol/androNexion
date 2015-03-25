@@ -41,8 +41,10 @@ import dagger.Provides;
                 APIRequester.class,
                 JSONParser.class,
                 JSONFactory.class,
+                Main2Activity.class,
+                BluetoothReceiver.class,
                 BeaconOrganizer.class,
-                Main2Activity.class
+                ScanService.class
         }
 )
 public class AppModule {

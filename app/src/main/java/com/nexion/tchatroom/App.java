@@ -37,25 +37,9 @@ public class App extends Application {
         objectGraph = ObjectGraph.create(new AppModule(this));
         objectGraph.inject(this);
         objectGraph.injectStatics();
-
-        //init();
     }
 
     public void inject(Object object) {
         objectGraph.inject(object);
-    }
-
-    private void init() {
-        initBluetoothAlarm();
-    }
-
-    private void initBluetoothAlarm() {
-        alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), BluetoothReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0, 1000 * 30, alarmIntent);
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(BluetoothManager.getInstance().getBluetoothReceiver(), filter);
     }
 }
