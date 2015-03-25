@@ -12,7 +12,7 @@
     <string name="tape_your_message">Tapez votre message !</string>
     <string name="desc_send_btn">Button to send a message</string>
 
-    <string name="desc_logo">Application logo</string>
+    <string name="desc_logo">Logo de l\'application</string>
     <string name="progress_login_msg">Connexion</string>
 
     <string name="title_activity_activity_test_beacon">ActivityTestBeacon</string>
@@ -30,5 +30,9 @@
 
     <string name="device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
     <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="exit_desc">Quitter le tchat</string>
+    <string name="kick_user">Expulser un utilisateur</string>
+    <string name="kick">Expulser</string>
 
 </resources>

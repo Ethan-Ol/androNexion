@@ -6,10 +6,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/messageBar"/>
+        android:layout_above="@+id/messageBar"
+        android:layout_below="@+id/toolBar"
+        android:scrollbars="vertical" />
 
     <LinearLayout
         android:id="@+id/messageBar"
@@ -22,19 +23,45 @@
             android:id="@+id/messageEt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:hint="@string/tape_your_message"
-            android:inputType="text"
-            android:layout_weight="1"/>
+            android:inputType="text" />
 
         <ImageButton
             android:id="@+id/sendBtn"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_menu_send"
-            android:contentDescription="@string/desc_send_btn"
             android:layout_weight="0"
-            android:background="@drawable/image_button"/>
+            android:background="@drawable/image_button"
+            android:contentDescription="@string/desc_send_btn"
+            android:src="@drawable/ic_menu_send" />
 
-        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/leaveBtn"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/image_button"
+        android:contentDescription="@string/kick_user"
+        android:src="@android:drawable/ic_menu_directions"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <ImageButton
+        android:id="@+id/kickBtn"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/image_button"
+        android:contentDescription="@string/exit_desc"
+        android:src="@drawable/ic_menu_blocked_user"
+        android:layout_toLeftOf="@id/leaveBtn"
+        android:layout_toStartOf="@id/leaveBtn"/>
 
 </RelativeLayout>

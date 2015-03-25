@@ -4,7 +4,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.nexion.beaconManagment.BeaconOrganizer;
@@ -18,6 +21,7 @@ import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
+import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WelcomeFragment;
 import com.nexion.tchatroom.model.NexionMessage;
@@ -40,7 +44,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends FragmentActivity implements
         LoginFragment.OnFragmentInteractionListener,
-        ChatRoomFragment.OnFragmentInteractionListener {
+        ChatRoomFragment.OnFragmentInteractionListener,
+        KickFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_ENABLE_BT = 150;
 
@@ -59,7 +64,9 @@ public class MainActivity extends FragmentActivity implements
     @Inject
     BeaconOrganizer beaconOrganizer;
 
-    private boolean test = false;
+    int currentRoomId;
+
+    private boolean test = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +165,13 @@ public class MainActivity extends FragmentActivity implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChatRoomFragment.TAG);
+        if(fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
     }
 
     private void checkBluetooth() {
@@ -188,6 +202,29 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
+    @Override
+    public void showKickFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, KickFragment.newInstance(currentRoomId), KickFragment.TAG)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onKick(List<User> userSelected) {
+        for(User user : userSelected) {
+            try {
+                apiRequester.kickUser(user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        onBackPressed();
+    }
+
+    @Inject
+    List<Room> rooms;
+
     private void test() {
         user.setPseudo("DarzuL");
         User teacher = new User("Teacher", true);
@@ -198,10 +235,13 @@ public class MainActivity extends FragmentActivity implements
         users.add(teacher);
         users.add(student);
 
+        currentRoomId = 1;
         Room room = new Room();
+        room.setId(1);
         room.setName("Room 1");
         room.setUsers(users);
         room.setMessages(new LinkedList<NexionMessage>());
+        rooms.add(room);
 
         Calendar calendar = Calendar.getInstance();
 
