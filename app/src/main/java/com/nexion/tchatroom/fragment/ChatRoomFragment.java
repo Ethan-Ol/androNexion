@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.list.ChatAdapter;
@@ -44,6 +46,8 @@ public class ChatRoomFragment extends Fragment {
 
     @InjectView(R.id.toolBar)
     Toolbar mToolbar;
+    @InjectView(R.id.kickBtn)
+    ImageButton mKickBtn;
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
     @InjectView(R.id.messageEt)
@@ -81,6 +85,10 @@ public class ChatRoomFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chat_room, container, false);
         ButterKnife.inject(this, v);
+
+        if(!user.isAdmin()) {
+            mKickBtn.setVisibility(View.GONE);
+        }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

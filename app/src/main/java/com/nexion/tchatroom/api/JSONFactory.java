@@ -67,4 +67,13 @@ public class JSONFactory extends JSONFields {
 
         return new JSONObject(str);
     }
+
+    public JSONObject createGcmJSON(String regid) throws JSONException {
+        String str = "{"
+                + "\"" + FIELD_TOKEN + "\"" + ":" + token.getKey() + ","
+                + "\"" + FIELD_GCM_KEY + "\"" + ":" + regid
+                + "}";
+
+        return new JSONObject(str);
+    }
 }

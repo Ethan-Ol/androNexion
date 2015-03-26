@@ -6,6 +6,8 @@
         android:name="android.hardware.bluetooth"
         android:required="true" />
 
+    <uses-permission android:name="com.nexion.tchatroom.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -43,6 +45,19 @@
             android:name=".ScanService"
             android:exported="false" >
         </service>
+
+        <receiver
+            android:name=".PushReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.nexion.tchatroom"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCS8QHl_gZTtQoFIdJ02RyUjs5_Vx47JV0"/>
     </application>
 
 </manifest>

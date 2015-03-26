@@ -62,6 +62,8 @@ public class WelcomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_welcome, container, false);
         ButterKnife.inject(this, v);
 
+        mInfoTv.setVisibility(View.VISIBLE);
+
         if(user.notExist())
             onLoading(null);
 

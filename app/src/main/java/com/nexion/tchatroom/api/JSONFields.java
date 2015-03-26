@@ -30,4 +30,6 @@ public abstract class JSONFields {
     static final String FIELD_BEACONS = "beacons";
     static final String FIELD_BEACON = "beacon";
     static final String FIELD_UUID = "uuid";
+
+    static final String FIELD_GCM_KEY = "gcm_key";
 }

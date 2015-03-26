@@ -3,13 +3,19 @@ package com.nexion.tchatroom.activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.nexion.beaconManagment.BeaconOrganizer;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BluetoothManager;
@@ -33,10 +39,11 @@ import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -48,6 +55,19 @@ public class MainActivity extends FragmentActivity implements
         KickFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_ENABLE_BT = 150;
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
+
+    String SENDER_ID = "520811926007";
+
+    Context context;
+    GoogleCloudMessaging gcm;
+    AtomicInteger msgId = new AtomicInteger();
+    SharedPreferences prefs;
+
+    String regid;
 
     @Inject
     Token token;
@@ -65,31 +85,44 @@ public class MainActivity extends FragmentActivity implements
     BeaconOrganizer beaconOrganizer;
 
     int currentRoomId;
-    private boolean test = true;
+    private boolean needToSendGcmKey = false;
+
+    private boolean test = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ((App) getApplication()).inject(this);
-        checkBluetooth();
+        context = getApplicationContext();
 
-        if (savedInstanceState == null) {
+        if (checkPlayServices()) {
 
-            if(test)
-                test();
-            else {
-                if (token.isEmpty()) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, LoginFragment.newInstance(null), LoginFragment.TAG)
-                            .commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, WelcomeFragment.newInstance(), WelcomeFragment.TAG)
-                            .commit();
-                    onTokenReceived(null);
-                    bus.post(new LoadingEvent());
+            gcm = GoogleCloudMessaging.getInstance(this);
+            regid = getRegistrationId(context);
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }
+
+            //checkBluetooth();
+
+            if (savedInstanceState == null) {
+
+                if (test)
+                    test();
+                else {
+                    if (token.isEmpty()) {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.container, LoginFragment.newInstance(null), LoginFragment.TAG)
+                                .commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.container, WelcomeFragment.newInstance(), WelcomeFragment.TAG)
+                                .commit();
+                        onTokenReceived(null);
+                        bus.post(new LoadingEvent());
+                    }
                 }
             }
         }
@@ -104,6 +137,12 @@ public class MainActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         bus.register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServices();
     }
 
     @Override
@@ -135,7 +174,14 @@ public class MainActivity extends FragmentActivity implements
     @Subscribe
     public void onUserInfoReceived(UserInfoReceivedEvent event) {
         try {
+            sendRegistrationIdToBackend();
             apiRequester.requestRoomsInfo();
+            if(needToSendGcmKey) {
+                apiRequester.sendGcmKey(regid);
+            }
+            else {
+                needToSendGcmKey = true;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -166,7 +212,7 @@ public class MainActivity extends FragmentActivity implements
         }
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChatRoomFragment.TAG);
-        if(fragment != null) {
+        if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .remove(fragment)
                     .commit();
@@ -176,12 +222,11 @@ public class MainActivity extends FragmentActivity implements
     private void checkBluetooth() {
         BluetoothManager bluetoothManager = BluetoothManager.getInstance();
         if (bluetoothManager.isBluetoothAvailable()) {
-            if(!bluetoothManager.isBluetoothEnabled()) {
+            if (!bluetoothManager.isBluetoothEnabled()) {
                 requestBluetoothActivation();
             }
-        }
-        else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT);
+        } else {
+            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -211,7 +256,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onKick(List<User> userSelected) {
-        for(User user : userSelected) {
+        for (User user : userSelected) {
             try {
                 apiRequester.kickUser(user);
             } catch (JSONException e) {
@@ -219,6 +264,99 @@ public class MainActivity extends FragmentActivity implements
             }
         }
         onBackPressed();
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+
+        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    private SharedPreferences getGCMPreferences(Context context) {
+        return getSharedPreferences(MainActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
+    }
+
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    private void registerInBackground() {
+        new AsyncTask() {
+            @Override
+            protected String doInBackground(Object[] params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+                    sendRegistrationIdToBackend();
+
+                    storeRegistrationId(context, regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+        }.execute(null, null, null);
+    }
+
+    private void sendRegistrationIdToBackend() {
+        try {
+            if(needToSendGcmKey) {
+                apiRequester.sendGcmKey(regid);
+            }
+            else {
+                needToSendGcmKey = true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.apply();
     }
 
     @Inject
