@@ -65,7 +65,6 @@ public class MainActivity extends FragmentActivity implements
     BeaconOrganizer beaconOrganizer;
 
     int currentRoomId;
-
     private boolean test = true;
 
     @Override
@@ -74,7 +73,7 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
 
         ((App) getApplication()).inject(this);
-        //checkBluetooth();
+        checkBluetooth();
 
         if (savedInstanceState == null) {
 
@@ -182,7 +181,7 @@ public class MainActivity extends FragmentActivity implements
             }
         }
         else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT);
         }
     }
 
@@ -196,7 +195,7 @@ public class MainActivity extends FragmentActivity implements
         switch (requestCode) {
             case REQUEST_ENABLE_BT:
                 if (resultCode == RESULT_OK) {
-                    beaconOrganizer.start();
+                    bus.post(new BluetoothEnabledEvent());
                 }
                 break;
         }

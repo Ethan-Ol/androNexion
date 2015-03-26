@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,8 @@ public class ChatRoomFragment extends Fragment {
     @Inject
     User user;
 
+    @InjectView(R.id.toolBar)
+    Toolbar mToolbar;
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
     @InjectView(R.id.messageEt)
@@ -116,8 +119,7 @@ public class ChatRoomFragment extends Fragment {
             messageEt.setText("");
             mListener.sendMessage(content);
             NexionMessage msg = createMessage(content);
-            mRoom.addMessage(msg);
-            mAdapter.notifyItemInserted(mRoom.countMessages());
+            addMessage(msg);
         }
     }
 
@@ -150,8 +152,7 @@ public class ChatRoomFragment extends Fragment {
 
     @Subscribe
     void onMessageReceive(MessageReceivedEvent event) {
-        mRoom.addMessage(event.getMessage());
-        mAdapter.notifyItemInserted(mRoom.countMessages());
+        addMessage(event.getMessage());
     }
 
     private NexionMessage createMessage(String content) {
@@ -161,6 +162,13 @@ public class ChatRoomFragment extends Fragment {
         msg.setSendAt(null);
 
         return msg;
+    }
+
+    private void addMessage(NexionMessage msg) {
+        mRoom.addMessage(msg);
+        int messageCount = mRoom.countMessages();
+        mAdapter.notifyItemInserted(mRoom.countMessages());
+        mRecyclerView.scrollToPosition(messageCount - 1);
     }
 
     public interface OnFragmentInteractionListener {
