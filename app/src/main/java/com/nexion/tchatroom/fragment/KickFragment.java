@@ -46,7 +46,6 @@ public class KickFragment extends Fragment {
     User user;
     Room currentRoom;
 
-
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;

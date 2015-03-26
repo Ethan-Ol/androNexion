@@ -1,5 +1,6 @@
 package com.nexion.tchatroom.list;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,8 +28,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private static final String TAG = "ChatAdapter";
 
     private final Room room;
+    private final Context context;
 
-    public ChatAdapter(Room room) {
+    public ChatAdapter(Context context, Room room) {
+        this.context = context;
+        ViewHolder.context = context;
         this.room = room;
     }
 
@@ -75,6 +79,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        static Context context;
+
         @InjectView(R.id.pseudoTv)
         TextView pseudoTv;
         @InjectView(R.id.messageTv)
@@ -91,7 +97,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         void refreshView(NexionMessage message) {
             pseudoTv.setText(message.getAuthor().getPseudo());
             messageTv.setText(message.getContent());
-            String dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
+
+            String dateText;
+            if(message.getSendAt() == null) {
+                dateText = context.getString(R.string.pending);
+            }
+            else {
+                dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
+            }
             dateTv.setText(dateText);
         }
     }

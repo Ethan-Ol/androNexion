@@ -70,7 +70,7 @@ public class ChatRoomFragment extends Fragment {
             mRoom = (Room) getArguments().getSerializable(ARG_ROOM);
         }
 
-        mAdapter = new ChatAdapter(mRoom);
+        mAdapter = new ChatAdapter(getActivity(), mRoom);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ChatRoomFragment extends Fragment {
         NexionMessage msg = new NexionMessage();
         msg.setAuthor(user);
         msg.setContent(content);
-        msg.setSendAt(Calendar.getInstance());
+        msg.setSendAt(null);
 
         return msg;
     }
