@@ -5,7 +5,12 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+
+import com.nexion.beaconManagment.BeaconOrganizer;
+
+import javax.inject.Inject;
 
 public class BluetoothReceiver extends BroadcastReceiver {
     private static final String TAG = "BluetoothReceiver";
@@ -17,17 +22,18 @@ public class BluetoothReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
+        Log.d("OK", "Received");
         // When discovery finds a device
-        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-            Log.d(TAG, "device found");
-            // Get the BluetoothDevice object from the Intent
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            // Add the name and address to an array adapter to show in a ListView
-            Log.d(TAG, device.getName() + "\n" + device.getAddress());
-        }
-        else {
-            Log.d(TAG, "alarm received");
-            BluetoothManager.getInstance().startDiscovering();
+        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+
+            Bundle extras = intent.getExtras();
+            int currentState = extras.getInt(BluetoothAdapter.EXTRA_STATE);
+            if(currentState == BluetoothAdapter.STATE_ON) {
+                ScanService.startActionScan(context);
+            }
+            else if(currentState == BluetoothAdapter.STATE_OFF) {
+                ScanService.stopActionScan(context);
+            }
         }
     }
 }

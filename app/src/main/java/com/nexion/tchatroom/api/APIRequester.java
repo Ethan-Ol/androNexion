@@ -1,6 +1,7 @@
 package com.nexion.tchatroom.api;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,31 +34,32 @@ public class APIRequester {
     private final String url = "http://git.ethandev.fr/API";
     private final Context mContext;
 
-    @Inject
-    Token token;
-    @Inject
-    User user;
-    @Inject
-    Bus bus;
-
     RequestQueue queue;
-    @Inject
+    Token token;
+    User user;
+    Bus bus;
     JSONFactory jsonFactory;
-    @Inject
     JSONParser jsonParser;
+
+    @Inject
+    public APIRequester(Context context, Token token, User user, Bus bus, JSONParser jsonParser, JSONFactory jsonFactory) {
+        this.mContext = context;
+        this.token = token;
+        this.user = user;
+        this.bus = bus;
+        this.jsonParser = jsonParser;
+        this.jsonFactory = jsonFactory;
+        queue = Volley.newRequestQueue(context);
+    }
 
     Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            bus.post(new RequestFailedEvent(mContext, error.networkResponse.statusCode));
+            Log.e("ERROR", error.toString());
+            if(error.networkResponse != null)
+                bus.post(new RequestFailedEvent(mContext, error.networkResponse.statusCode));
         }
     };
-
-    @Inject
-    public APIRequester(Context context) {
-        mContext = context;
-        queue = Volley.newRequestQueue(context);
-    }
 
     public void requestToken(String login, String password) throws JSONException {
         String page = "/getToken.php";
@@ -79,7 +81,7 @@ public class APIRequester {
     }
 
     public void requestUserInfo() throws JSONException {
-        String page = "/getcurentuser.php";
+        String page = "/getCurrentUser.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
@@ -96,14 +98,32 @@ public class APIRequester {
                 errorListener));
     }
 
+    public void requestRoomsInfo() throws JSONException {
+        String page = "/getInitDatas.php";
+        JSONObject jsonObject = jsonFactory.createTokenJSON();
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            jsonParser.parseJSONRooms(response);
+                            bus.post(new RoomsInfoReceivedEvent());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                errorListener));
+    }
+
     public void postMessage(String content) throws JSONException {
-        String page = "/postmsg.php";
+        String page = "/postMsg.php";
         JSONObject jsonObject = jsonFactory.createMessageJSON(content);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void joinRoom(final Room room, String password) throws JSONException {
-        String page = "jointchat.php";
+        String page = "joinTchat.php";
         JSONObject jsonObject = jsonFactory.createRoomJSON(room, password);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
@@ -121,13 +141,13 @@ public class APIRequester {
     }
 
     public void leaveRoom() throws JSONException {
-        String page = "/leavetchat.php";
+        String page = "/leaveTchat.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void clearRoom() throws JSONException {
-        String page = "/cleartchat.php";
+        String page = "/clearTchat.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
@@ -136,23 +156,5 @@ public class APIRequester {
         String page = "/kick.php";
         JSONObject jsonObject = jsonFactory.createUserJSON(user);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
-    }
-
-    public void requestRoomsInfo() throws JSONException {
-        String page = "/getroominfo.php";
-        JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            jsonParser.parseJSONRooms(response);
-                            bus.post(new RoomsInfoReceivedEvent());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                errorListener));
     }
 }

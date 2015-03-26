@@ -3,13 +3,11 @@ package com.nexion.tchatroom.event;
 import com.nexion.tchatroom.model.Room;
 
 /**
- * Created by DarzuL on 22/03/2015.
+ * Created by ethan on 25/03/15.
  */
-public class OnRoomAvailableEvent {
+public class OnRoomUnavailableEvent {
     private Room mRoom;
-    public OnRoomAvailableEvent(Room r){
-        mRoom=r;
-    }
+    public OnRoomUnavailableEvent(Room r){mRoom = r;}
 
     public Room getRoom() {
         return mRoom;

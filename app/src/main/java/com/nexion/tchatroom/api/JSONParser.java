@@ -37,7 +37,7 @@ public class JSONParser extends JSONFields {
 
     public void parseJSONUserResponse(JSONObject response) throws JSONException {
         String pseudo = response.getString(FIELD_PSEUDO);
-        boolean isAdmin = response.getBoolean(FIELD_ROLE);
+        boolean isAdmin = response.getInt(FIELD_ROLE) >= 1;
         user.setPseudo(pseudo);
         user.isAdmin(isAdmin);
     }

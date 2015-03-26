@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nexion.tchatroom" >
 
-    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,12 +23,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.nexion.beaconManagment.ActivityTestBeacon"
+            android:label="@string/title_activity_activity_test_beacon" >
+        </activity>
+        <activity android:name="com.nexion.beaconManagment.Main2Activity" >
+        </activity>
 
         <receiver
             android:name=".BluetoothReceiver"
             android:enabled="true"
             android:exported="false" >
+            <intent-filter>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
         </receiver>
+
+        <service
+            android:name=".ScanService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

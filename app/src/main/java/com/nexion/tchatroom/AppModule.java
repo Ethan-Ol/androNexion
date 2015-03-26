@@ -2,6 +2,8 @@ package com.nexion.tchatroom;
 
 import android.content.Context;
 
+import com.nexion.beaconManagment.BeaconOrganizer;
+import com.nexion.beaconManagment.Main2Activity;
 import com.nexion.tchatroom.activity.MainActivity;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.JSONFactory;
@@ -38,7 +40,11 @@ import dagger.Provides;
                 Token.class,
                 APIRequester.class,
                 JSONParser.class,
-                JSONFactory.class
+                JSONFactory.class,
+                Main2Activity.class,
+                BluetoothReceiver.class,
+                BeaconOrganizer.class,
+                ScanService.class
         }
 )
 public class AppModule {
@@ -58,6 +64,12 @@ public class AppModule {
     @Singleton
     public User provideCurrentUser() {
         return new User("", false);
+    }
+
+    @Provides
+    @Singleton
+    public Room provideRoom() {
+        return new Room();
     }
 
     @Provides
