@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity implements
     @Inject
     User user;
 
-    private boolean test = false;
+    private boolean test = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
