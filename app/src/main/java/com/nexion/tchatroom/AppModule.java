@@ -11,7 +11,7 @@ import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
-import com.nexion.tchatroom.fragment.WelcomeFragment;
+import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.Token;
@@ -36,7 +36,7 @@ import dagger.Provides;
                 App.class,
                 MainActivity.class,
                 LoginFragment.class,
-                WelcomeFragment.class,
+                WaitingRoomFragment.class,
                 ChatRoomFragment.class,
                 KickFragment.class,
                 Token.class,

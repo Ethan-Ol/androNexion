@@ -35,5 +35,8 @@
     <string name="kick_user">Expulser un utilisateur</string>
     <string name="kick">Expulser</string>
     <string name="pending">Pending</string>
+    <string name="title_activity_chat_room">ChatRoomActivity</string>
+    <string name="title_activity_waiting_room">WaitingRoomActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>

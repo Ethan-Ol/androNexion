@@ -14,52 +14,57 @@ import com.nexion.tchatroom.event.RoomJoinedEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
-import com.nexion.tchatroom.model.NexionMessage;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
+import com.nexion.tchatroom.manager.CurrentUserManager;
+import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
-import com.nexion.tchatroom.model.Token;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.inject.Inject;
-import javax.xml.transform.ErrorListener;
+import java.util.List;
 
 /**
  * Created by DarzuL on 14/03/2015.
+ * <p/>
+ * Methods to call API
  */
 public class APIRequester {
 
-    private final String url = "http://git.ethandev.fr/API";
-    private final Context mContext;
+    private static final String url = "http://git.ethandev.fr/API";
 
-    RequestQueue queue;
-    Token token;
-    User user;
-    Bus bus;
-    JSONFactory jsonFactory;
-    JSONParser jsonParser;
+    private static RequestQueue queue;
+    private JSONFactory jsonFactory;
+    private final Bus bus;
+    private List<Room> rooms;
 
-    @Inject
-    public APIRequester(Context context, Token token, User user, Bus bus, JSONParser jsonParser, JSONFactory jsonFactory) {
-        this.mContext = context;
-        this.token = token;
-        this.user = user;
+    private final CurrentRoomManager currentRoomManager;
+    private final TokenManager tokenManager;
+    private final CurrentUserManager currentUserManager;
+
+    public APIRequester(final Context context, final Bus bus, List<Room> rooms) {
         this.bus = bus;
-        this.jsonParser = jsonParser;
-        this.jsonFactory = jsonFactory;
+        this.jsonFactory = new JSONFactory(context);
         queue = Volley.newRequestQueue(context);
+        this.rooms = rooms;
+
+        currentRoomManager = new CurrentRoomManager(context);
+        tokenManager = new TokenManager(context);
+        currentUserManager = new CurrentUserManager(context);
+
+        errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ERROR", error.toString());
+                if (error.networkResponse != null)
+                    bus.post(new RequestFailedEvent(context, error.networkResponse.statusCode));
+            }
+        };
     }
 
-    Response.ErrorListener errorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e("ERROR", error.toString());
-            if(error.networkResponse != null)
-                bus.post(new RequestFailedEvent(mContext, error.networkResponse.statusCode));
-        }
-    };
+    Response.ErrorListener errorListener;
 
     public void requestToken(String login, String password) throws JSONException {
         String page = "/getToken.php";
@@ -69,7 +74,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            jsonParser.parseJSONTokenResponse(response);
+                            tokenManager.set(JSONParser.parseJSONTokenResponse(response));
                             bus.post(new TokenReceivedEvent());
 
                         } catch (JSONException e) {
@@ -88,7 +93,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            jsonParser.parseJSONUserResponse(response);
+                            currentUserManager.set(JSONParser.parseJSONUserResponse(response));
                             bus.post(new UserInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -106,7 +111,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            jsonParser.parseJSONRooms(response);
+                            rooms = JSONParser.parseJSONRooms(response);
                             bus.post(new RoomsInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -130,7 +135,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            jsonParser.parseJSONRoomResponse(response, room);
+                            currentRoomManager.set(JSONParser.parseJSONRoomResponse(response));
                             bus.post(new RoomJoinedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -163,6 +168,6 @@ public class APIRequester {
         JSONObject jsonObject = jsonFactory.createGcmJSON(regid);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 null,
-                errorListener));
+                null));
     }
 }
