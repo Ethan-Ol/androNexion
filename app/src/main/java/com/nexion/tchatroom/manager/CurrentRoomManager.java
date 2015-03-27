@@ -8,7 +8,7 @@ import com.nexion.tchatroom.model.Room;
 /**
  * Created by DarzuL on 27/03/2015.
  *
- * Current room manager
+ * Manage the current room of the user
  */
 public class CurrentRoomManager implements KeyFields, IManager<Room> {
     private Room room;
@@ -16,6 +16,7 @@ public class CurrentRoomManager implements KeyFields, IManager<Room> {
 
     public CurrentRoomManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        room = get();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class CurrentRoomManager implements KeyFields, IManager<Room> {
     }
 
     public Room get() {
-        if(room == null) {
+        if (room == null) {
             room = new Room();
             room.setId(sharedPreferences.getInt(KEY_ROOM, 0));
         }

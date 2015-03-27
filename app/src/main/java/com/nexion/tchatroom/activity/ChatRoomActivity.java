@@ -10,7 +10,6 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
-import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
 

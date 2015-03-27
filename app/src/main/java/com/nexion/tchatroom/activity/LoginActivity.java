@@ -5,12 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
@@ -21,8 +17,7 @@ import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
-import com.nexion.tchatroom.fragment.WaitingRoomFragment;
-import com.nexion.tchatroom.manager.PlayServicesManager;
+import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
@@ -53,16 +48,18 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         setContentView(R.layout.activity_login);
         ((App) getApplication()).inject(this);
 
+        //TODO delete
+        //new TokenManager(getApplicationContext()).set("");
+
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
-        if(fragment == null) {
+        if (fragment == null) {
             TokenManager tokenManager = new TokenManager(getApplicationContext());
 
-            if(tokenManager.isExist()) {
+            if (tokenManager.isExist()) {
                 startWaitingRoom(null);
-            }
-            else {
+            } else {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.container, LoginFragment.newInstance(), LOGIN_FRAGMENT_TAG)
@@ -76,6 +73,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         super.onStart();
         bus.register(this);
     }
+
     @Override
 
     public void onStop() {

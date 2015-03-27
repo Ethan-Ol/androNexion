@@ -12,7 +12,6 @@ import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.JSONFactory;
 import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
-import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.model.NexionMessage;
@@ -42,6 +41,7 @@ import dagger.Provides;
                 KickActivity.class,
                 LoginFragment.class,
                 WaitingRoomFragment.class,
+                ChatRoomFragment.class,
                 APIRequester.class,
                 JSONParser.class,
                 JSONFactory.class,

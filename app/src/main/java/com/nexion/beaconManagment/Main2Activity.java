@@ -1,11 +1,8 @@
 package com.nexion.beaconManagment;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
@@ -15,8 +12,6 @@ import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import org.altbeacon.beacon.BeaconManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +43,7 @@ public class Main2Activity extends Activity {
         Room a = new Room();
         a.setName("Appartement");
         a.setBeacons(beacons);
-        if(rooms == null){
+        if (rooms == null) {
             rooms = new ArrayList<Room>();
         }
         rooms.add(a);
@@ -63,12 +58,12 @@ public class Main2Activity extends Activity {
     }
 
     @Subscribe
-    public void OnRoomEntered(OnRoomAvailableEvent event){
-        Log.i("ROOM","Entered in " + event.getRoom().getName());
+    public void OnRoomEntered(OnRoomAvailableEvent event) {
+        Log.i("ROOM", "Entered in " + event.getRoom().getName());
     }
 
     @Subscribe
-    public void OnRoomExited(OnRoomUnavailableEvent event){
+    public void OnRoomExited(OnRoomUnavailableEvent event) {
         Log.i("ROOM", "Exited of " + event.getRoom().getName());
     }
 }

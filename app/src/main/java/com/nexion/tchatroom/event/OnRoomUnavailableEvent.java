@@ -7,7 +7,10 @@ import com.nexion.tchatroom.model.Room;
  */
 public class OnRoomUnavailableEvent {
     private Room mRoom;
-    public OnRoomUnavailableEvent(Room r){mRoom = r;}
+
+    public OnRoomUnavailableEvent(Room r) {
+        mRoom = r;
+    }
 
     public Room getRoom() {
         return mRoom;

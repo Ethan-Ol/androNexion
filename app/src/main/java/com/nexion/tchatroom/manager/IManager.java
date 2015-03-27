@@ -5,6 +5,8 @@ package com.nexion.tchatroom.manager;
  */
 interface IManager<T> {
     boolean isExist();
+
     void set(T entity);
+
     T get();
 }

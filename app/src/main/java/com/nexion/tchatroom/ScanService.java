@@ -1,8 +1,8 @@
 package com.nexion.tchatroom;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 
 import com.nexion.beaconManagment.BeaconOrganizer;
 

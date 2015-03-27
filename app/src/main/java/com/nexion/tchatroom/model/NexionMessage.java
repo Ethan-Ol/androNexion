@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 /**
  * Created by DarzuL on 08/03/2015.
- *
+ * <p/>
  * There is 3 item type
  * 0 -> Message from current user
  * 1 -> Message from other student
@@ -53,11 +53,9 @@ public class NexionMessage extends AbstractEntity {
     public int getType() {
         if (author.equals(currentUser)) {
             return MESSAGE_FROM_USER;
-        }
-        else if(author.isAdmin()) {
+        } else if (author.isAdmin()) {
             return MESSAGE_FROM_TEACHER;
-        }
-        else {
+        } else {
             return MESSAGE_FROM_STUDENT;
         }
     }

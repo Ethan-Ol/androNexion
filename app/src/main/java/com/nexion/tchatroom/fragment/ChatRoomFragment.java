@@ -16,14 +16,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.nexion.tchatroom.App;
-import com.nexion.tchatroom.list.ChatAdapter;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
+import com.nexion.tchatroom.list.ChatAdapter;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
+import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,8 +50,12 @@ public class ChatRoomFragment extends Fragment {
     @InjectView(R.id.messageEt)
     EditText messageEt;
 
+    @Inject
+    Bus bus;
+
     private RecyclerView.LayoutManager mLayoutManager;
     private ChatAdapter mAdapter;
+    private CurrentUserManager currentUserManager;
     private CurrentRoomManager currentRoomManager;
 
     public static ChatRoomFragment newInstance() {
@@ -63,6 +71,9 @@ public class ChatRoomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
+        currentUserManager = new CurrentUserManager(getActivity());
+        mUser = currentUserManager.get();
+
         currentRoomManager = new CurrentRoomManager(getActivity());
         mRoom = currentRoomManager.get();
 
@@ -75,7 +86,7 @@ public class ChatRoomFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_chat_room, container, false);
         ButterKnife.inject(this, v);
 
-        if(!mUser.isAdmin()) {
+        if (!mUser.isAdmin()) {
             mKickBtn.setVisibility(View.GONE);
         }
 
@@ -86,7 +97,7 @@ public class ChatRoomFragment extends Fragment {
         messageEt.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_UP) {
+                if (event.getAction() == KeyEvent.ACTION_UP) {
                     if (keyCode == KeyEvent.KEYCODE_ENTER) {
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
                                 Context.INPUT_METHOD_SERVICE);
@@ -104,6 +115,18 @@ public class ChatRoomFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
@@ -112,7 +135,7 @@ public class ChatRoomFragment extends Fragment {
     @OnClick(R.id.sendBtn)
     void sendMessage() {
         String content = messageEt.getText().toString();
-        if(!content.isEmpty()) {
+        if (!content.isEmpty()) {
             messageEt.setText("");
             mListener.sendMessage(content);
             NexionMessage msg = createMessage(content);
@@ -148,7 +171,7 @@ public class ChatRoomFragment extends Fragment {
     }
 
     @Subscribe
-    void onMessageReceive(MessageReceivedEvent event) {
+    public void onMessageReceive(MessageReceivedEvent event) {
         addMessage(event.getMessage());
     }
 
@@ -170,7 +193,9 @@ public class ChatRoomFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         public void sendMessage(String content);
+
         public void leaveRoom();
+
         public void startKickActivity();
     }
 }

@@ -1,9 +1,9 @@
 package com.nexion.tchatroom.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -12,13 +12,18 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
+import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.manager.PlayServicesManager;
+import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
+
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,11 +53,19 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         }
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_TAG);
-        if(fragment == null) {
+        if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, WaitingRoomFragment.newInstance(), WAITING_ROOM_TAG)
                     .commit();
+        }
+
+        if(rooms.isEmpty()) {
+            try {
+                apiRequester.requestRoomsInfo();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

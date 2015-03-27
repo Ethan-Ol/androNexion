@@ -24,10 +24,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by DarzuL on 27/03/2015.
- *
+ * <p/>
  * Kick activity
  */
-public class KickActivity extends FragmentActivity implements KickFragment.OnFragmentInteractionListener{
+public class KickActivity extends FragmentActivity implements KickFragment.OnFragmentInteractionListener {
 
     private final static String KICK_FRAGMENT_TAG = "ChatRoom";
     private APIRequester apiRequester;
@@ -46,7 +46,7 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
-        if(fragment == null) {
+        if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, ChatRoomFragment.newInstance(), KICK_FRAGMENT_TAG)
@@ -59,6 +59,7 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
         super.onStart();
         bus.register(this);
     }
+
     @Override
 
     public void onStop() {

@@ -48,5 +48,7 @@ public class Room extends AbstractEntity {
         return messages.size();
     }
 
-    public boolean isExist() {return name != null;}
+    public boolean isExist() {
+        return name != null;
+    }
 }

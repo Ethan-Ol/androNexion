@@ -20,8 +20,6 @@ import com.nexion.tchatroom.model.User;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;

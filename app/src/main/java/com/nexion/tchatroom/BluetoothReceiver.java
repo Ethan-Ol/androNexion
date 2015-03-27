@@ -1,16 +1,11 @@
 package com.nexion.tchatroom;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.nexion.beaconManagment.BeaconOrganizer;
-
-import javax.inject.Inject;
 
 public class BluetoothReceiver extends BroadcastReceiver {
     private static final String TAG = "BluetoothReceiver";
@@ -28,10 +23,9 @@ public class BluetoothReceiver extends BroadcastReceiver {
 
             Bundle extras = intent.getExtras();
             int currentState = extras.getInt(BluetoothAdapter.EXTRA_STATE);
-            if(currentState == BluetoothAdapter.STATE_ON) {
+            if (currentState == BluetoothAdapter.STATE_ON) {
                 ScanService.startActionScan(context);
-            }
-            else if(currentState == BluetoothAdapter.STATE_OFF) {
+            } else if (currentState == BluetoothAdapter.STATE_OFF) {
                 ScanService.stopActionScan(context);
             }
         }

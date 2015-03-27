@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nexion.tchatroom.R;
-import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 
 import java.util.LinkedList;
@@ -18,7 +17,7 @@ import butterknife.InjectView;
 
 /**
  * Created by DarzuL on 25/03/2015.
- *
+ * <p/>
  * Adapter to manage user to kick them
  */
 public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
@@ -49,11 +48,10 @@ public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
     }
 
     public boolean onUserItemClick(User user) {
-        if(userSelected.contains(user)) {
+        if (userSelected.contains(user)) {
             userSelected.remove(user);
             return false;
-        }
-        else {
+        } else {
             userSelected.add(user);
             return true;
         }
@@ -78,17 +76,16 @@ public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
         public void refresh(User user, boolean selected) {
             mUser = user;
             pseudoTv.setText(user.getPseudo());
-            if(selected) {
+            if (selected) {
                 itemView.setBackgroundResource(R.color.item_selected);
             }
         }
 
         @Override
         public void onClick(View v) {
-            if(listener.onUserItemClick(mUser)) {
+            if (listener.onUserItemClick(mUser)) {
                 v.setBackgroundResource(R.color.item_selected);
-            }
-            else {
+            } else {
                 v.setBackgroundResource(R.color.item_not_selected);
             }
         }

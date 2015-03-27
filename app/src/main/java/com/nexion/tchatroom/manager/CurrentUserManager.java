@@ -8,7 +8,7 @@ import com.nexion.tchatroom.model.User;
 /**
  * Created by DarzuL on 27/03/2015.
  *
- * Current user manager
+ * Manage the current user data
  */
 public class CurrentUserManager implements KeyFields, IManager<User> {
     private User user;
@@ -16,6 +16,7 @@ public class CurrentUserManager implements KeyFields, IManager<User> {
 
     public CurrentUserManager(Context context) {
         sharedPref = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        user = get();
     }
 
     @Override
@@ -33,9 +34,9 @@ public class CurrentUserManager implements KeyFields, IManager<User> {
 
     @Override
     public User get() {
-        if(user == null) {
+        if (user == null) {
             String pseudo = sharedPref.getString(KEY_PSEUDO, "");
-            boolean isAdmin = sharedPref.getBoolean(KEY_PSEUDO, false);
+            boolean isAdmin = sharedPref.getBoolean(KEY_ADMIN, false);
             user = new User(pseudo, isAdmin);
         }
 

@@ -1,7 +1,5 @@
 package com.nexion.tchatroom.api;
 
-import android.os.Message;
-
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
@@ -36,8 +34,8 @@ public final class JSONConverter implements JSONFields {
         message.setSendAt(date);
 
         int userId = jsonObject.getInt(FIELD_USER_ID);
-        for(User user : users) {
-            if(user.getId() == userId) {
+        for (User user : users) {
+            if (user.getId() == userId) {
                 message.setAuthor(user);
                 return message;
             }
@@ -53,7 +51,7 @@ public final class JSONConverter implements JSONFields {
 
         List<Beacon> beacons = new ArrayList<>(4);
         JSONArray jsonArrayBeacons = jsonObject.getJSONArray(FIELD_BEACONS);
-        for(int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             JSONObject jsonObjectBeacon = jsonArrayBeacons.getJSONObject(i);
             Beacon beacon = jsonObjectToBeacon(jsonObjectBeacon, room);
             beacons.add(beacon);

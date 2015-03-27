@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 /**
  * Created by DarzuL on 27/03/2015.
+ *
+ * Manage the token key
  */
 public class TokenManager implements KeyFields, IManager<String> {
 
@@ -13,14 +15,11 @@ public class TokenManager implements KeyFields, IManager<String> {
 
     public TokenManager(Context context) {
         sharedPref = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        token = get();
     }
 
     @Override
     public boolean isExist() {
-        if(token.isEmpty()) {
-            token = sharedPref.getString(KEY_TOKEN, "");
-        }
-
         return !token.isEmpty();
     }
 
@@ -35,7 +34,7 @@ public class TokenManager implements KeyFields, IManager<String> {
 
     @Override
     public String get() {
-        if(token.isEmpty()) {
+        if (token.isEmpty()) {
             token = sharedPref.getString(KEY_TOKEN, "");
         }
 

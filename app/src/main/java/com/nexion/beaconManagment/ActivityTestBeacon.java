@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.nexion.tchatroom.R;
@@ -32,14 +30,16 @@ public class ActivityTestBeacon extends Activity implements BeaconConsumer {
         setContentView(R.layout.activity_activity_test_beacon);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        beaconManager.getBeaconParsers().add(new BeaconParser(). setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         beaconManager.bind(this);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         beaconManager.unbind(this);
     }
+
     @Override
     public void onBeaconServiceConnect() {
 
@@ -67,7 +67,7 @@ public class ActivityTestBeacon extends Activity implements BeaconConsumer {
             public void didDetermineStateForRegion(int state, Region region) {
                 TextView tv = (TextView) findViewById(R.id.dbg_txt_info);
                 //tv.setText("New state of region : " + region.getUniqueId() + " state = " + state);
-                Log.i(TAG, "I have just switched from seeing/not seeing beacons : " +state + " id = " + region.getUniqueId());
+                Log.i(TAG, "I have just switched from seeing/not seeing beacons : " + state + " id = " + region.getUniqueId());
             }
         });
 

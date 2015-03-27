@@ -27,10 +27,10 @@ public class RequestFailedEvent {
                 return mContext.getString(R.string.error_403);
         }
 
-        if(mStatusCode >= 500 && mStatusCode < 600)
+        if (mStatusCode >= 500 && mStatusCode < 600)
             return mContext.getString(R.string.error_5xx);
 
-        if(mStatusCode >= 300 && mStatusCode < 400)
+        if (mStatusCode >= 300 && mStatusCode < 400)
             return mContext.getString(R.string.error_3xx);
 
         return mContext.getString(R.string.error_unknown);

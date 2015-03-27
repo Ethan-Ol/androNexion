@@ -19,7 +19,7 @@ import butterknife.InjectView;
 
 /**
  * Created by DarzuL on 09/03/2015.
- *
+ * <p/>
  * A list with 3 different item which correspond
  * to the message from student, teacher and the user
  */
@@ -99,10 +99,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             messageTv.setText(message.getContent());
 
             String dateText;
-            if(message.getSendAt() == null) {
+            if (message.getSendAt() == null) {
                 dateText = context.getString(R.string.pending);
-            }
-            else {
+            } else {
                 dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
             }
             dateTv.setText(dateText);
