@@ -17,6 +17,10 @@ public class TokenManager implements KeyFields, IManager<String> {
 
     @Override
     public boolean isExist() {
+        if(token.isEmpty()) {
+            token = sharedPref.getString(KEY_TOKEN, "");
+        }
+
         return !token.isEmpty();
     }
 

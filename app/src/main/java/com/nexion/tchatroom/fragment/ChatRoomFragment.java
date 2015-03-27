@@ -3,7 +3,6 @@ package com.nexion.tchatroom.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -21,14 +19,11 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.list.ChatAdapter;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Subscribe;
-
-import java.util.Calendar;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -38,11 +33,9 @@ public class ChatRoomFragment extends Fragment {
     private static final String ARG_ROOM = "room";
     public static final String TAG = "ChatRoomFragment";
 
+    private User mUser;
     private Room mRoom;
     private OnFragmentInteractionListener mListener;
-
-    @Inject
-    User user;
 
     @InjectView(R.id.toolBar)
     Toolbar mToolbar;
@@ -55,13 +48,10 @@ public class ChatRoomFragment extends Fragment {
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ChatAdapter mAdapter;
+    private CurrentRoomManager currentRoomManager;
 
-    public static ChatRoomFragment newInstance(Room room) {
-        ChatRoomFragment fragment = new ChatRoomFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_ROOM, room);
-        fragment.setArguments(args);
-        return fragment;
+    public static ChatRoomFragment newInstance() {
+        return new ChatRoomFragment();
     }
 
     public ChatRoomFragment() {
@@ -73,9 +63,8 @@ public class ChatRoomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        if (getArguments() != null) {
-            mRoom = (Room) getArguments().getSerializable(ARG_ROOM);
-        }
+        currentRoomManager = new CurrentRoomManager(getActivity());
+        mRoom = currentRoomManager.get();
 
         mAdapter = new ChatAdapter(getActivity(), mRoom);
     }
@@ -86,7 +75,7 @@ public class ChatRoomFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_chat_room, container, false);
         ButterKnife.inject(this, v);
 
-        if(!user.isAdmin()) {
+        if(!mUser.isAdmin()) {
             mKickBtn.setVisibility(View.GONE);
         }
 
@@ -133,7 +122,7 @@ public class ChatRoomFragment extends Fragment {
 
     @OnClick(R.id.kickBtn)
     void openKickDialog() {
-        mListener.showKickFragment();
+        mListener.startKickActivity();
     }
 
     @OnClick(R.id.leaveBtn)
@@ -165,7 +154,7 @@ public class ChatRoomFragment extends Fragment {
 
     private NexionMessage createMessage(String content) {
         NexionMessage msg = new NexionMessage();
-        msg.setAuthor(user);
+        msg.setAuthor(mUser);
         msg.setContent(content);
         msg.setSendAt(null);
 
@@ -182,6 +171,6 @@ public class ChatRoomFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         public void sendMessage(String content);
         public void leaveRoom();
-        public void showKickFragment();
+        public void startKickActivity();
     }
 }

@@ -63,13 +63,10 @@ public class WaitingRoomFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_welcome, container, false);
+        View v = inflater.inflate(R.layout.fragment_waiting_room, container, false);
         ButterKnife.inject(this, v);
 
         mInfoTv.setVisibility(View.VISIBLE);
-
-        if(user.notExist())
-            onLoading(null);
 
         return v;
     }
@@ -135,7 +132,7 @@ public class WaitingRoomFragment extends Fragment {
     }
 
     @OnClick(R.id.connectBtn)
-    private void onJoinRoom() {
+    void onJoinRoom() {
         mListener.onJoinRoom();
     }
 

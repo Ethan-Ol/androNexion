@@ -4,7 +4,10 @@ import android.content.Context;
 
 import com.nexion.beaconManagment.BeaconOrganizer;
 import com.nexion.beaconManagment.Main2Activity;
-import com.nexion.tchatroom.activity.MainActivity;
+import com.nexion.tchatroom.activity.ChatRoomActivity;
+import com.nexion.tchatroom.activity.KickActivity;
+import com.nexion.tchatroom.activity.LoginActivity;
+import com.nexion.tchatroom.activity.WaitingRoomActivity;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.JSONFactory;
 import com.nexion.tchatroom.api.JSONParser;
@@ -14,7 +17,6 @@ import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
-import com.nexion.tchatroom.model.Token;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
@@ -34,12 +36,12 @@ import dagger.Provides;
 
         injects = {
                 App.class,
-                MainActivity.class,
+                LoginActivity.class,
+                WaitingRoomActivity.class,
+                ChatRoomActivity.class,
+                KickActivity.class,
                 LoginFragment.class,
                 WaitingRoomFragment.class,
-                ChatRoomFragment.class,
-                KickFragment.class,
-                Token.class,
                 APIRequester.class,
                 JSONParser.class,
                 JSONFactory.class,

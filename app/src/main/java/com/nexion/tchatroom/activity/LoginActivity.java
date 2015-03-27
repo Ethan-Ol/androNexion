@@ -23,6 +23,7 @@ import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.PlayServicesManager;
+import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -37,7 +38,6 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int REQUEST_ENABLE_BT = 150;
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final static String LOGIN_FRAGMENT_TAG = "LoginFragment";
 
     @Inject
@@ -55,16 +55,19 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
 
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
 
-        if (checkPlayServices()) {
-            new PlayServicesManager(getApplicationContext(), apiRequester);
-        }
-
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
         if(fragment == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, WaitingRoomFragment.newInstance(), LOGIN_FRAGMENT_TAG)
-                    .commit();
+            TokenManager tokenManager = new TokenManager(getApplicationContext());
+
+            if(tokenManager.isExist()) {
+                startWaitingRoom(null);
+            }
+            else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.container, LoginFragment.newInstance(), LOGIN_FRAGMENT_TAG)
+                        .commit();
+            }
         }
     }
 
@@ -78,13 +81,6 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     public void onStop() {
         super.onStop();
         bus.unregister(this);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkPlayServices();
     }
 
     @Override
@@ -117,23 +113,8 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
 
     @Subscribe
     public void startWaitingRoom(RoomsInfoReceivedEvent event) {
-        new Intent(getApplicationContext(), WaitingRoomActivity.class);
+        startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
-    }
-
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
     private void checkBluetooth() {

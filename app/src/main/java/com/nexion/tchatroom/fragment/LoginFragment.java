@@ -48,16 +48,8 @@ public class LoginFragment extends Fragment {
     @Inject
     Bus bus;
 
-    public static LoginFragment newInstance(String username) {
-        LoginFragment fragment = new LoginFragment();
-
-        if (username != null) {
-            Bundle args = new Bundle();
-            args.putString(ARG_USERNAME, username);
-            fragment.setArguments(args);
-        }
-
-        return fragment;
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     public LoginFragment() {

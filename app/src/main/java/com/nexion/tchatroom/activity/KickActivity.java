@@ -1,10 +1,9 @@
 package com.nexion.tchatroom.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
@@ -12,6 +11,7 @@ import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import org.json.JSONException;
@@ -22,9 +22,14 @@ import javax.inject.Inject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ChatRoomActivity extends ActionBarActivity implements ChatRoomFragment.OnFragmentInteractionListener {
+/**
+ * Created by DarzuL on 27/03/2015.
+ *
+ * Kick activity
+ */
+public class KickActivity extends FragmentActivity implements KickFragment.OnFragmentInteractionListener{
 
-    private final static String CHAT_ROOM_TAG = "ChatRoom";
+    private final static String KICK_FRAGMENT_TAG = "ChatRoom";
     private APIRequester apiRequester;
 
     @Inject
@@ -40,44 +45,36 @@ public class ChatRoomActivity extends ActionBarActivity implements ChatRoomFragm
 
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(CHAT_ROOM_TAG);
-        if (fragment == null) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
+        if(fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, ChatRoomFragment.newInstance(), CHAT_ROOM_TAG)
-                    .commit();
-        }
-    }
-
-
-    @Override
-    public void sendMessage(String content) {
-        try {
-            apiRequester.postMessage(content);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void leaveRoom() {
-        try {
-            apiRequester.leaveRoom();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChatRoomFragment.TAG);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
+                    .add(R.id.container, ChatRoomFragment.newInstance(), KICK_FRAGMENT_TAG)
                     .commit();
         }
     }
 
     @Override
-    public void startKickActivity() {
-        startActivity(new Intent(getApplicationContext(), KickActivity.class));
+    protected void onStart() {
+        super.onStart();
+        bus.register(this);
+    }
+    @Override
+
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
+    @Override
+    public void onKick(List<User> userSelected) {
+        for (User user : userSelected) {
+            try {
+                apiRequester.kickUser(user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         finish();
     }
 

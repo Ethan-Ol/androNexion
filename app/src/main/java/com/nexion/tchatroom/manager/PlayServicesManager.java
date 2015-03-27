@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nexion.tchatroom.activity.MainActivity;
+import com.nexion.tchatroom.activity.LoginActivity;
 import com.nexion.tchatroom.api.APIRequester;
 
 import org.json.JSONException;
@@ -62,7 +62,7 @@ public class PlayServicesManager {
     }
 
     private SharedPreferences getGCMPreferences(Context context) {
-        return context.getSharedPreferences(MainActivity.class.getSimpleName(),
+        return context.getSharedPreferences(LoginActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 

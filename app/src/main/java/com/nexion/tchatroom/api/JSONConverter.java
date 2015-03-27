@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by DarzuL on 14/03/2015.
  */
-public final class JSONConverter extends JSONFields {
+public final class JSONConverter implements JSONFields {
 
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
         User user = new User();

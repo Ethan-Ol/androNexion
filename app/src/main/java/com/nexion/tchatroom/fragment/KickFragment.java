@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.list.KickAdapter;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
+import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 
@@ -32,19 +34,11 @@ public class KickFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public static KickFragment newInstance(int currentRoomId) {
-        KickFragment fragment = new KickFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_CURRENT_ROOM_ID, currentRoomId);
-        fragment.setArguments(args);
-        return fragment;
+        return new KickFragment();
     }
 
-    @Inject
-    List<Room> rooms;
-
-    @Inject
     User user;
-    Room currentRoom;
+    Room room;
 
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
@@ -60,18 +54,11 @@ public class KickFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        if(getArguments() != null) {
-            int currentRoomId = getArguments().getInt(ARG_CURRENT_ROOM_ID);
-            for(Room room : rooms) {
-                if(room.getId() == currentRoomId) {
-                    currentRoom = room;
-                    break;
-                }
-            }
-        }
+        user = new CurrentUserManager(getActivity()).get();
+        room = new CurrentRoomManager(getActivity()).get();
 
         List<User> kickableUsers = new LinkedList<>();
-        kickableUsers.addAll(currentRoom.getUsers());
+        kickableUsers.addAll(room.getUsers());
         kickableUsers.remove(user);
         mAdapter = new KickAdapter(kickableUsers);
     }
