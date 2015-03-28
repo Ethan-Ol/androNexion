@@ -69,8 +69,8 @@ public class WaitingRoomFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         //TODO Test
-        //mInfoTv.setVisibility(View.VISIBLE);
-        mConnectBtn.setVisibility(View.VISIBLE);
+        mInfoTv.setVisibility(View.VISIBLE);
+        //mConnectBtn.setVisibility(View.VISIBLE);
 
         return v;
     }
