@@ -59,6 +59,8 @@ public class JSONParser implements JSONFields {
             room.getMessages().add(message);
         }
 
+        room.setName(response.getString(FIELD_ROOM_NAME));
+
         return room;
     }
 }

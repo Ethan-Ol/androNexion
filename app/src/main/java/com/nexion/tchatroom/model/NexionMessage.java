@@ -1,6 +1,8 @@
 package com.nexion.tchatroom.model;
 
 
+import com.nexion.tchatroom.manager.CurrentUserManager;
+
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -12,19 +14,22 @@ import javax.inject.Inject;
  * 0 -> Message from current user
  * 1 -> Message from other student
  * 2 -> Message from teacher
+ * 3 -> Message from bot
  */
 public class NexionMessage extends AbstractEntity {
 
     public static final int MESSAGE_FROM_USER = 0;
     public static final int MESSAGE_FROM_TEACHER = 1;
     public static final int MESSAGE_FROM_STUDENT = 2;
+    public static final int MESSAGE_FROM_BOT = 3;
 
-    @Inject
-    static User currentUser;
-
+    int type;
     String content;
     Calendar sendAt;
     User author;
+
+    public NexionMessage() {
+    }
 
     public String getContent() {
         return content;
@@ -50,13 +55,11 @@ public class NexionMessage extends AbstractEntity {
         this.author = author;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getType() {
-        if (author.equals(currentUser)) {
-            return MESSAGE_FROM_USER;
-        } else if (author.isAdmin()) {
-            return MESSAGE_FROM_TEACHER;
-        } else {
-            return MESSAGE_FROM_STUDENT;
-        }
+        return type;
     }
 }

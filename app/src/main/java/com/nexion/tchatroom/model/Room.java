@@ -48,4 +48,12 @@ public class Room extends AbstractEntity {
     public int countMessages() {
         return messages.size();
     }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
 }

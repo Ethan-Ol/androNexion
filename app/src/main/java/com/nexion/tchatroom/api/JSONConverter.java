@@ -59,6 +59,7 @@ public final class JSONConverter implements JSONFields {
             beacons.add(beacon);
         }
         room.setBeacons(beacons);
+        room.setName(jsonObject.getString(FIELD_ROOM_NAME));
 
         return room;
     }

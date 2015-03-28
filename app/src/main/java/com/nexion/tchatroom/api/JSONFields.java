@@ -28,4 +28,6 @@ public interface JSONFields {
     String FIELD_UUID = "UUID";
 
     String FIELD_GCM_KEY = "gcm_key";
+
+    String FIELD_ROOM_NAME = "name";
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.nexion.tchatroom.event.JoinReceivedEvent;
+import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.User;
@@ -106,7 +107,7 @@ public class PushService extends IntentService {
             User author = new User();
             author.setPseudo(jobj.getString(NAME));
             author.setId(jobj.getInt(ID));
-            bus.post(new JoinReceivedEvent(author));
+            bus.post(new LeaveReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -9,18 +9,15 @@
         android:id="@+id/pseudoTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DarzuL"
         android:padding="8dp"/>
 
     <TextView
-        android:text="Hello My name is DarzuL"
         android:id="@+id/messageTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp" />
 
     <TextView
-        android:text="11:21"
         android:id="@+id/dateTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

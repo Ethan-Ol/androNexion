@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
+import com.nexion.tchatroom.event.JoinReceivedEvent;
+import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
 import com.nexion.tchatroom.list.ChatAdapter;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
@@ -28,6 +30,7 @@ import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -153,7 +156,7 @@ public class ChatRoomFragment extends Fragment {
         if (!content.isEmpty()) {
             messageEt.setText("");
             mListener.sendMessage(content);
-            NexionMessage msg = createMessage(content);
+            NexionMessage msg = createOwnMessage(content);
             addMessage(msg);
         }
     }
@@ -187,10 +190,24 @@ public class ChatRoomFragment extends Fragment {
 
     @Subscribe
     public void onMessageReceive(MessageReceivedEvent event) {
+        NexionMessage message = event.getMessage();
+        User author = message.getAuthor();
+        if(author.getPseudo().equals(currentUserManager.get().getPseudo())) {
+            message.setType(NexionMessage.MESSAGE_FROM_USER);
+            unPendingMsg();
+            return;
+        }
+        else if(author.isAdmin()) {
+            message.setType(NexionMessage.MESSAGE_FROM_TEACHER);
+        }
+        else {
+            message.setType(NexionMessage.MESSAGE_FROM_STUDENT);
+        }
+
         addMessage(event.getMessage());
     }
 
-    private NexionMessage createMessage(String content) {
+    private NexionMessage createOwnMessage(String content) {
         NexionMessage msg = new NexionMessage();
         msg.setAuthor(mUser);
         msg.setContent(content);
@@ -204,6 +221,37 @@ public class ChatRoomFragment extends Fragment {
         int messageCount = mRoom.countMessages();
         mAdapter.notifyItemInserted(mRoom.countMessages());
         mRecyclerView.scrollToPosition(messageCount - 1);
+    }
+
+    private void unPendingMsg() {
+        List<NexionMessage> messages = mRoom.getMessages();
+        int len = messages.size();
+
+        for(int i = len-1; i>0; i++) {
+            NexionMessage message = messages.get(i);
+            if(message.getSendAt() == null && message.getType() == NexionMessage.MESSAGE_FROM_USER) {
+                message.setSendAt(Calendar.getInstance());
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Subscribe
+    public void onUserJoined(JoinReceivedEvent event) {
+        User user = event.getUser();
+        mRoom.addUser(user);
+        NexionMessage msg = new NexionMessage();
+        msg.setContent(getString(R.string.has_joined_room, user.getPseudo()));
+        msg.setType(NexionMessage.MESSAGE_FROM_BOT);
+    }
+
+    @Subscribe
+    public void onUserLeft(LeaveReceivedEvent event) {
+        User user = event.getUser();
+        mRoom.addUser(user);
+        NexionMessage msg = new NexionMessage();
+        msg.setContent(getString(R.string.has_left_room, user.getPseudo()));
+        msg.setType(NexionMessage.MESSAGE_FROM_BOT);
     }
 
     public interface OnFragmentInteractionListener {

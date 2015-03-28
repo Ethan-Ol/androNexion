@@ -24,8 +24,8 @@ import butterknife.InjectView;
 /**
  * Created by DarzuL on 09/03/2015.
  * <p/>
- * A list with 3 different item which correspond
- * to the message from student, teacher and the user
+ * A list with 4 different item which correspond
+ * to the message from student, teacher, user and the bot
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -59,6 +59,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             case NexionMessage.MESSAGE_FROM_STUDENT:
                 v = layoutInflater.inflate(R.layout.message_item_from_student, viewGroup, false);
                 return new ViewHolderStudent(v, this);
+
+            case NexionMessage.MESSAGE_FROM_BOT:
+                v = layoutInflater.inflate(R.layout.message_item_from_bot, viewGroup, false);
+                return new ViewHolderBot(v, this);
 
             default:
                 Log.e(TAG, "Message without type");
@@ -151,6 +155,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public ViewHolderStudent(View itemView, ChatAdapter listener) {
             super(itemView, listener);
+        }
+    }
+
+    static class ViewHolderBot extends ViewHolder {
+        public ViewHolderBot(View itemView, ChatAdapter listener) {
+            super(itemView, listener);
+        }
+
+        @Override
+        void refreshView(NexionMessage message) {
+            messageTv.setText(message.getContent());
         }
     }
 }

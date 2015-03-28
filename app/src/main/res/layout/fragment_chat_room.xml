@@ -69,8 +69,8 @@
         style="@style/TextTitle"
         android:layout_width="wrap_content"
         android:layout_height="?android:attr/actionBarSize"
-        android:layout_marginLeft="24dip"
-        android:layout_marginStart="24dip"
+        android:layout_marginLeft="48dip"
+        android:layout_marginStart="48dip"
         android:contentDescription="@string/title_room_desc"
         android:gravity="center" />
 
