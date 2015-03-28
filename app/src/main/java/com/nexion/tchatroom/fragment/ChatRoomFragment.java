@@ -225,7 +225,7 @@ public class ChatRoomFragment extends Fragment {
         List<NexionMessage> messages = mRoom.getMessages();
         int len = messages.size();
 
-        for (int i = len - 1; i > 0; i++) {
+        for (int i = len - 1; i >= 0; i--) {
             NexionMessage message = messages.get(i);
             if (message.getSendAt() == null && message.getType() == NexionMessage.MESSAGE_FROM_USER) {
                 message.setSendAt(Calendar.getInstance());
@@ -241,6 +241,7 @@ public class ChatRoomFragment extends Fragment {
         NexionMessage msg = new NexionMessage();
         msg.setContent(getString(R.string.has_joined_room, user.getPseudo()));
         msg.setType(NexionMessage.MESSAGE_FROM_BOT);
+        addMessage(msg);
     }
 
     @Subscribe
@@ -250,6 +251,7 @@ public class ChatRoomFragment extends Fragment {
         NexionMessage msg = new NexionMessage();
         msg.setContent(getString(R.string.has_left_room, user.getPseudo()));
         msg.setType(NexionMessage.MESSAGE_FROM_BOT);
+        addMessage(msg);
     }
 
     public interface OnFragmentInteractionListener {
