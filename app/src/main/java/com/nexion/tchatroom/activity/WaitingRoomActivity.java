@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -69,13 +68,12 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
                     .commit();
         }
 
-        if (rooms.isEmpty()) {
-            try {
-                apiRequester.requestRoomsInfo();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            apiRequester.requestRoomsInfo();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override
@@ -118,7 +116,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     @Subscribe
     public void onRoomAvailable(OnRoomAvailableEvent event) {
-        Log.i(TAG,"Room " + event.getRoom().getId() + " is avalaible");
+        Log.i(TAG, "Room " + event.getRoom().getId() + " is avalaible");
         mAvailableRoom = event.getRoom();
     }
 

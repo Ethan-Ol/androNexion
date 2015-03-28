@@ -100,16 +100,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     }
 
     @Subscribe
-    public void onUserInfoReceived(UserInfoReceivedEvent event) {
-        try {
-            apiRequester.requestRoomsInfo();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Subscribe
-    public void startWaitingRoom(RoomsInfoReceivedEvent event) {
+    public void startWaitingRoom(UserInfoReceivedEvent event) {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
     }
