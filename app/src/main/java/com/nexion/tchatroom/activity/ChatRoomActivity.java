@@ -9,9 +9,12 @@ import android.support.v4.app.FragmentActivity;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
+import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
@@ -54,6 +57,13 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         if (rooms.isEmpty()) {
             leaveRoom();
         }
+        bus.register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bus.unregister(this);
     }
 
     @Override
@@ -85,5 +95,12 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Subscribe
+    public void onRoomUnavailable(OnRoomUnavailableEvent event) {
+        new CurrentRoomManager(getApplicationContext()).set(0);
+        startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
+        finish();
     }
 }

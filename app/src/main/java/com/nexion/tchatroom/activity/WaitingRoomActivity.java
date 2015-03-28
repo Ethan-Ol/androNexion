@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +45,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     @Inject
     BeaconOrganizer beaconOrganizer;
 
+    CurrentRoomManager currentRoomManager;
     private APIRequester apiRequester;
     private Room mAvailableRoom;
 
@@ -53,6 +55,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         setContentView(R.layout.activity_waiting_room);
         ((App) getApplication()).inject(this);
 
+        currentRoomManager = new CurrentRoomManager(getApplicationContext());
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);
@@ -95,10 +98,11 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     }
 
     @Override
-    public void onJoinRoom() {
+    public void onJoinRoom(Room room) {
         //TODO debug mode
-        mAvailableRoom = rooms.get(0);
-        new CurrentRoomManager(getApplicationContext()).set(mAvailableRoom.getId());
+        //mAvailableRoom = rooms.get(0);
+        new CurrentRoomManager(getApplicationContext()).set(room.getId());
+
         try {
             apiRequester.joinRoom(mAvailableRoom, "");
             startChatRoom();
