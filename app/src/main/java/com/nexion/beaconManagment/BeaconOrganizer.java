@@ -10,6 +10,7 @@ import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
+import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.Room;
@@ -44,11 +45,13 @@ public class BeaconOrganizer implements BeaconConsumer {
     Context m_context;
 
     private org.altbeacon.beacon.BeaconManager m_manager;
+    boolean started;
 
     @Inject
     public BeaconOrganizer(Context context, List<Room> rooms) {
         this.m_context = context;
         this.rooms = rooms;
+        started = false;
 
         currentRoomManager = new CurrentRoomManager(getApplicationContext());
         int roomId = currentRoomManager.get();
@@ -74,13 +77,26 @@ public class BeaconOrganizer implements BeaconConsumer {
         stop();
     }
 
+    @Subscribe
+    public void onRoomsIsReceived(RoomsInfoReceivedEvent event){
+        Log.i(TAG,"Room received");
+        stop();
+        start();
+    }
+
     public void start() {
-        m_manager.bind(this);
+        if(started!=true) {
+            started = true;
+            m_manager.bind(this);
+        }
     }
 
     public void stop() {
-        m_manager.unbind(this);
-        currentRoom.setName(null);
+        if(started) {
+            started = false;
+            m_manager.unbind(this);
+            currentRoom.setName(null);
+        }
     }
 
     @Override
@@ -157,11 +173,14 @@ public class BeaconOrganizer implements BeaconConsumer {
         if (rooms != null) {
             for (Room r : rooms) {
                 for (Beacon b : r.getBeacons()) {
-                    tmpregion = new Region("" + r.getId(), Identifier.parse(b.getUUID()), null, null);
                     try {
+                        tmpregion = new Region("" + r.getId(), Identifier.parse(b.getUUID()), null, null);
                         m_manager.startMonitoringBeaconsInRegion(tmpregion);
                     } catch (RemoteException e) {
                         Log.i(TAG, "Set notifier : ERROR");
+                    }
+                    catch (Exception e){
+                        Log.e(TAG,e.getMessage());
                     }
                 }
             }
