@@ -121,6 +121,9 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
             if (!bluetoothManager.isBluetoothEnabled()) {
                 requestBluetoothActivation();
             }
+            else {
+                bus.post(new BluetoothEnabledEvent());
+            }
         } else {
             Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
         }

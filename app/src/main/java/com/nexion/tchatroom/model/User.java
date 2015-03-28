@@ -29,8 +29,4 @@ public class User extends AbstractEntity {
     public void isAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-
-    public boolean notExist() {
-        return pseudo.isEmpty();
-    }
 }

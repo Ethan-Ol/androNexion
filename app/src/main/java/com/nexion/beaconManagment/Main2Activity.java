@@ -22,8 +22,6 @@ public class Main2Activity extends Activity {
 
     @Inject
     List<Room> rooms;
-
-    @Inject
     BeaconOrganizer manager;
 
     @Inject

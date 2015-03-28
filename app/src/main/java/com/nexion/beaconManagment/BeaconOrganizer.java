@@ -10,6 +10,7 @@ import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
@@ -36,9 +37,9 @@ public class BeaconOrganizer implements BeaconConsumer {
     Bus bus;
     @Inject
     List<Room> rooms;
-    @Inject
-    Room currentRoom;
 
+    CurrentRoomManager currentRoomManager;
+    Room currentRoom;
     Context m_context;
 
     private org.altbeacon.beacon.BeaconManager m_manager;
@@ -46,6 +47,16 @@ public class BeaconOrganizer implements BeaconConsumer {
     @Inject
     public BeaconOrganizer(Context context) {
         this.m_context = context;
+
+        currentRoomManager = new CurrentRoomManager(getApplicationContext());
+        int roomId = currentRoomManager.get();
+        for(Room room : rooms) {
+            if(room.getId() == roomId) {
+                currentRoom = room;
+                break;
+            }
+        }
+
         m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(m_context);
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         m_manager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
@@ -78,7 +89,7 @@ public class BeaconOrganizer implements BeaconConsumer {
             public void didEnterRegion(Region region) {
                 Log.i(TAG, "I just saw an beacon for the first time ! " + region.getUniqueId());
 
-                if (currentRoom.isExist()) {
+                if (currentRoomManager.isExist()) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         return;
                     }
@@ -87,7 +98,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                 for (Room r : rooms) {
                     if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                        if (currentRoom.isExist()) {
+                        if (currentRoomManager.isExist()) {
                             bus.post(new OnRoomUnavailableEvent(currentRoom));
                         }
                         currentRoom = r;
@@ -99,7 +110,7 @@ public class BeaconOrganizer implements BeaconConsumer {
             @Override
             public void didExitRegion(Region region) {
                 Log.i(TAG, "Exit of region : " + region.getUniqueId());
-                if (currentRoom.isExist()) {
+                if (currentRoomManager.isExist()) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         bus.post(new OnRoomUnavailableEvent(currentRoom));
                         currentRoom = new Room();
@@ -110,11 +121,12 @@ public class BeaconOrganizer implements BeaconConsumer {
             @Override
             public void didDetermineStateForRegion(int state, Region region) {
                 Log.i(TAG, "Change state of region : " + region.getUniqueId() + " state : " + state);
-                if (currentRoom.isExist()) {
+                if (currentRoomManager.isExist()) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         if (state == 0) {
                             bus.post(new OnRoomUnavailableEvent(currentRoom));
-                            currentRoom = new Room();
+                            currentRoomManager.set(0);
+                            currentRoom = null;
                         }
                         return;
                     }
@@ -124,7 +136,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                     for (Room r : rooms) {
                         if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                            if (currentRoom.isExist()) {
+                            if (currentRoomManager.isExist()) {
                                 bus.post(new OnRoomUnavailableEvent(currentRoom));
                             }
                             currentRoom = r;

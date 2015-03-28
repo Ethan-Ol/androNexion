@@ -49,6 +49,13 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(rooms.isEmpty()) {
+            leaveRoom();
+        }
+    }
 
     @Override
     public void sendMessage(String content) {

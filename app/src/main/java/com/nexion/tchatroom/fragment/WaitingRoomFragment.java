@@ -17,7 +17,9 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.EndLoadingEvent;
 import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
+import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.event.RequestFailedEvent;
+import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -45,10 +47,9 @@ public class WaitingRoomFragment extends Fragment {
 
     @Inject
     Bus bus;
-    @Inject
-    User user;
 
     private OnFragmentInteractionListener mListener;
+    private CurrentRoomManager currentRoomManager;
 
     public static Fragment newInstance() {
         return new WaitingRoomFragment();
@@ -61,6 +62,8 @@ public class WaitingRoomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
+
+        currentRoomManager = new CurrentRoomManager(getActivity());
     }
 
     @Override
@@ -69,8 +72,8 @@ public class WaitingRoomFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         //TODO Test
-        //mInfoTv.setVisibility(View.VISIBLE);
-        mConnectBtn.setVisibility(View.VISIBLE);
+        mInfoTv.setVisibility(View.VISIBLE);
+        //mConnectBtn.setVisibility(View.VISIBLE);
 
         return v;
     }
@@ -102,7 +105,6 @@ public class WaitingRoomFragment extends Fragment {
     public void onStart() {
         super.onStart();
         bus.register(this);
-        // TODO check if mRoom is available
     }
 
     @Override
@@ -112,9 +114,15 @@ public class WaitingRoomFragment extends Fragment {
     }
 
     @Subscribe
-    public void onRoomAvailable(OnRoomAvailableEvent event) {
+         public void onRoomAvailable(OnRoomAvailableEvent event) {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void onRoomUnavailable(OnRoomUnavailableEvent event) {
+        mConnectBtn.setVisibility(View.GONE);
+        mInfoTv.setVisibility(View.VISIBLE);
     }
 
     @Subscribe

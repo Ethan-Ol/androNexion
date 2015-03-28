@@ -31,8 +31,6 @@ import dagger.Provides;
  * Created by DarzuL on 09/03/2015.
  */
 @Module(
-        staticInjections = NexionMessage.class,
-
         injects = {
                 App.class,
                 LoginActivity.class,
@@ -66,18 +64,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public User provideCurrentUser() {
-        return new User("", false);
-    }
-
-    @Provides
-    @Singleton
-    public Room provideRoom() {
-        return new Room();
-    }
-
-    @Provides
-    @Singleton
     public List<Room> provideRooms() {
         return new LinkedList<>();
     }
@@ -87,11 +73,4 @@ public class AppModule {
     public Bus provideBus() {
         return new AndroidBus();
     }
-
-        /*    @Provides
-        @Singleton
-        public Room provideCurrentRoom() {
-            return null;
-        }
-    */
 }
