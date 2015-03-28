@@ -71,6 +71,4 @@ public final class JSONConverter implements JSONFields {
         beacon.setRoom(room);
         return beacon;
     }
-
-
 }
