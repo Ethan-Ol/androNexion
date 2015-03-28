@@ -69,7 +69,8 @@ public final class JSONConverter implements JSONFields {
         beacon.setId(jsonObject.getInt(FIELD_ID));
         beacon.setUUID(jsonObject.getString(FIELD_UUID));
         beacon.setRoom(room);
-
         return beacon;
     }
+
+
 }
