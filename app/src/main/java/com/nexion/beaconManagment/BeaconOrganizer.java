@@ -76,6 +76,7 @@ public class BeaconOrganizer implements BeaconConsumer {
 
     public void start() {
         if (started == false) {
+            Log.i(TAG,"Start " + TAG);
             bus.register(this);
             started = true;
             m_manager.bind(this);
@@ -162,13 +163,17 @@ public class BeaconOrganizer implements BeaconConsumer {
         else
             Log.i(TAG, "rooms is null");
 
+        int i=0;
+
         if (rooms != null) {
             for (Room r : rooms) {
                 for (Beacon b : r.getBeacons()) {
                     try {
                         tmpregion = new Region("" + r.getId(), Identifier.parse(b.getUUID()), null, null);
                         m_manager.startMonitoringBeaconsInRegion(tmpregion);
+
                         Log.i(TAG, "Listen Beacon : " + b.getUUID() + " room " + r.getId());
+
                     } catch (RemoteException e) {
                         Log.i(TAG, "Set notifier : ERROR");
                     } catch (Exception e) {

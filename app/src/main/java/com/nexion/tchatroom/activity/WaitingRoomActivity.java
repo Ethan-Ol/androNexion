@@ -118,6 +118,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     @Subscribe
     public void onRoomAvailable(OnRoomAvailableEvent event) {
+        Log.i(TAG,"Room " + event.getRoom().getId() + " is avalaible");
         mAvailableRoom = event.getRoom();
     }
 
