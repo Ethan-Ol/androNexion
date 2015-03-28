@@ -37,7 +37,6 @@ public class BeaconOrganizer implements BeaconConsumer {
 
     @Inject
     Bus bus;
-    @Inject
     List<Room> rooms;
 
     CurrentRoomManager currentRoomManager;
@@ -47,8 +46,9 @@ public class BeaconOrganizer implements BeaconConsumer {
     private org.altbeacon.beacon.BeaconManager m_manager;
 
     @Inject
-    public BeaconOrganizer(Context context) {
+    public BeaconOrganizer(Context context, List<Room> rooms) {
         this.m_context = context;
+        this.rooms = rooms;
 
         currentRoomManager = new CurrentRoomManager(getApplicationContext());
         int roomId = currentRoomManager.get();

@@ -32,7 +32,6 @@ import javax.inject.Inject;
 public class LoginActivity extends FragmentActivity implements LoginFragment.OnFragmentInteractionListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
-    private static final int REQUEST_ENABLE_BT = 150;
     private final static String LOGIN_FRAGMENT_TAG = "LoginFragment";
 
     @Inject
@@ -77,7 +76,6 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     @Override
     protected void onResume() {
         super.onResume();
-        checkBluetooth();
     }
 
     @Override
@@ -119,35 +117,5 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     public void startWaitingRoom(RoomsInfoReceivedEvent event) {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
-    }
-
-    private void checkBluetooth() {
-        BluetoothManager bluetoothManager = BluetoothManager.getInstance();
-        if (bluetoothManager.isBluetoothAvailable()) {
-            if (!bluetoothManager.isBluetoothEnabled()) {
-                requestBluetoothActivation();
-            }
-            else {
-                bus.post(new BluetoothEnabledEvent());
-            }
-        } else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void requestBluetoothActivation() {
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(discoverableIntent, REQUEST_ENABLE_BT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_ENABLE_BT:
-                if (resultCode == RESULT_OK) {
-                    bus.post(new BluetoothEnabledEvent());
-                }
-                break;
-        }
     }
 }
