@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 
 import com.nexion.tchatroom.App;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ChatRoomActivity extends ActionBarActivity implements ChatRoomFragment.OnFragmentInteractionListener {
+public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragment.OnFragmentInteractionListener {
 
     private final static String CHAT_ROOM_TAG = "ChatRoom";
     private APIRequester apiRequester;
@@ -66,12 +67,7 @@ public class ChatRoomActivity extends ActionBarActivity implements ChatRoomFragm
             e.printStackTrace();
         }
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChatRoomFragment.TAG);
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        }
+        startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
     }
 
     @Override

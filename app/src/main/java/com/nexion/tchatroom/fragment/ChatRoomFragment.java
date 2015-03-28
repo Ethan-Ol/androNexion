@@ -27,6 +27,8 @@ import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -34,7 +36,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class ChatRoomFragment extends Fragment {
-    private static final String ARG_ROOM = "room";
+    private static final String ARG_ROOM = "mRoom";
     public static final String TAG = "ChatRoomFragment";
 
     private User mUser;
@@ -52,6 +54,8 @@ public class ChatRoomFragment extends Fragment {
 
     @Inject
     Bus bus;
+    @Inject
+    List<Room> rooms;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ChatAdapter mAdapter;
@@ -75,7 +79,13 @@ public class ChatRoomFragment extends Fragment {
         mUser = currentUserManager.get();
 
         currentRoomManager = new CurrentRoomManager(getActivity());
-        mRoom = currentRoomManager.get();
+        int roomId = currentRoomManager.get();
+        for(Room room : rooms) {
+            if(room.getId() == roomId) {
+                mRoom = room;
+                break;
+            }
+        }
 
         mAdapter = new ChatAdapter(getActivity(), mRoom);
     }

@@ -45,6 +45,7 @@
             android:enabled="true"
             android:permission="com.google.android.c2dm.permission.SEND"
             >
+
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
@@ -59,11 +60,9 @@
         <activity
             android:name=".activity.ChatRoomActivity"
             android:label="@string/title_activity_chat_room" />
-
         <activity
             android:name=".activity.WaitingRoomActivity"
             android:label="@string/title_activity_waiting_room" />
-
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" >
@@ -74,6 +73,10 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".PushService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
