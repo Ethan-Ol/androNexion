@@ -89,7 +89,10 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     @Override
     public void onJoinRoom() {
-        new CurrentRoomManager(getApplicationContext()).set(mAvailableRoom);
+        //TODO debug mode
+        mAvailableRoom = rooms.get(0);
+        new CurrentRoomManager(getApplicationContext()).set(mAvailableRoom.getId());
+
         startActivity(new Intent(getApplicationContext(), ChatRoomActivity.class));
         finish();
     }

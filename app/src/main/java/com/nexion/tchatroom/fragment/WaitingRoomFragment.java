@@ -31,7 +31,7 @@ import butterknife.OnClick;
 /**
  * Created by DarzuL on 15/03/2015.
  *
- * Waiting room fragment when user is not in a room
+ * Waiting mRoom fragment when user is not in a mRoom
  */
 public class WaitingRoomFragment extends Fragment {
     public static final String TAG = "NoChatRoomFragment";
@@ -69,8 +69,8 @@ public class WaitingRoomFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         //TODO Test
-        mInfoTv.setVisibility(View.VISIBLE);
-        //mConnectBtn.setVisibility(View.VISIBLE);
+        //mInfoTv.setVisibility(View.VISIBLE);
+        mConnectBtn.setVisibility(View.VISIBLE);
 
         return v;
     }
@@ -102,7 +102,7 @@ public class WaitingRoomFragment extends Fragment {
     public void onStart() {
         super.onStart();
         bus.register(this);
-        // TODO check if room is available
+        // TODO check if mRoom is available
     }
 
     @Override

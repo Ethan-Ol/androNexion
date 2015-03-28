@@ -8,38 +8,37 @@ import com.nexion.tchatroom.model.Room;
 /**
  * Created by DarzuL on 27/03/2015.
  *
- * Manage the current room of the user
+ * Manage the current roomId of the user
  */
-public class CurrentRoomManager implements KeyFields, IManager<Room> {
-    private Room room;
+public class CurrentRoomManager implements KeyFields, IManager<Integer> {
+    private int roomId = 0;
     private final SharedPreferences sharedPreferences;
 
     public CurrentRoomManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(room == null) {
-            room = get();
+        if(roomId == 0) {
+            roomId = get();
         }
     }
 
     @Override
     public boolean isExist() {
-        return room != null;
+        return roomId != 0;
     }
 
     @Override
-    public void set(Room room) {
+    public void set(Integer roomId) {
         sharedPreferences
                 .edit()
-                .putInt(KEY_ROOM, room.getId())
+                .putInt(KEY_ROOM, roomId)
                 .apply();
     }
 
-    public Room get() {
-        if (room == null) {
-            room = new Room();
-            room.setId(sharedPreferences.getInt(KEY_ROOM, 0));
+    public Integer get() {
+        if (roomId == 0) {
+            roomId = sharedPreferences.getInt(KEY_ROOM, 0);
         }
 
-        return room;
+        return roomId;
     }
 }

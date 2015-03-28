@@ -20,6 +20,8 @@ import com.nexion.tchatroom.model.User;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -36,7 +38,10 @@ public class KickFragment extends Fragment {
     }
 
     User user;
-    Room room;
+    Room mRoom;
+
+    @Inject
+    List<Room> rooms;
 
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
@@ -53,10 +58,16 @@ public class KickFragment extends Fragment {
         ((App) getActivity().getApplication()).inject(this);
 
         user = new CurrentUserManager(getActivity()).get();
-        room = new CurrentRoomManager(getActivity()).get();
+        int roomId = new CurrentRoomManager(getActivity()).get();
+        for(Room room : rooms) {
+            if(room.getId() == roomId) {
+                mRoom = room;
+                break;
+            }
+        }
 
         List<User> kickableUsers = new LinkedList<>();
-        kickableUsers.addAll(room.getUsers());
+        kickableUsers.addAll(mRoom.getUsers());
         kickableUsers.remove(user);
         mAdapter = new KickAdapter(kickableUsers);
     }

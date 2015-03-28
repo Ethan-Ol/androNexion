@@ -135,7 +135,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            currentRoomManager.set(JSONParser.parseJSONRoomResponse(response));
+                            currentRoomManager.set(JSONParser.parseJSONRoomResponse(response).getId());
                             bus.post(new RoomJoinedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
