@@ -111,7 +111,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     private void startChatRoom() {
         startActivity(new Intent(getApplicationContext(), ChatRoomActivity.class));
-        finish();
     }
 
     @Subscribe
