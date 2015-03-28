@@ -55,8 +55,8 @@ public class BeaconOrganizer implements BeaconConsumer {
 
         currentRoomManager = new CurrentRoomManager(getApplicationContext());
         int roomId = currentRoomManager.get();
-        for(Room room : rooms) {
-            if(room.getId() == roomId) {
+        for (Room room : rooms) {
+            if (room.getId() == roomId) {
                 currentRoom = room;
                 break;
             }
@@ -78,21 +78,21 @@ public class BeaconOrganizer implements BeaconConsumer {
     }
 
     @Subscribe
-    public void onRoomsIsReceived(RoomsInfoReceivedEvent event){
-        Log.i(TAG,"Room received");
+    public void onRoomsIsReceived(RoomsInfoReceivedEvent event) {
+        Log.i(TAG, "Room received");
         stop();
         start();
     }
 
     public void start() {
-        if(started!=true) {
+        if (started != true) {
             started = true;
             m_manager.bind(this);
         }
     }
 
     public void stop() {
-        if(started) {
+        if (started) {
             started = false;
             m_manager.unbind(this);
             currentRoom.setName(null);
@@ -178,9 +178,8 @@ public class BeaconOrganizer implements BeaconConsumer {
                         m_manager.startMonitoringBeaconsInRegion(tmpregion);
                     } catch (RemoteException e) {
                         Log.i(TAG, "Set notifier : ERROR");
-                    }
-                    catch (Exception e){
-                        Log.e(TAG,e.getMessage());
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }

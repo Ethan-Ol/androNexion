@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
@@ -52,7 +51,7 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
     @Override
     protected void onStart() {
         super.onStart();
-        if(rooms.isEmpty()) {
+        if (rooms.isEmpty()) {
             leaveRoom();
         }
     }

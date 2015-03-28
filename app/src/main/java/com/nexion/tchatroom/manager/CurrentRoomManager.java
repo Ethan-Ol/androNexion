@@ -3,11 +3,9 @@ package com.nexion.tchatroom.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.nexion.tchatroom.model.Room;
-
 /**
  * Created by DarzuL on 27/03/2015.
- *
+ * <p/>
  * Manage the current roomId of the user
  */
 public class CurrentRoomManager implements KeyFields, IManager<Integer> {
@@ -16,7 +14,7 @@ public class CurrentRoomManager implements KeyFields, IManager<Integer> {
 
     public CurrentRoomManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(roomId == 0) {
+        if (roomId == 0) {
             roomId = get();
         }
     }

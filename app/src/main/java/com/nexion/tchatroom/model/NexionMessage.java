@@ -1,11 +1,7 @@
 package com.nexion.tchatroom.model;
 
 
-import com.nexion.tchatroom.manager.CurrentUserManager;
-
 import java.util.Calendar;
-
-import javax.inject.Inject;
 
 /**
  * Created by DarzuL on 08/03/2015.

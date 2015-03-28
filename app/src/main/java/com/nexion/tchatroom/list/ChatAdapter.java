@@ -131,7 +131,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public void onClick(View v) {
             String text = messageTv.getText().toString();
             Matcher matcher = PATTERN.matcher(text);
-            if(matcher.find()) {
+            if (matcher.find()) {
                 listener.onOpenUrl(matcher.group());
             }
         }

@@ -14,6 +14,8 @@ import com.squareup.otto.Bus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
 public class PushService extends IntentService {
@@ -26,7 +28,7 @@ public class PushService extends IntentService {
     private static final String NAME = "pseudo";
     private static final String ID = "id";
     private static final String DATE = "dateTime";
-    private static final String MESSAGE = "message";
+    private static final String MESSAGE = "content";
 
     public static void startActionPost(Context context, String jsonObject) {
         Intent intent = new Intent(context, PushService.class);
@@ -54,12 +56,12 @@ public class PushService extends IntentService {
 
     public PushService() {
         super("PushService");
-        ((App) getApplication()).inject(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            ((App) getApplication()).inject(this);
             final String action = intent.getAction();
             final String jsonObjectStr = intent.getStringExtra(EXTRA_JSON);
             if (ACTION_POST.equals(action)) {
@@ -81,11 +83,13 @@ public class PushService extends IntentService {
             author.setPseudo(jobj.getString(NAME));
             author.setId(jobj.getInt(ID));
             message.setAuthor(author);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(jobj.getInt(DATE));
+            message.setSendAt(calendar);
             bus.post(new MessageReceivedEvent(message));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //bus.post(new MessageReceivedEvent());
     }
 
     private void handleActionJoin(String jsonObjectStr) {
@@ -98,7 +102,6 @@ public class PushService extends IntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //bus.post();
     }
 
     private void handleActionLeave(String jsonObjectStr) {
@@ -111,6 +114,5 @@ public class PushService extends IntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //bus.post();
     }
 }

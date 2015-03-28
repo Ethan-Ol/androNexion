@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -30,18 +29,15 @@ public class PushReceiver extends BroadcastReceiver {
             JSONObject object = new JSONObject(message.toString());
             String action = object.getString(ACTION);
 
-            if(action == ACTION_POST){
-                PushService.startActionPost(context,message.toString());
+            if (action.equals(ACTION_POST)) {
+                PushService.startActionPost(context, message.toString());
+            } else if (action.equals(ACTION_LEAVE)) {
+                PushService.startActionLeave(context, message.toString());
+            } else if (action.equals(ACTION_JOIN)) {
+                PushService.startActionJoin(context, message.toString());
             }
-            else if(action == ACTION_LEAVE){
-                PushService.startActionLeave(context,message.toString());
-            }
-            else if(action == ACTION_JOIN){
-                PushService.startActionJoin(context,message.toString());
-            }
-        }
-        catch (Exception e){
-            Log.e(TAG,e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
 
         /*

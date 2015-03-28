@@ -1,23 +1,18 @@
 package com.nexion.tchatroom.activity;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 
 import com.nexion.tchatroom.App;
-import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
-import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;

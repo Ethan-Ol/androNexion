@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 /**
  * Created by DarzuL on 27/03/2015.
- *
+ * <p/>
  * Manage the token key
  */
 public class TokenManager implements KeyFields, IManager<String> {
@@ -15,7 +15,7 @@ public class TokenManager implements KeyFields, IManager<String> {
 
     public TokenManager(Context context) {
         sharedPref = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(token.isEmpty())
+        if (token.isEmpty())
             token = get();
     }
 

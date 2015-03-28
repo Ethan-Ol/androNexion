@@ -22,8 +22,8 @@ public class JSONFactory implements JSONFields {
 
     JSONObject createLoginJSON(String login, String password) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_LOGIN + "\"" + ":" + login + ","
-                + "\"" + FIELD_PASSWORD + "\"" + ":" + password
+                + "\"" + FIELD_LOGIN + "\"" + ":" + "\"" + login + "\"" + ","
+                + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\""
                 + "}";
 
         return new JSONObject(str);
@@ -31,7 +31,7 @@ public class JSONFactory implements JSONFields {
 
     JSONObject createTokenJSON() throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + tokenManager.get()
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\""
                 + "}";
 
         return new JSONObject(str);
@@ -39,8 +39,8 @@ public class JSONFactory implements JSONFields {
 
     JSONObject createMessageJSON(String content) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + tokenManager.get() + ","
-                + "\"" + FIELD_CONTENT + "\"" + ":" + content
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
+                + "\"" + FIELD_CONTENT + "\"" + ":" + "\"" + content + "\""
                 + "}";
 
         return new JSONObject(str);
@@ -48,7 +48,7 @@ public class JSONFactory implements JSONFields {
 
     JSONObject createUserJSON(User user) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + tokenManager.get() + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
                 + "\"" + FIELD_USER_ID + "\"" + ":" + user.getId() + ","
                 + "\"" + FIELD_KICK_DURATION + "\"" + ":" + 60
                 + "}";
@@ -58,9 +58,9 @@ public class JSONFactory implements JSONFields {
 
     JSONObject createRoomJSON(Room room, String password) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + tokenManager.get() + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
                 + "\"" + FIELD_ROOM_ID + "\"" + ":" + room.getId() + ","
-                + "\"" + FIELD_PASSWORD + "\"" + ":" + password
+                + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\""
                 + "}";
 
         return new JSONObject(str);

@@ -14,9 +14,7 @@ import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
-import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
-import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import java.util.LinkedList;
@@ -46,7 +44,8 @@ import dagger.Provides;
                 Main2Activity.class,
                 BluetoothReceiver.class,
                 BeaconOrganizer.class,
-                ScanService.class
+                ScanService.class,
+                PushService.class
         }
 )
 public class AppModule {

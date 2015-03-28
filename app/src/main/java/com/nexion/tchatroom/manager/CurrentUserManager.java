@@ -7,7 +7,7 @@ import com.nexion.tchatroom.model.User;
 
 /**
  * Created by DarzuL on 27/03/2015.
- *
+ * <p/>
  * Manage the current user data
  */
 public class CurrentUserManager implements KeyFields, IManager<User> {

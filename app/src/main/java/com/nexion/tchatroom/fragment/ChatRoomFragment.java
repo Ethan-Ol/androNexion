@@ -86,8 +86,8 @@ public class ChatRoomFragment extends Fragment {
 
         currentRoomManager = new CurrentRoomManager(getActivity());
         int roomId = currentRoomManager.get();
-        for(Room room : rooms) {
-            if(room.getId() == roomId) {
+        for (Room room : rooms) {
+            if (room.getId() == roomId) {
                 mRoom = room;
                 break;
             }
@@ -111,7 +111,7 @@ public class ChatRoomFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         titleTv.setText(mRoom.getName());
-        
+
         messageEt.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -192,15 +192,13 @@ public class ChatRoomFragment extends Fragment {
     public void onMessageReceive(MessageReceivedEvent event) {
         NexionMessage message = event.getMessage();
         User author = message.getAuthor();
-        if(author.getPseudo().equals(currentUserManager.get().getPseudo())) {
+        if (author.getPseudo().equals(currentUserManager.get().getPseudo())) {
             message.setType(NexionMessage.MESSAGE_FROM_USER);
             unPendingMsg();
             return;
-        }
-        else if(author.isAdmin()) {
+        } else if (author.isAdmin()) {
             message.setType(NexionMessage.MESSAGE_FROM_TEACHER);
-        }
-        else {
+        } else {
             message.setType(NexionMessage.MESSAGE_FROM_STUDENT);
         }
 
@@ -227,9 +225,9 @@ public class ChatRoomFragment extends Fragment {
         List<NexionMessage> messages = mRoom.getMessages();
         int len = messages.size();
 
-        for(int i = len-1; i>0; i++) {
+        for (int i = len - 1; i > 0; i++) {
             NexionMessage message = messages.get(i);
-            if(message.getSendAt() == null && message.getType() == NexionMessage.MESSAGE_FROM_USER) {
+            if (message.getSendAt() == null && message.getType() == NexionMessage.MESSAGE_FROM_USER) {
                 message.setSendAt(Calendar.getInstance());
                 mAdapter.notifyDataSetChanged();
             }
@@ -256,7 +254,9 @@ public class ChatRoomFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         public void sendMessage(String content);
+
         public void leaveRoom();
+
         public void startKickActivity();
     }
 }

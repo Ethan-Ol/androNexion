@@ -17,18 +17,15 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
-import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.manager.PlayServicesManager;
-import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,7 +65,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
                     .commit();
         }
 
-        if(rooms.isEmpty()) {
+        if (rooms.isEmpty()) {
             try {
                 apiRequester.requestRoomsInfo();
             } catch (JSONException e) {
@@ -132,8 +129,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         if (bluetoothManager.isBluetoothAvailable()) {
             if (!bluetoothManager.isBluetoothEnabled()) {
                 requestBluetoothActivation();
-            }
-            else {
+            } else {
                 beaconOrganizer.start();
             }
         } else {

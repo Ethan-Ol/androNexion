@@ -20,7 +20,6 @@ import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -32,7 +31,7 @@ import butterknife.OnClick;
 
 /**
  * Created by DarzuL on 15/03/2015.
- *
+ * <p/>
  * Waiting mRoom fragment when user is not in a mRoom
  */
 public class WaitingRoomFragment extends Fragment {
@@ -114,7 +113,7 @@ public class WaitingRoomFragment extends Fragment {
     }
 
     @Subscribe
-         public void onRoomAvailable(OnRoomAvailableEvent event) {
+    public void onRoomAvailable(OnRoomAvailableEvent event) {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.VISIBLE);
     }

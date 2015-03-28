@@ -59,8 +59,8 @@ public class KickFragment extends Fragment {
 
         user = new CurrentUserManager(getActivity()).get();
         int roomId = new CurrentRoomManager(getActivity()).get();
-        for(Room room : rooms) {
-            if(room.getId() == roomId) {
+        for (Room room : rooms) {
+            if (room.getId() == roomId) {
                 mRoom = room;
                 break;
             }
