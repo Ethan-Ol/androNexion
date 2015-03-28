@@ -105,7 +105,7 @@ public class ChatRoomFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         if (!mUser.isAdmin()) {
-            mKickBtn.setVisibility(View.GONE);
+            //mKickBtn.setVisibility(View.GONE);
         }
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -171,6 +171,17 @@ public class ChatRoomFragment extends Fragment {
 
     @OnClick(R.id.leaveBtn)
     void onLeaveRoom() {
+        User userToKick = null;
+        for(User user : mRoom.getUsers()) {
+            if(user.getPseudo().equals(mUser.getPseudo())) {
+                userToKick = user;
+                break;
+            }
+        }
+        if(userToKick != null) {
+            mRoom.removeUser(userToKick);
+        }
+
         mListener.leaveRoom();
     }
 
