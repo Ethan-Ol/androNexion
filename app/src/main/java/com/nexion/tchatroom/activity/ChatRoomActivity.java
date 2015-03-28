@@ -77,14 +77,7 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
 
     @Override
     public void leaveRoom() {
-        try {
-            apiRequester.leaveRoom();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
-        finish();
+        onBackPressed();
     }
 
     @Override
@@ -102,5 +95,16 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         new CurrentRoomManager(getApplicationContext()).set(0);
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            apiRequester.leaveRoom();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        super.onBackPressed();
     }
 }
