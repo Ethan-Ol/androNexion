@@ -74,12 +74,12 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         }
 
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
+        finish();
     }
 
     @Override
     public void startKickActivity() {
         startActivity(new Intent(getApplicationContext(), KickActivity.class));
-        finish();
     }
 
     @Override

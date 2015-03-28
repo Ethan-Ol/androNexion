@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.nexion.tchatroom.event.JoinReceivedEvent;
+import com.nexion.tchatroom.event.KickReceivedEvent;
 import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
 import com.nexion.tchatroom.model.NexionMessage;
@@ -22,6 +23,7 @@ public class PushService extends IntentService {
     private static final String ACTION_POST = "com.nexion.tchatroom.action.POST";
     private static final String ACTION_JOIN = "com.nexion.tchatroom.action.JOIN";
     private static final String ACTION_LEAVE = "com.nexion.tchatroom.action.LEAVE";
+    private static final String ACTION_KICK = "com.nexion.tchatroom.action.KICK";
 
     private static final String EXTRA_JSON = "com.nexion.tchatroom.extra.JSON";
 
@@ -47,6 +49,13 @@ public class PushService extends IntentService {
     public static void startActionLeave(Context context, String jsonObjectStr) {
         Intent intent = new Intent(context, PushService.class);
         intent.setAction(ACTION_LEAVE);
+        intent.putExtra(EXTRA_JSON, jsonObjectStr);
+        context.startService(intent);
+    }
+
+    public static void startActionKick(Context context, String jsonObjectStr) {
+        Intent intent = new Intent(context, PushService.class);
+        intent.setAction(ACTION_KICK);
         intent.putExtra(EXTRA_JSON, jsonObjectStr);
         context.startService(intent);
     }
@@ -84,7 +93,7 @@ public class PushService extends IntentService {
             author.setId(jobj.getInt(ID));
             message.setAuthor(author);
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(jobj.getInt(DATE));
+            calendar.setTimeInMillis(jobj.getInt(DATE) * 1000);
             message.setSendAt(calendar);
             bus.post(new MessageReceivedEvent(message));
         } catch (JSONException e) {
@@ -111,6 +120,18 @@ public class PushService extends IntentService {
             author.setPseudo(jobj.getString(NAME));
             author.setId(jobj.getInt(ID));
             bus.post(new LeaveReceivedEvent(author));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleActionKick(String jsonObjectStr) {
+        try {
+            JSONObject jobj = new JSONObject(jsonObjectStr);
+            User author = new User();
+            author.setPseudo(jobj.getString(NAME));
+            author.setId(jobj.getInt(ID));
+            bus.post(new KickReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();
         }

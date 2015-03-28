@@ -41,5 +41,7 @@
     <string name="title_room_desc">Titre de la salle</string>
     <string name="has_joined_room">%s a rejoind la salle</string>
     <string name="has_left_room">%s a quitté la salle</string>
+    <string name="has_kicked">%s a été kick</string>
+    <string name="title_activity_kick">KickActivity</string>
 
 </resources>

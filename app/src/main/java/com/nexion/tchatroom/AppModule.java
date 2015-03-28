@@ -12,6 +12,7 @@ import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.JSONFactory;
 import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
+import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.model.Room;
@@ -27,6 +28,8 @@ import dagger.Provides;
 
 /**
  * Created by DarzuL on 09/03/2015.
+ *
+ * The main module
  */
 @Module(
         injects = {
@@ -38,6 +41,7 @@ import dagger.Provides;
                 LoginFragment.class,
                 WaitingRoomFragment.class,
                 ChatRoomFragment.class,
+                KickFragment.class,
                 APIRequester.class,
                 JSONParser.class,
                 JSONFactory.class,

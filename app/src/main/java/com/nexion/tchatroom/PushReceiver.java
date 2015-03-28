@@ -14,6 +14,7 @@ public class PushReceiver extends BroadcastReceiver {
     private static final String ACTION = "action";
     private static final String ACTION_LEAVE = "leave";
     private static final String ACTION_JOIN = "join";
+    private static final String ACTION_KICK = "kick";
     private static final String ACTION_POST = "post";
 
     public PushReceiver() {
@@ -35,17 +36,11 @@ public class PushReceiver extends BroadcastReceiver {
                 PushService.startActionLeave(context, message.toString());
             } else if (action.equals(ACTION_JOIN)) {
                 PushService.startActionJoin(context, message.toString());
+            } else if(action.equals(ACTION_KICK)) {
+                PushService.startActionKick(context, message.toString());
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-
-        /*
-        for (String key : bundle.keySet()) {
-            Object value = bundle.get(key);
-            Log.d(TAG, String.format("%s %s (%s)", key,
-                    value.toString(), value.getClass().getName()));
-        }
-        //*/
     }
 }

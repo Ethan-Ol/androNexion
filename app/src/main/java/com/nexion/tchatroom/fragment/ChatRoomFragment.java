@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.JoinReceivedEvent;
+import com.nexion.tchatroom.event.KickReceivedEvent;
 import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
 import com.nexion.tchatroom.list.ChatAdapter;
@@ -248,9 +249,23 @@ public class ChatRoomFragment extends Fragment {
     @Subscribe
     public void onUserLeft(LeaveReceivedEvent event) {
         User user = event.getUser();
-        mRoom.addUser(user);
+        mRoom.removeUser(user);
         NexionMessage msg = new NexionMessage();
         msg.setContent(getString(R.string.has_left_room, user.getPseudo()));
+        msg.setType(NexionMessage.MESSAGE_FROM_BOT);
+        addMessage(msg);
+    }
+
+    @Subscribe
+    public void onUserKick(KickReceivedEvent event) {
+        User user = event.getUser();
+        mRoom.removeUser(user);
+
+        if(user.getPseudo().equals(mUser.getPseudo()))
+            mListener.leaveRoom();
+
+        NexionMessage msg = new NexionMessage();
+        msg.setContent(getString(R.string.has_kicked, user.getPseudo()));
         msg.setType(NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
     }

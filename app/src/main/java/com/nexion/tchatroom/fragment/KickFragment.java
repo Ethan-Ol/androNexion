@@ -33,11 +33,11 @@ public class KickFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public static KickFragment newInstance(int currentRoomId) {
+    public static KickFragment newInstance() {
         return new KickFragment();
     }
 
-    User user;
+    User mUser;
     Room mRoom;
 
     @Inject
@@ -57,7 +57,7 @@ public class KickFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        user = new CurrentUserManager(getActivity()).get();
+        mUser = new CurrentUserManager(getActivity()).get();
         int roomId = new CurrentRoomManager(getActivity()).get();
         for (Room room : rooms) {
             if (room.getId() == roomId) {
@@ -68,7 +68,12 @@ public class KickFragment extends Fragment {
 
         List<User> kickableUsers = new LinkedList<>();
         kickableUsers.addAll(mRoom.getUsers());
-        kickableUsers.remove(user);
+        for(User user : mRoom.getUsers()) {
+            if(user.getPseudo().equals(mUser.getPseudo())) {
+                kickableUsers.remove(user);
+                break;
+            }
+        }
         mAdapter = new KickAdapter(kickableUsers);
     }
 

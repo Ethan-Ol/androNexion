@@ -49,7 +49,7 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, ChatRoomFragment.newInstance(), KICK_FRAGMENT_TAG)
+                    .add(R.id.container, KickFragment.newInstance(), KICK_FRAGMENT_TAG)
                     .commit();
         }
     }

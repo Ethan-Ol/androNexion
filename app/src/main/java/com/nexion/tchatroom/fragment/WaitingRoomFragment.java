@@ -32,7 +32,7 @@ import butterknife.OnClick;
 /**
  * Created by DarzuL on 15/03/2015.
  * <p/>
- * Waiting mRoom fragment when user is not in a mRoom
+ * Waiting mRoom fragment when mUser is not in a mRoom
  */
 public class WaitingRoomFragment extends Fragment {
     public static final String TAG = "NoChatRoomFragment";
