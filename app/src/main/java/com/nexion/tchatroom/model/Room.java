@@ -1,12 +1,13 @@
 package com.nexion.tchatroom.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Room extends AbstractEntity {
     String name;
-    List<Beacon> beacons;
-    List<User> users;
-    List<NexionMessage> messages;
+    List<Beacon> beacons = new LinkedList<>();
+    List<User> users = new LinkedList<>();
+    List<NexionMessage> messages = new LinkedList<>();
 
     public String getName() {
         return name;
