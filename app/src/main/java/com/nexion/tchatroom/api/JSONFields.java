@@ -25,7 +25,7 @@ public interface JSONFields {
     String FIELD_ROOM_ID = "room_id";
 
     String FIELD_BEACONS = "beacons";
-    String FIELD_UUID = "uuid";
+    String FIELD_UUID = "UUID";
 
     String FIELD_GCM_KEY = "gcm_key";
 }

@@ -111,7 +111,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            rooms = JSONParser.parseJSONRooms(response);
+                            rooms.addAll(JSONParser.parseJSONRooms(response));
                             bus.post(new RoomsInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();

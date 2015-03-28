@@ -15,7 +15,8 @@ public class TokenManager implements KeyFields, IManager<String> {
 
     public TokenManager(Context context) {
         sharedPref = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        token = get();
+        if(token.isEmpty())
+            token = get();
     }
 
     @Override

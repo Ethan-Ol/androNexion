@@ -7,7 +7,6 @@ interface KeyFields {
     String PREF_FILE = "nexion";
     String KEY_ROOM = "current_room_id";
     String KEY_TOKEN = "token";
-    String KEY_PSEUDO = "token";
+    String KEY_PSEUDO = "pseudo";
     String KEY_ADMIN = "is_admin";
-
 }

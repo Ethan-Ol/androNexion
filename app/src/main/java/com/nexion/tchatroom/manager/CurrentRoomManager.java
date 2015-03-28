@@ -16,7 +16,9 @@ public class CurrentRoomManager implements KeyFields, IManager<Room> {
 
     public CurrentRoomManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        room = get();
+        if(room == null) {
+            room = get();
+        }
     }
 
     @Override

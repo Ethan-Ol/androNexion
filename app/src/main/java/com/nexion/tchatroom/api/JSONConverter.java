@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -47,11 +48,12 @@ public final class JSONConverter implements JSONFields {
     public static Room jsonObjectToRoom(JSONObject jsonObject) throws JSONException {
         Room room = new Room();
 
-        room.setId(jsonObject.getInt(FIELD_ROOM_ID));
+        room.setId(jsonObject.getInt(FIELD_ID));
 
-        List<Beacon> beacons = new ArrayList<>(4);
+        List<Beacon> beacons = new LinkedList<>();
         JSONArray jsonArrayBeacons = jsonObject.getJSONArray(FIELD_BEACONS);
-        for (int i = 0; i < 4; i++) {
+        int len = jsonArrayBeacons.length();
+        for (int i = 0; i < len; i++) {
             JSONObject jsonObjectBeacon = jsonArrayBeacons.getJSONObject(i);
             Beacon beacon = jsonObjectToBeacon(jsonObjectBeacon, room);
             beacons.add(beacon);
