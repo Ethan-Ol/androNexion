@@ -40,7 +40,6 @@ public class BeaconOrganizer implements BeaconConsumer {
     Bus bus;
     List<Room> rooms;
 
-    CurrentRoomManager currentRoomManager;
     Room currentRoom;
     Context m_context;
 
@@ -52,15 +51,6 @@ public class BeaconOrganizer implements BeaconConsumer {
         this.m_context = context;
         this.rooms = rooms;
         started = false;
-
-        currentRoomManager = new CurrentRoomManager(getApplicationContext());
-        int roomId = currentRoomManager.get();
-        for (Room room : rooms) {
-            if (room.getId() == roomId) {
-                currentRoom = room;
-                break;
-            }
-        }
 
         m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(m_context);
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
@@ -85,17 +75,20 @@ public class BeaconOrganizer implements BeaconConsumer {
     }
 
     public void start() {
-        if (started != true) {
+        if (started == false) {
+            bus.register(this);
             started = true;
             m_manager.bind(this);
         }
     }
 
     public void stop() {
-        if (started) {
+        if (started == true) {
             started = false;
             m_manager.unbind(this);
-            currentRoom.setName(null);
+            bus.unregister(this);
+            if(currentRoom!=null)
+                currentRoom.setName(null);
         }
     }
 
@@ -107,7 +100,7 @@ public class BeaconOrganizer implements BeaconConsumer {
             public void didEnterRegion(Region region) {
                 Log.i(TAG, "I just saw an beacon for the first time ! " + region.getUniqueId());
 
-                if (currentRoomManager.isExist()) {
+                if (currentRoom != null) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         return;
                     }
@@ -116,7 +109,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                 for (Room r : rooms) {
                     if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                        if (currentRoomManager.isExist()) {
+                        if (currentRoom != null) {
                             bus.post(new OnRoomUnavailableEvent(currentRoom));
                         }
                         currentRoom = r;
@@ -128,10 +121,10 @@ public class BeaconOrganizer implements BeaconConsumer {
             @Override
             public void didExitRegion(Region region) {
                 Log.i(TAG, "Exit of region : " + region.getUniqueId());
-                if (currentRoomManager.isExist()) {
+                if (currentRoom != null) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         bus.post(new OnRoomUnavailableEvent(currentRoom));
-                        currentRoom = new Room();
+                        currentRoom = null;
                     }
                 }
             }
@@ -139,11 +132,10 @@ public class BeaconOrganizer implements BeaconConsumer {
             @Override
             public void didDetermineStateForRegion(int state, Region region) {
                 Log.i(TAG, "Change state of region : " + region.getUniqueId() + " state : " + state);
-                if (currentRoomManager.isExist()) {
+                if (currentRoom != null) {
                     if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         if (state == 0) {
                             bus.post(new OnRoomUnavailableEvent(currentRoom));
-                            currentRoomManager.set(0);
                             currentRoom = null;
                         }
                         return;
@@ -154,7 +146,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                     for (Room r : rooms) {
                         if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                            if (currentRoomManager.isExist()) {
+                            if (currentRoom != null) {
                                 bus.post(new OnRoomUnavailableEvent(currentRoom));
                             }
                             currentRoom = r;
@@ -176,6 +168,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                     try {
                         tmpregion = new Region("" + r.getId(), Identifier.parse(b.getUUID()), null, null);
                         m_manager.startMonitoringBeaconsInRegion(tmpregion);
+                        Log.i(TAG, "Listen Beacon : " + b.getUUID() + " room " + r.getId());
                     } catch (RemoteException e) {
                         Log.i(TAG, "Set notifier : ERROR");
                     } catch (Exception e) {
