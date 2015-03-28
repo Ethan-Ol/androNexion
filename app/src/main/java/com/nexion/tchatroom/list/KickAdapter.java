@@ -47,7 +47,7 @@ public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
         return users == null ? 0 : users.size();
     }
 
-    public boolean onUserItemClick(User user) {
+    private boolean onUserItemClick(User user) {
         if (userSelected.contains(user)) {
             userSelected.remove(user);
             return false;

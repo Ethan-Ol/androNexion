@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
@@ -45,6 +46,8 @@ public class ChatRoomFragment extends Fragment {
 
     @InjectView(R.id.toolBar)
     Toolbar mToolbar;
+    @InjectView(R.id.title)
+    TextView titleTv;
     @InjectView(R.id.kickBtn)
     ImageButton mKickBtn;
     @InjectView(R.id.list)
@@ -104,6 +107,8 @@ public class ChatRoomFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+        titleTv.setText(mRoom.getName());
+        
         messageEt.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {

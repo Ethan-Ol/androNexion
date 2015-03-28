@@ -1,6 +1,8 @@
 package com.nexion.tchatroom.list;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 
 import java.text.DateFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,6 +30,8 @@ import butterknife.InjectView;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private static final String TAG = "ChatAdapter";
+    private final static String REG_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    private final static Pattern PATTERN = Pattern.compile(REG_URL, 0);
 
     private final Room room;
     private final Context context;
@@ -44,15 +50,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         switch (viewType) {
             case NexionMessage.MESSAGE_FROM_USER:
                 v = layoutInflater.inflate(R.layout.message_item_from_user, viewGroup, false);
-                return new ViewHolderUser(v);
+                return new ViewHolderUser(v, this);
 
             case NexionMessage.MESSAGE_FROM_TEACHER:
                 v = layoutInflater.inflate(R.layout.message_item_from_teacher, viewGroup, false);
-                return new ViewHolderTeacher(v);
+                return new ViewHolderTeacher(v, this);
 
             case NexionMessage.MESSAGE_FROM_STUDENT:
                 v = layoutInflater.inflate(R.layout.message_item_from_student, viewGroup, false);
-                return new ViewHolderStudent(v);
+                return new ViewHolderStudent(v, this);
 
             default:
                 Log.e(TAG, "Message without type");
@@ -77,7 +83,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return room.getMessages().get(position).getType();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    private void onOpenUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        context.startActivity(intent);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         static Context context;
 
@@ -88,10 +100,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @InjectView(R.id.dateTv)
         TextView dateTv;
 
-        public ViewHolder(View v) {
-            super(v);
+        ChatAdapter listener;
 
+        public ViewHolder(View v, ChatAdapter listener) {
+            super(v);
             ButterKnife.inject(this, v);
+
+            this.listener = listener;
+            v.setOnClickListener(this);
         }
 
         void refreshView(NexionMessage message) {
@@ -106,26 +122,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
             dateTv.setText(dateText);
         }
+
+        @Override
+        public void onClick(View v) {
+            String text = messageTv.getText().toString();
+            Matcher matcher = PATTERN.matcher(text);
+            if(matcher.find()) {
+                listener.onOpenUrl(matcher.group());
+            }
+        }
     }
 
     static class ViewHolderUser extends ViewHolder {
 
-        public ViewHolderUser(View itemView) {
-            super(itemView);
+        public ViewHolderUser(View itemView, ChatAdapter listener) {
+            super(itemView, listener);
         }
     }
 
     static class ViewHolderTeacher extends ViewHolder {
 
-        public ViewHolderTeacher(View itemView) {
-            super(itemView);
+        public ViewHolderTeacher(View itemView, ChatAdapter listener) {
+            super(itemView, listener);
         }
     }
 
     static class ViewHolderStudent extends ViewHolder {
 
-        public ViewHolderStudent(View itemView) {
-            super(itemView);
+        public ViewHolderStudent(View itemView, ChatAdapter listener) {
+            super(itemView, listener);
         }
     }
 }

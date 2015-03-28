@@ -25,10 +25,12 @@ import org.altbeacon.beacon.Region;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by ethan on 24/03/15.
  */
+@Singleton
 public class BeaconOrganizer implements BeaconConsumer {
 
     private static final String TAG = "BeaconOrganizer";

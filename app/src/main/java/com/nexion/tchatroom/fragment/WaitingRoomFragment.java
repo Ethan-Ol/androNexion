@@ -71,9 +71,9 @@ public class WaitingRoomFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_waiting_room, container, false);
         ButterKnife.inject(this, v);
 
-        //TODO Test
-        mInfoTv.setVisibility(View.VISIBLE);
-        //mConnectBtn.setVisibility(View.VISIBLE);
+        //TODO debug mode
+        //mInfoTv.setVisibility(View.VISIBLE);
+        mConnectBtn.setVisibility(View.VISIBLE);
 
         return v;
     }

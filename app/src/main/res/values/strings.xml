@@ -38,5 +38,6 @@
     <string name="title_activity_chat_room">ChatRoomActivity</string>
     <string name="title_activity_waiting_room">WaitingRoomActivity</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_room_desc">Titre de la salle</string>
 
 </resources>

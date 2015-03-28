@@ -48,20 +48,30 @@
         android:id="@+id/leaveBtn"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:background="@drawable/image_button"
         android:contentDescription="@string/kick_user"
-        android:src="@android:drawable/ic_menu_directions"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:src="@android:drawable/ic_menu_directions" />
 
     <ImageButton
         android:id="@+id/kickBtn"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
+        android:layout_toLeftOf="@id/leaveBtn"
+        android:layout_toStartOf="@id/leaveBtn"
         android:background="@drawable/image_button"
         android:contentDescription="@string/exit_desc"
-        android:src="@drawable/ic_menu_blocked_user"
-        android:layout_toLeftOf="@id/leaveBtn"
-        android:layout_toStartOf="@id/leaveBtn"/>
+        android:src="@drawable/ic_menu_blocked_user" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginLeft="24dip"
+        android:layout_marginStart="24dip"
+        android:contentDescription="@string/title_room_desc"
+        android:gravity="center" />
 
 </RelativeLayout>

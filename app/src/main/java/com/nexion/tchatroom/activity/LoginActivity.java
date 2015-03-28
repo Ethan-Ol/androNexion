@@ -75,6 +75,12 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkBluetooth();
+    }
+
+    @Override
 
     public void onStop() {
         super.onStop();
