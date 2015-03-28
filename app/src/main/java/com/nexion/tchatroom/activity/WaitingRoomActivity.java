@@ -44,6 +44,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     @Inject
     BeaconOrganizer beaconOrganizer;
 
+    private APIRequester apiRequester;
     private Room mAvailableRoom;
 
     @Override
@@ -52,7 +53,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         setContentView(R.layout.activity_waiting_room);
         ((App) getApplication()).inject(this);
 
-        APIRequester apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
+        apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);
         }
@@ -98,7 +99,15 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         //TODO debug mode
         mAvailableRoom = rooms.get(0);
         new CurrentRoomManager(getApplicationContext()).set(mAvailableRoom.getId());
+        try {
+            apiRequester.joinRoom(mAvailableRoom, "");
+            startChatRoom();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void startChatRoom() {
         startActivity(new Intent(getApplicationContext(), ChatRoomActivity.class));
         finish();
     }

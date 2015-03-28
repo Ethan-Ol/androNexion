@@ -109,6 +109,7 @@ public class ChatRoomFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
 
         titleTv.setText(mRoom.getName());
 

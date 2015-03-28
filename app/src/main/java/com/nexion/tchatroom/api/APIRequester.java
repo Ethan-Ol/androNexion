@@ -128,7 +128,7 @@ public class APIRequester {
     }
 
     public void joinRoom(final Room room, String password) throws JSONException {
-        String page = "joinTchat.php";
+        String page = "/joinTchat.php";
         JSONObject jsonObject = jsonFactory.createRoomJSON(room, password);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {

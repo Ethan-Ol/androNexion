@@ -21,7 +21,8 @@ public final class JSONConverter implements JSONFields {
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
         User user = new User();
         user.setPseudo(jsonObject.getString(FIELD_PSEUDO));
-        user.setId(jsonObject.getInt(FIELD_USER_ID));
+        user.setId(jsonObject.getInt(FIELD_ID));
+        user.isAdmin(jsonObject.getInt(FIELD_ROLE) == 1);
 
         return user;
     }
@@ -30,7 +31,7 @@ public final class JSONConverter implements JSONFields {
         NexionMessage message = new NexionMessage();
         message.setContent(jsonObject.getString(FIELD_CONTENT));
         Calendar date = Calendar.getInstance();
-        date.setTimeInMillis(jsonObject.getLong(FIELD_DATE));
+        date.setTimeInMillis(jsonObject.getLong(FIELD_DATE) * 1000);
         message.setSendAt(date);
 
         int userId = jsonObject.getInt(FIELD_USER_ID);
