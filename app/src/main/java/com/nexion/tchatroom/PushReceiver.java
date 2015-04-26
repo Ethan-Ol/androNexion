@@ -36,7 +36,7 @@ public class PushReceiver extends BroadcastReceiver {
                 PushService.startActionLeave(context, message.toString());
             } else if (action.equals(ACTION_JOIN)) {
                 PushService.startActionJoin(context, message.toString());
-            } else if(action.equals(ACTION_KICK)) {
+            } else if (action.equals(ACTION_KICK)) {
                 PushService.startActionKick(context, message.toString());
             }
         } catch (Exception e) {

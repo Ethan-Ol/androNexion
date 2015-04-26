@@ -13,13 +13,10 @@ import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.TokenManager;
-import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import org.json.JSONException;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,8 +27,6 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
 
     @Inject
     Bus bus;
-    @Inject
-    List<Room> rooms;
 
     private APIRequester apiRequester;
 
@@ -41,7 +36,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         setContentView(R.layout.activity_login);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
+        apiRequester = new APIRequester(getApplicationContext(), bus);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
         if (fragment == null) {

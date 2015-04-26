@@ -28,7 +28,7 @@ import dagger.Provides;
 
 /**
  * Created by DarzuL on 09/03/2015.
- *
+ * <p/>
  * The main module
  */
 @Module(
@@ -63,12 +63,6 @@ public class AppModule {
     @Singleton
     public Context provideApplicationContext() {
         return app;
-    }
-
-    @Provides
-    @Singleton
-    public List<Room> provideRooms() {
-        return new LinkedList<>();
     }
 
     @Provides

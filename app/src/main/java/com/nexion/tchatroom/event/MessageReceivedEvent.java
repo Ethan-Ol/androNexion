@@ -1,18 +1,27 @@
 package com.nexion.tchatroom.event;
 
-import com.nexion.tchatroom.model.NexionMessage;
-
 /**
  * Created by DarzuL on 15/03/2015.
  */
 public class MessageReceivedEvent {
-    private NexionMessage message;
+    private int authorId;
+    private String content;
+    private long dateTime;
 
-    public MessageReceivedEvent(NexionMessage message) {
-        this.message = message;
+    public MessageReceivedEvent(int authorId, String content, long dateTime) {
+        this.authorId = authorId;
+        this.content = content;
     }
 
-    public NexionMessage getMessage() {
-        return message;
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public long getDateTime() {
+        return dateTime;
     }
 }

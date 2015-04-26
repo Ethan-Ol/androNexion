@@ -13,10 +13,8 @@ import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.event.RoomJoinedEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
-import com.nexion.tchatroom.event.UserInfoReceivedEvent;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.manager.TokenManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.BeaconRoom;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
@@ -34,20 +32,14 @@ public class APIRequester {
 
     private static final String url = "http://git.ethandev.fr/API";
 
-    private static RequestQueue queue;
-    private JSONFactory jsonFactory;
+    private final RequestQueue queue;
+    private final JSONFactory jsonFactory;
     private final Bus bus;
-    private List<Room> rooms;
 
-    private final CurrentRoomManager currentRoomManager;
-
-    public APIRequester(final Context context, final Bus bus, List<Room> rooms) {
-        this.bus = bus;
-        this.jsonFactory = new JSONFactory(context);
+    public APIRequester(final Context context, final Bus bus) {
         queue = Volley.newRequestQueue(context);
-        this.rooms = rooms;
-
-        currentRoomManager = new CurrentRoomManager(context);
+        this.jsonFactory = new JSONFactory(context);
+        this.bus = bus;
 
         errorListener = new Response.ErrorListener() {
             @Override
@@ -80,7 +72,7 @@ public class APIRequester {
                 errorListener));
     }
 
-    public void requestRoomsInfo() throws JSONException {
+    public void requestRoomsInfo(final BeaconsRoomInfoListener listener) throws JSONException {
         String page = "/getInitDatas.php";
         JSONObject jsonObject = jsonFactory.createTokenJSON();
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
@@ -88,7 +80,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            rooms.addAll(JSONParser.parseJSONRooms(response));
+                            listener.onBeaconsRoomInfoReceived(JSONParser.parseJSONBeaconRooms(response));
                             bus.post(new RoomsInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -104,15 +96,15 @@ public class APIRequester {
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
-    public void joinRoom(final Room room, String password) throws JSONException {
+    public void joinRoom(final int roomId, String password, final RoomJoinListener listener) throws JSONException {
         String page = "/joinTchat.php";
-        JSONObject jsonObject = jsonFactory.createRoomJSON(room, password);
+        JSONObject jsonObject = jsonFactory.createRoomJSON(roomId, password);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            currentRoomManager.set(JSONParser.parseJSONRoomResponse(response).getId());
+                            listener.onRoomJoined(JSONParser.parseJSONRoomResponse(response));
                             bus.post(new RoomJoinedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -150,5 +142,13 @@ public class APIRequester {
 
     public static interface UserInfoListener {
         public void onUserConnected(String token, User user);
+    }
+
+    public static interface RoomJoinListener {
+        public void onRoomJoined(ChatRoom room);
+    }
+
+    public static interface BeaconsRoomInfoListener {
+        public void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms);
     }
 }

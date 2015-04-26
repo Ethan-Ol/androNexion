@@ -8,9 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
@@ -34,8 +33,6 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
 
     @Inject
     Bus bus;
-    @Inject
-    List<Room> rooms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +40,7 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
         setContentView(R.layout.activity_chat_room);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
+        apiRequester = new APIRequester(getApplicationContext(), bus);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
         if (fragment == null) {

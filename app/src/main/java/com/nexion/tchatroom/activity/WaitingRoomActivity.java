@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,10 +18,11 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
+import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.manager.PlayServicesManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -30,7 +32,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class WaitingRoomActivity extends FragmentActivity implements WaitingRoomFragment.OnFragmentInteractionListener {
+public class WaitingRoomActivity extends FragmentActivity implements WaitingRoomFragment.OnFragmentInteractionListener, APIRequester.RoomJoinListener {
 
     private final static String WAITING_ROOM_TAG = "WaitingRoom";
     private static final int REQUEST_ENABLE_BT = 150;
@@ -40,13 +42,11 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     @Inject
     Bus bus;
     @Inject
-    List<Room> rooms;
-    @Inject
     BeaconOrganizer beaconOrganizer;
 
     CurrentRoomManager currentRoomManager;
     private APIRequester apiRequester;
-    private Room mAvailableRoom;
+    private Integer mAvailableRoomId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         ((App) getApplication()).inject(this);
 
         currentRoomManager = new CurrentRoomManager(getApplicationContext());
-        apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
+        apiRequester = new APIRequester(getApplicationContext(), bus);
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);
         }
@@ -67,13 +67,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
                     .add(R.id.container, WaitingRoomFragment.newInstance(), WAITING_ROOM_TAG)
                     .commit();
         }
-
-        try {
-            apiRequester.requestRoomsInfo();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -95,29 +88,35 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         bus.unregister(this);
     }
 
-    @Override
-    public void onJoinRoom(Room room) {
-        //TODO debug mode
-        //mAvailableRoom = rooms.get(0);
-        new CurrentRoomManager(getApplicationContext()).set(room.getId());
+    @Subscribe
+    public void onRoomAvailable(OnRoomAvailableEvent event) {
+        mAvailableRoomId = event.getRoomId();
+    }
 
+    @Subscribe
+    public void onRoomUnavailable(OnRoomUnavailableEvent event) {
+        mAvailableRoomId = null;
+    }
+
+    @Override
+    public void onJoinRoom() {
         try {
-            apiRequester.joinRoom(mAvailableRoom, "");
+            apiRequester.joinRoom(mAvailableRoomId, "", this);
             startChatRoom();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onRoomJoined(ChatRoom room) {
+        startChatRoom();
+    }
+
     private void startChatRoom() {
         startActivity(new Intent(getApplicationContext(), ChatRoomActivity.class));
     }
 
-    @Subscribe
-    public void onRoomAvailable(OnRoomAvailableEvent event) {
-        Log.i(TAG, "Room " + event.getRoom().getId() + " is avalaible");
-        mAvailableRoom = event.getRoom();
-    }
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);

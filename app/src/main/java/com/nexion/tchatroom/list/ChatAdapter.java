@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nexion.tchatroom.R;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.NexionMessage;
-import com.nexion.tchatroom.model.Room;
 
 import java.text.DateFormat;
 import java.util.regex.Matcher;
@@ -33,13 +33,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private final static String REG_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     private final static Pattern PATTERN = Pattern.compile(REG_URL, 0);
 
-    private final Room room;
-    private final Context context;
+    private final Context mContext;
+    private final ChatRoom mRoom;
 
-    public ChatAdapter(Context context, Room room) {
-        this.context = context;
-        ViewHolder.context = context;
-        this.room = room;
+    public ChatAdapter(Context context, ChatRoom room) {
+        mContext = context;
+        ViewHolder.sAdapter = this;
+        mRoom = room;
     }
 
     @Override
@@ -50,19 +50,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         switch (viewType) {
             case NexionMessage.MESSAGE_FROM_USER:
                 v = layoutInflater.inflate(R.layout.message_item_from_user, viewGroup, false);
-                return new ViewHolderUser(v, this);
+                return new ViewHolderUser(v);
 
             case NexionMessage.MESSAGE_FROM_TEACHER:
                 v = layoutInflater.inflate(R.layout.message_item_from_teacher, viewGroup, false);
-                return new ViewHolderTeacher(v, this);
+                return new ViewHolderTeacher(v);
 
             case NexionMessage.MESSAGE_FROM_STUDENT:
                 v = layoutInflater.inflate(R.layout.message_item_from_student, viewGroup, false);
-                return new ViewHolderStudent(v, this);
+                return new ViewHolderStudent(v);
 
             case NexionMessage.MESSAGE_FROM_BOT:
                 v = layoutInflater.inflate(R.layout.message_item_from_bot, viewGroup, false);
-                return new ViewHolderBot(v, this);
+                return new ViewHolderBot(v);
 
             default:
                 Log.e(TAG, "Message without type");
@@ -73,29 +73,29 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        NexionMessage message = room.getMessages().get(position);
+        NexionMessage message = mRoom.getMessage(position);
         viewHolder.refreshView(message);
     }
 
     @Override
     public int getItemCount() {
-        return room.countMessages();
+        return mRoom.getMessages().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return room.getMessages().get(position).getType();
+        return mRoom.getMessage(position).getType();
     }
 
     private void onOpenUrl(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
-        context.startActivity(intent);
+        mContext.startActivity(intent);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        static Context context;
+        private static ChatAdapter sAdapter;
 
         @InjectView(R.id.pseudoTv)
         TextView pseudoTv;
@@ -104,23 +104,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         @InjectView(R.id.dateTv)
         TextView dateTv;
 
-        ChatAdapter listener;
-
-        public ViewHolder(View v, ChatAdapter listener) {
+        public ViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
-
-            this.listener = listener;
             v.setOnClickListener(this);
         }
 
         void refreshView(NexionMessage message) {
-            pseudoTv.setText(message.getAuthor().getPseudo());
+            pseudoTv.setText(sAdapter.mRoom.getUser(message.getAuthorId()).getPseudo());
             messageTv.setText(message.getContent());
 
             String dateText;
             if (message.getSendAt() == null) {
-                dateText = context.getString(R.string.pending);
+                dateText = sAdapter.mContext.getString(R.string.pending);
             } else {
                 dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
             }
@@ -132,35 +128,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             String text = messageTv.getText().toString();
             Matcher matcher = PATTERN.matcher(text);
             if (matcher.find()) {
-                listener.onOpenUrl(matcher.group());
+                sAdapter.onOpenUrl(matcher.group());
             }
         }
     }
 
     static class ViewHolderUser extends ViewHolder {
 
-        public ViewHolderUser(View itemView, ChatAdapter listener) {
-            super(itemView, listener);
+        public ViewHolderUser(View itemView) {
+            super(itemView);
         }
     }
 
     static class ViewHolderTeacher extends ViewHolder {
 
-        public ViewHolderTeacher(View itemView, ChatAdapter listener) {
-            super(itemView, listener);
+        public ViewHolderTeacher(View itemView) {
+            super(itemView);
         }
     }
 
     static class ViewHolderStudent extends ViewHolder {
 
-        public ViewHolderStudent(View itemView, ChatAdapter listener) {
-            super(itemView, listener);
+        public ViewHolderStudent(View itemView) {
+            super(itemView);
         }
     }
 
     static class ViewHolderBot extends ViewHolder {
-        public ViewHolderBot(View itemView, ChatAdapter listener) {
-            super(itemView, listener);
+        public ViewHolderBot(View itemView) {
+            super(itemView);
         }
 
         @Override

@@ -1,15 +1,18 @@
 package com.nexion.tchatroom.api;
 
+import com.nexion.tchatroom.model.BeaconRoom;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.NexionMessage;
-import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DarzuL on 14/03/2015.
@@ -24,38 +27,39 @@ public class JSONParser implements JSONFields {
         return new User(response.getInt(FIELD_ID), response.getString(FIELD_PSEUDO), response.getInt(FIELD_ACL));
     }
 
-    static List<Room> parseJSONRooms(JSONObject response) throws JSONException {
+    static List<BeaconRoom> parseJSONBeaconRooms(JSONObject response) throws JSONException {
         JSONArray jsonArrayRooms = response.getJSONArray(FIELD_ROOMS);
 
-        List<Room> rooms = new LinkedList<>();
+        List<BeaconRoom> rooms = new LinkedList<>();
         int len = jsonArrayRooms.length();
         for (int i = 0; i < len; i++) {
-            Room room = JSONConverter.jsonObjectToRoom(jsonArrayRooms.getJSONObject(i));
+            BeaconRoom room = JSONConverter.jsonObjectToBeaconRoom(jsonArrayRooms.getJSONObject(i));
             rooms.add(room);
         }
 
         return rooms;
     }
 
-    static Room parseJSONRoomResponse(JSONObject response) throws JSONException {
-        JSONArray users = response.getJSONArray(FIELD_USERS);
-        JSONArray messages = response.getJSONArray(FIELD_MESSAGES);
+    static ChatRoom parseJSONRoomResponse(JSONObject response) throws JSONException {
+        int roomId = response.getInt(FIELD_ID);
+        String roomName = response.getString(FIELD_ROOM_NAME);
+        JSONArray usersJSONArray = response.getJSONArray(FIELD_USERS);
+        JSONArray messagesJSONArray = response.getJSONArray(FIELD_MESSAGES);
 
-        Room room = new Room();
-        room.setUsers(new LinkedList<User>());
-        room.setMessages(new LinkedList<NexionMessage>());
-        int len = users.length();
+        Map<Integer, User> userMap = new HashMap<>();
+        List<NexionMessage> messages = new LinkedList<NexionMessage>();
+        int len = usersJSONArray.length();
         for (int i = 0; i < len; i++) {
-            User user = JSONConverter.jsonObjectToUser(users.getJSONObject(i));
-            room.getUsers().add(user);
+            User user = JSONConverter.jsonObjectToUser(usersJSONArray.getJSONObject(i));
+            userMap.put(user.getId(), user);
         }
 
-        len = messages.length();
+        len = messagesJSONArray.length();
         for (int i = 0; i < len; i++) {
-            NexionMessage message = JSONConverter.jsonObjectToMessage(messages.getJSONObject(i), room.getUsers());
-            room.getMessages().add(message);
+            NexionMessage message = JSONConverter.jsonObjectToMessage(messagesJSONArray.getJSONObject(i));
+            messages.add(message);
         }
 
-        return room;
+        return new ChatRoom(roomId, roomName, userMap, messages);
     }
 }

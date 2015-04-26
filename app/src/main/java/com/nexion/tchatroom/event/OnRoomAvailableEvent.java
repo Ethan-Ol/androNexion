@@ -1,18 +1,16 @@
 package com.nexion.tchatroom.event;
 
-import com.nexion.tchatroom.model.Room;
-
 /**
  * Created by DarzuL on 22/03/2015.
  */
 public class OnRoomAvailableEvent {
-    private Room mRoom;
+    private final int roomId;
 
-    public OnRoomAvailableEvent(Room r) {
-        mRoom = r;
+    public OnRoomAvailableEvent(int roomId) {
+        this.roomId = roomId;
     }
 
-    public Room getRoom() {
-        return mRoom;
+    public int getRoomId() {
+        return roomId;
     }
 }

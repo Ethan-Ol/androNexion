@@ -12,7 +12,7 @@ import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -31,8 +31,6 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
 
     @Inject
     Bus bus;
-    @Inject
-    List<Room> rooms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         setContentView(R.layout.activity_chat_room);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
+        apiRequester = new APIRequester(getApplicationContext(), bus);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CHAT_ROOM_TAG);
         if (fragment == null) {
@@ -54,9 +52,6 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
     @Override
     protected void onStart() {
         super.onStart();
-        if (rooms.isEmpty()) {
-            leaveRoom();
-        }
         bus.register(this);
     }
 

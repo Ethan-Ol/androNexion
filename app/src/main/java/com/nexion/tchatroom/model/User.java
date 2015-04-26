@@ -2,8 +2,8 @@ package com.nexion.tchatroom.model;
 
 public class User extends AbstractEntity {
 
-    private final int ACL_TEACHER = 1;
-    private final int ACL_STUDENT = 0;
+    public static final int ACL_TEACHER = 1;
+    public static final int ACL_STUDENT = 0;
 
     private String pseudo;
     private int acl;
@@ -16,6 +16,10 @@ public class User extends AbstractEntity {
 
     public String getPseudo() {
         return pseudo;
+    }
+
+    public int getAcl() {
+        return acl;
     }
 
     public boolean isAdmin() {

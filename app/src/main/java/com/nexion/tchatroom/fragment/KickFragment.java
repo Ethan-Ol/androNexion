@@ -13,7 +13,7 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.list.KickAdapter;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 
 import java.util.LinkedList;
@@ -37,10 +37,7 @@ public class KickFragment extends Fragment {
     }
 
     User mUser;
-    Room mRoom;
-
-    @Inject
-    List<Room> rooms;
+    ChatRoom mRoom;
 
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
@@ -56,22 +53,9 @@ public class KickFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        int roomId = new CurrentRoomManager(getActivity()).get();
-        for (Room room : rooms) {
-            if (room.getId() == roomId) {
-                mRoom = room;
-                break;
-            }
-        }
-
+        //TODO refacto
         List<User> kickableUsers = new LinkedList<>();
-        kickableUsers.addAll(mRoom.getUsers());
-        for (User user : mRoom.getUsers()) {
-            if (user.getPseudo().equals(mUser.getPseudo())) {
-                kickableUsers.remove(user);
-                break;
-            }
-        }
+        kickableUsers.addAll(mRoom.getUsers().values());
         mAdapter = new KickAdapter(kickableUsers);
     }
 

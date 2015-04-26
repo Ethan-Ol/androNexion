@@ -6,6 +6,8 @@ import java.util.Calendar;
 /**
  * Created by DarzuL on 08/03/2015.
  * <p/>
+ * A message
+ * <p/>
  * There is 3 item type
  * 0 -> Message from current user
  * 1 -> Message from other student
@@ -19,43 +21,53 @@ public class NexionMessage extends AbstractEntity {
     public static final int MESSAGE_FROM_STUDENT = 2;
     public static final int MESSAGE_FROM_BOT = 3;
 
-    int type;
-    String content;
-    Calendar sendAt;
-    User author;
+    private String content;
+    private Calendar sendAt;
+    private Integer authorId;
+    private Integer type;
+    private boolean pending;
 
-    public NexionMessage() {
+    public NexionMessage(String content, Long dateTime, Integer authorId) {
+        this(content, dateTime, authorId, null);
+    }
+
+    public NexionMessage(String content, Long dateTime, Integer authorId, Integer type) {
+        this.content = content;
+
+        Calendar sendAt = null;
+        if (dateTime == null) {
+            pending = true;
+        } else {
+            sendAt = Calendar.getInstance();
+            sendAt.setTimeInMillis(dateTime);
+        }
+        this.sendAt = sendAt;
+        this.authorId = authorId;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public Calendar getSendAt() {
         return sendAt;
     }
 
-    public void setSendAt(Calendar sendAt) {
-        this.sendAt = sendAt;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public User getAuthor() {
-        return author;
+    public boolean isPending() {
+        return pending;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getType() {
+    public Integer getType() {
         return type;
+    }
+
+    public void unpending(Calendar sendAt) {
+        if (pending) {
+            this.sendAt = sendAt;
+        }
     }
 }

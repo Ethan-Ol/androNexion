@@ -1,19 +1,17 @@
 package com.nexion.tchatroom.event;
 
-import com.nexion.tchatroom.model.User;
-
 /**
  * Created by DarzuL on 28/03/2015.
  */
 public class KickReceivedEvent {
 
-    User user;
+    int userId;
 
-    public KickReceivedEvent(User user) {
-        this.user = user;
+    public KickReceivedEvent(int userId) {
+        this.userId = userId;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 }

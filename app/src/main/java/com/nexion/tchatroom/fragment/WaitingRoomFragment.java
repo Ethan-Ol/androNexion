@@ -20,7 +20,7 @@ import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -48,7 +48,7 @@ public class WaitingRoomFragment extends Fragment {
     @Inject
     Bus bus;
 
-    private Room availableRoom;
+    private Integer availableRoomId;
     private OnFragmentInteractionListener mListener;
     private CurrentRoomManager currentRoomManager;
 
@@ -118,14 +118,13 @@ public class WaitingRoomFragment extends Fragment {
     public void onRoomAvailable(OnRoomAvailableEvent event) {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.VISIBLE);
-        availableRoom = event.getRoom();
     }
 
     @Subscribe
     public void onRoomUnavailable(OnRoomUnavailableEvent event) {
         mConnectBtn.setVisibility(View.GONE);
         mInfoTv.setVisibility(View.VISIBLE);
-        availableRoom = null;
+        availableRoomId = null;
     }
 
     @Subscribe
@@ -148,11 +147,11 @@ public class WaitingRoomFragment extends Fragment {
 
     @OnClick(R.id.connectBtn)
     void onJoinRoom() {
-        mListener.onJoinRoom(availableRoom);
+        mListener.onJoinRoom();
     }
 
 
     public interface OnFragmentInteractionListener {
-        public void onJoinRoom(Room room);
+        public void onJoinRoom();
     }
 }

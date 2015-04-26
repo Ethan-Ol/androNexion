@@ -3,7 +3,7 @@ package com.nexion.tchatroom.api;
 import android.content.Context;
 
 import com.nexion.tchatroom.manager.TokenManager;
-import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 
 import org.json.JSONException;
@@ -56,10 +56,10 @@ public class JSONFactory implements JSONFields {
         return new JSONObject(str);
     }
 
-    JSONObject createRoomJSON(Room room, String password) throws JSONException {
+    JSONObject createRoomJSON(int roomId, String password) throws JSONException {
         String str = "{"
                 + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
-                + "\"" + FIELD_ROOM_ID + "\"" + ":" + room.getId() + ","
+                + "\"" + FIELD_ROOM_ID + "\"" + ":" + roomId + ","
                 + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\""
                 + "}";
 
