@@ -88,9 +88,7 @@ public class PushService extends IntentService {
             JSONObject jobj = new JSONObject(jsonObjectStr);
             NexionMessage message = new NexionMessage();
             message.setContent(jobj.getString(MESSAGE));
-            User author = new User();
-            author.setPseudo(jobj.getString(NAME));
-            author.setId(jobj.getInt(ID));
+            User author = new User(jobj.getInt(ID), jobj.getString(NAME), 0);
             message.setAuthor(author);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(jobj.getInt(DATE) * 1000);
@@ -104,9 +102,7 @@ public class PushService extends IntentService {
     private void handleActionJoin(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            User author = new User();
-            author.setPseudo(jobj.getString(NAME));
-            author.setId(jobj.getInt(ID));
+            User author = new User(jobj.getInt(ID), jobj.getString(NAME), 0);
             bus.post(new JoinReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -116,9 +112,7 @@ public class PushService extends IntentService {
     private void handleActionLeave(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            User author = new User();
-            author.setPseudo(jobj.getString(NAME));
-            author.setId(jobj.getInt(ID));
+            User author = new User(jobj.getInt(ID), jobj.getString(NAME), 0);
             bus.post(new LeaveReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -128,9 +122,7 @@ public class PushService extends IntentService {
     private void handleActionKick(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            User author = new User();
-            author.setPseudo(jobj.getString(NAME));
-            author.setId(jobj.getInt(ID));
+            User author = new User(jobj.getInt(ID), jobj.getString(NAME), 0);
             bus.post(new KickReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();

@@ -7,6 +7,7 @@ public interface KeyFields {
     String PREF_FILE = "nexion";
     String KEY_ROOM = "current_room_id";
     String KEY_TOKEN = "token";
-    String KEY_PSEUDO = "pseudo";
-    String KEY_ADMIN = "is_admin";
+    String KEY_USER_ID = "user_id";
+    String KEY_USER_PSEUDO = "user_pseudo";
+    String KEY_USER_ACL = "user_acl";
 }

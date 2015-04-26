@@ -13,7 +13,6 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.list.KickAdapter;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 
@@ -57,7 +56,6 @@ public class KickFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        mUser = new CurrentUserManager(getActivity()).get();
         int roomId = new CurrentRoomManager(getActivity()).get();
         for (Room room : rooms) {
             if (room.getId() == roomId) {
@@ -68,8 +66,8 @@ public class KickFragment extends Fragment {
 
         List<User> kickableUsers = new LinkedList<>();
         kickableUsers.addAll(mRoom.getUsers());
-        for(User user : mRoom.getUsers()) {
-            if(user.getPseudo().equals(mUser.getPseudo())) {
+        for (User user : mRoom.getUsers()) {
+            if (user.getPseudo().equals(mUser.getPseudo())) {
                 kickableUsers.remove(user);
                 break;
             }

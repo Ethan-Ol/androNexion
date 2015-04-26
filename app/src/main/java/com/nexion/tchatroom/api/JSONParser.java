@@ -21,10 +21,7 @@ public class JSONParser implements JSONFields {
     }
 
     static User getUserInfo(JSONObject response) throws JSONException {
-        String pseudo = response.getString(FIELD_PSEUDO);
-        boolean isAdmin = response.getInt(FIELD_ROLE) >= 1;
-
-        return new User(pseudo, isAdmin);
+        return new User(response.getInt(FIELD_ID), response.getString(FIELD_PSEUDO), response.getInt(FIELD_ACL));
     }
 
     static List<Room> parseJSONRooms(JSONObject response) throws JSONException {

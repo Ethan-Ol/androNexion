@@ -14,7 +14,7 @@ public interface JSONFields {
     String FIELD_USERS = "users";
     String FIELD_USER_ID = "user_id";
     String FIELD_PSEUDO = "pseudo";
-    String FIELD_ROLE = "role";
+    String FIELD_ACL = "role";
     String FIELD_KICK_DURATION = "duration";
 
     String FIELD_MESSAGES = "messages";

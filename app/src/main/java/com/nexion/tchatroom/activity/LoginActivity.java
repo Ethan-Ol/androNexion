@@ -9,18 +9,13 @@ import android.support.v4.app.FragmentActivity;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.event.LoadingEvent;
-import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
-import com.nexion.tchatroom.event.TokenReceivedEvent;
-import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
@@ -101,8 +96,9 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
                 .edit()
                 .putString(KEY_TOKEN, token)
-                .putString(KEY_PSEUDO, user.getPseudo())
-                .putBoolean(KEY_ADMIN, user.isAdmin())
+                .putInt(KEY_USER_ID, user.getId())
+                .putString(KEY_USER_PSEUDO, user.getPseudo())
+                .putBoolean(KEY_USER_ACL, user.isAdmin())
                 .apply();
 
         startWaitingRoom();

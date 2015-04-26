@@ -2,6 +2,7 @@ package com.nexion.tchatroom.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +23,9 @@ import com.nexion.tchatroom.event.JoinReceivedEvent;
 import com.nexion.tchatroom.event.KickReceivedEvent;
 import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
-import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.list.ChatAdapter;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.manager.CurrentUserManager;
+import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ChatRoomFragment extends Fragment {
+public class ChatRoomFragment extends Fragment implements KeyFields {
     private static final String ARG_ROOM = "mRoom";
     public static final String TAG = "ChatRoomFragment";
 
@@ -67,7 +67,6 @@ public class ChatRoomFragment extends Fragment {
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ChatAdapter mAdapter;
-    private CurrentUserManager currentUserManager;
     private CurrentRoomManager currentRoomManager;
 
     public static ChatRoomFragment newInstance() {
@@ -83,8 +82,11 @@ public class ChatRoomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
-        currentUserManager = new CurrentUserManager(getActivity());
-        mUser = currentUserManager.get();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        int userId = sharedPref.getInt(KEY_USER_ID, 0);
+        String userPseudo = sharedPref.getString(KEY_USER_PSEUDO, "");
+        int userAcl = sharedPref.getInt(KEY_USER_ACL, 0);
+        mUser = new User(userId, userPseudo, userAcl);
 
         currentRoomManager = new CurrentRoomManager(getActivity());
         int roomId = currentRoomManager.get();
@@ -172,13 +174,13 @@ public class ChatRoomFragment extends Fragment {
     @OnClick(R.id.leaveBtn)
     void onLeaveRoom() {
         User userToKick = null;
-        for(User user : mRoom.getUsers()) {
-            if(user.getPseudo().equals(mUser.getPseudo())) {
+        for (User user : mRoom.getUsers()) {
+            if (user.getPseudo().equals(mUser.getPseudo())) {
                 userToKick = user;
                 break;
             }
         }
-        if(userToKick != null) {
+        if (userToKick != null) {
             mRoom.removeUser(userToKick);
         }
 
@@ -206,7 +208,7 @@ public class ChatRoomFragment extends Fragment {
     public void onMessageReceive(MessageReceivedEvent event) {
         NexionMessage message = event.getMessage();
         User author = message.getAuthor();
-        if (author.getPseudo().equals(currentUserManager.get().getPseudo())) {
+        if (mUser.getId() == author.getId()) {
             message.setType(NexionMessage.MESSAGE_FROM_USER);
             unPendingMsg();
             return;
@@ -273,7 +275,7 @@ public class ChatRoomFragment extends Fragment {
         User user = event.getUser();
         mRoom.removeUser(user);
 
-        if(user.getPseudo().equals(mUser.getPseudo()))
+        if (user.getPseudo().equals(mUser.getPseudo()))
             mListener.leaveRoom();
 
         NexionMessage msg = new NexionMessage();

@@ -19,12 +19,7 @@ import java.util.List;
 public final class JSONConverter implements JSONFields {
 
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
-        User user = new User();
-        user.setPseudo(jsonObject.getString(FIELD_PSEUDO));
-        user.setId(jsonObject.getInt(FIELD_ID));
-        user.isAdmin(jsonObject.getInt(FIELD_ROLE) == 1);
-
-        return user;
+        return new User(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_PSEUDO), jsonObject.getInt(FIELD_ACL));
     }
 
     static NexionMessage jsonObjectToMessage(JSONObject jsonObject, List<User> users) throws JSONException {
