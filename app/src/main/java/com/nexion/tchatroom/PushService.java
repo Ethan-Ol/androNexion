@@ -24,11 +24,13 @@ public class PushService extends IntentService {
 
     private static final String EXTRA_JSON = "com.nexion.tchatroom.extra.JSON";
 
-    private static final String NAME = "pseudo";
     private static final String ID = "id";
+    private static final String PSEUDO = "pseudo";
+    private static final String ACL = "acl";
+    
     private static final String AUTHOR_ID = "id";
-    private static final String DATE = "dateTime";
     private static final String CONTENT = "content";
+    private static final String DATE = "dateTime";
 
     public static void startActionPost(Context context, String jsonObject) {
         Intent intent = new Intent(context, PushService.class);
@@ -93,7 +95,7 @@ public class PushService extends IntentService {
     private void handleActionJoin(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            User author = new User(jobj.getInt(ID), jobj.getString(NAME), 0);
+            User author = new User(jobj.getInt(ID), jobj.getString(PSEUDO), jobj.getInt(ACL));
             bus.post(new JoinReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();
