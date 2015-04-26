@@ -15,7 +15,6 @@ import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.manager.CurrentUserManager;
 import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
 import com.nexion.tchatroom.model.User;
@@ -41,8 +40,6 @@ public class APIRequester {
     private List<Room> rooms;
 
     private final CurrentRoomManager currentRoomManager;
-    private final TokenManager tokenManager;
-    private final CurrentUserManager currentUserManager;
 
     public APIRequester(final Context context, final Bus bus, List<Room> rooms) {
         this.bus = bus;
@@ -51,8 +48,6 @@ public class APIRequester {
         this.rooms = rooms;
 
         currentRoomManager = new CurrentRoomManager(context);
-        tokenManager = new TokenManager(context);
-        currentUserManager = new CurrentUserManager(context);
 
         errorListener = new Response.ErrorListener() {
             @Override
@@ -66,7 +61,7 @@ public class APIRequester {
 
     Response.ErrorListener errorListener;
 
-    public void requestToken(String login, String password) throws JSONException {
+    public void requestToken(String login, String password, final UserInfoListener listener) throws JSONException {
         String page = "/getToken.php";
         JSONObject jsonObject = jsonFactory.createLoginJSON(login, password);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
@@ -74,27 +69,9 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            tokenManager.set(JSONParser.parseJSONTokenResponse(response));
+                            listener.onUserConnected(JSONParser.getToken(response), JSONParser.getUserInfo(response));
                             bus.post(new TokenReceivedEvent());
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                errorListener));
-    }
-
-    public void requestUserInfo() throws JSONException {
-        String page = "/getCurrentUser.php";
-        JSONObject jsonObject = jsonFactory.createTokenJSON();
-        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            currentUserManager.set(JSONParser.parseJSONUserResponse(response));
-                            bus.post(new UserInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -169,5 +146,9 @@ public class APIRequester {
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 null,
                 null));
+    }
+
+    public static interface UserInfoListener {
+        public void onUserConnected(String token, User user);
     }
 }

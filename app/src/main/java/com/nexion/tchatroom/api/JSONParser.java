@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class JSONParser implements JSONFields {
 
-    static String parseJSONTokenResponse(JSONObject jsonObject) throws JSONException {
+    static String getToken(JSONObject jsonObject) throws JSONException {
         return jsonObject.getString(FIELD_TOKEN);
     }
 
-    static User parseJSONUserResponse(JSONObject response) throws JSONException {
+    static User getUserInfo(JSONObject response) throws JSONException {
         String pseudo = response.getString(FIELD_PSEUDO);
         boolean isAdmin = response.getInt(FIELD_ROLE) >= 1;
 

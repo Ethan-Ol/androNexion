@@ -1,5 +1,6 @@
 package com.nexion.tchatroom.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,16 @@ import android.support.v4.app.FragmentActivity;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
+import com.nexion.tchatroom.api.JSONParser;
 import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.event.TokenReceivedEvent;
 import com.nexion.tchatroom.event.UserInfoReceivedEvent;
 import com.nexion.tchatroom.fragment.LoginFragment;
+import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.TokenManager;
 import com.nexion.tchatroom.model.Room;
+import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -24,7 +28,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class LoginActivity extends FragmentActivity implements LoginFragment.OnFragmentInteractionListener {
+public class LoginActivity extends FragmentActivity implements LoginFragment.OnFragmentInteractionListener, APIRequester.UserInfoListener, KeyFields {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private final static String LOGIN_FRAGMENT_TAG = "LoginFragment";
@@ -42,9 +46,6 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         setContentView(R.layout.activity_login);
         ((App) getApplication()).inject(this);
 
-        //TODO delete
-        //new TokenManager(getApplicationContext()).set("");
-
         apiRequester = new APIRequester(getApplicationContext(), bus, rooms);
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
@@ -52,7 +53,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
             TokenManager tokenManager = new TokenManager(getApplicationContext());
 
             if (tokenManager.isExist()) {
-                startWaitingRoom(null);
+                startWaitingRoom();
             } else {
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -83,25 +84,27 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     @Override
     public void onLogin(String username, String password) {
         try {
-            apiRequester.requestToken(username, password);
+            apiRequester.requestToken(username, password, LoginActivity.this);
             bus.post(new LoadingEvent());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    @Subscribe
-    public void onTokenReceived(TokenReceivedEvent event) {
-        try {
-            apiRequester.requestUserInfo();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Subscribe
-    public void startWaitingRoom(UserInfoReceivedEvent event) {
+    public void startWaitingRoom() {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
+    }
+
+    @Override
+    public void onUserConnected(String token, User user) {
+        getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+                .edit()
+                .putString(KEY_TOKEN, token)
+                .putString(KEY_PSEUDO, user.getPseudo())
+                .putBoolean(KEY_ADMIN, user.isAdmin())
+                .apply();
+
+        startWaitingRoom();
     }
 }
