@@ -44,7 +44,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     @Inject
     BeaconOrganizer beaconOrganizer;
 
-    CurrentRoomManager currentRoomManager;
     private APIRequester apiRequester;
     private Integer mAvailableRoomId;
 
@@ -54,7 +53,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         setContentView(R.layout.activity_waiting_room);
         ((App) getApplication()).inject(this);
 
-        currentRoomManager = new CurrentRoomManager(getApplicationContext());
         apiRequester = new APIRequester(getApplicationContext(), bus);
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);

@@ -67,7 +67,6 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
     private RecyclerView.LayoutManager mLayoutManager;
     private ChatAdapter mAdapter;
-    private CurrentRoomManager currentRoomManager;
     private Map<Integer, User> mUserMap;
     private List<NexionMessage> mMessages;
 

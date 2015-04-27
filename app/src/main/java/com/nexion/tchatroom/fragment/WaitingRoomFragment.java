@@ -50,7 +50,6 @@ public class WaitingRoomFragment extends Fragment {
 
     private Integer availableRoomId;
     private OnFragmentInteractionListener mListener;
-    private CurrentRoomManager currentRoomManager;
 
     public static Fragment newInstance() {
         return new WaitingRoomFragment();
@@ -63,8 +62,6 @@ public class WaitingRoomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
-
-        currentRoomManager = new CurrentRoomManager(getActivity());
     }
 
     @Override
