@@ -75,7 +75,7 @@ public class BeaconOrganizer implements BeaconConsumer {
 
     public void start() {
         if (started == false) {
-            Log.i(TAG,"Start " + TAG);
+            Log.i(TAG, "Start " + TAG);
             bus.register(this);
             started = true;
             m_manager.bind(this);
@@ -160,7 +160,7 @@ public class BeaconOrganizer implements BeaconConsumer {
         else
             Log.i(TAG, "rooms is null");
 
-        int i=0;
+        int i = 0;
 
         if (rooms != null) {
             for (BeaconRoom r : rooms) {

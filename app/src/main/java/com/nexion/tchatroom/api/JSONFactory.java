@@ -1,9 +1,5 @@
 package com.nexion.tchatroom.api;
 
-import android.content.Context;
-
-import com.nexion.tchatroom.manager.TokenManager;
-import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 
 import org.json.JSONException;
@@ -14,12 +10,6 @@ import org.json.JSONObject;
  */
 public class JSONFactory implements JSONFields {
 
-    private final TokenManager tokenManager;
-
-    public JSONFactory(Context context) {
-        tokenManager = new TokenManager(context);
-    }
-
     JSONObject createLoginJSON(String login, String password) throws JSONException {
         String str = "{"
                 + "\"" + FIELD_LOGIN + "\"" + ":" + "\"" + login + "\"" + ","
@@ -29,26 +19,26 @@ public class JSONFactory implements JSONFields {
         return new JSONObject(str);
     }
 
-    JSONObject createTokenJSON() throws JSONException {
+    JSONObject createTokenJSON(String token) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\""
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\""
                 + "}";
 
         return new JSONObject(str);
     }
 
-    JSONObject createMessageJSON(String content) throws JSONException {
+    JSONObject createMessageJSON(String token, String content) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\"" + ","
                 + "\"" + FIELD_CONTENT + "\"" + ":" + "\"" + content + "\""
                 + "}";
 
         return new JSONObject(str);
     }
 
-    JSONObject createUserJSON(User user) throws JSONException {
+    JSONObject createUserJSON(String token, User user) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\"" + ","
                 + "\"" + FIELD_USER_ID + "\"" + ":" + user.getId() + ","
                 + "\"" + FIELD_KICK_DURATION + "\"" + ":" + 60
                 + "}";
@@ -56,9 +46,9 @@ public class JSONFactory implements JSONFields {
         return new JSONObject(str);
     }
 
-    JSONObject createRoomJSON(int roomId, String password) throws JSONException {
+    JSONObject createRoomJSON(String token, int roomId, String password) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + tokenManager.get() + "\"" + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\"" + ","
                 + "\"" + FIELD_ROOM_ID + "\"" + ":" + roomId + ","
                 + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\""
                 + "}";
@@ -66,9 +56,9 @@ public class JSONFactory implements JSONFields {
         return new JSONObject(str);
     }
 
-    JSONObject createGcmJSON(String regid) throws JSONException {
+    JSONObject createGcmJSON(String token, String regid) throws JSONException {
         String str = "{"
-                + "\"" + FIELD_TOKEN + "\"" + ":" + tokenManager.get() + ","
+                + "\"" + FIELD_TOKEN + "\"" + ":" + token + ","
                 + "\"" + FIELD_GCM_KEY + "\"" + ":" + regid
                 + "}";
 

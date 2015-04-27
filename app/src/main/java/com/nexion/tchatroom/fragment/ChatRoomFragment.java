@@ -24,7 +24,6 @@ import com.nexion.tchatroom.event.KickReceivedEvent;
 import com.nexion.tchatroom.event.LeaveReceivedEvent;
 import com.nexion.tchatroom.event.MessageReceivedEvent;
 import com.nexion.tchatroom.list.ChatAdapter;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.NexionMessage;

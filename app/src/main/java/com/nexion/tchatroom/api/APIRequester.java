@@ -12,7 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.event.RoomJoinedEvent;
 import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
-import com.nexion.tchatroom.event.TokenReceivedEvent;
+import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.BeaconRoom;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
@@ -36,9 +36,14 @@ public class APIRequester {
     private final JSONFactory jsonFactory;
     private final Bus bus;
 
+    private String token;
+
     public APIRequester(final Context context, final Bus bus) {
         queue = Volley.newRequestQueue(context);
-        this.jsonFactory = new JSONFactory(context);
+        token = context.getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
+                .getString(KeyFields.KEY_TOKEN, null);
+
+        this.jsonFactory = new JSONFactory();
         this.bus = bus;
 
         errorListener = new Response.ErrorListener() {
@@ -61,8 +66,8 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            listener.onUserConnected(JSONParser.getToken(response), JSONParser.getUserInfo(response));
-                            bus.post(new TokenReceivedEvent());
+                            token = JSONParser.getToken(response);
+                            listener.onUserConnected(token, JSONParser.getUserInfo(response));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -74,7 +79,7 @@ public class APIRequester {
 
     public void requestRoomsInfo(final BeaconsRoomInfoListener listener) throws JSONException {
         String page = "/getInitDatas.php";
-        JSONObject jsonObject = jsonFactory.createTokenJSON();
+        JSONObject jsonObject = jsonFactory.createTokenJSON(token);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -92,13 +97,13 @@ public class APIRequester {
 
     public void postMessage(String content) throws JSONException {
         String page = "/postMsg.php";
-        JSONObject jsonObject = jsonFactory.createMessageJSON(content);
+        JSONObject jsonObject = jsonFactory.createMessageJSON(token, content);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void joinRoom(final int roomId, String password, final RoomJoinListener listener) throws JSONException {
         String page = "/joinTchat.php";
-        JSONObject jsonObject = jsonFactory.createRoomJSON(roomId, password);
+        JSONObject jsonObject = jsonFactory.createRoomJSON(token, roomId, password);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -116,25 +121,25 @@ public class APIRequester {
 
     public void leaveRoom() throws JSONException {
         String page = "/leaveTchat.php";
-        JSONObject jsonObject = jsonFactory.createTokenJSON();
+        JSONObject jsonObject = jsonFactory.createTokenJSON(token);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void clearRoom() throws JSONException {
         String page = "/clearTchat.php";
-        JSONObject jsonObject = jsonFactory.createTokenJSON();
+        JSONObject jsonObject = jsonFactory.createTokenJSON(token);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void kickUser(User user) throws JSONException {
         String page = "/kick.php";
-        JSONObject jsonObject = jsonFactory.createUserJSON(user);
+        JSONObject jsonObject = jsonFactory.createUserJSON(token, user);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
     public void sendGcmKey(String regid) throws JSONException {
         String page = "/setDeviceId.php";
-        JSONObject jsonObject = jsonFactory.createGcmJSON(regid);
+        JSONObject jsonObject = jsonFactory.createGcmJSON(token, regid);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 null,
                 null));

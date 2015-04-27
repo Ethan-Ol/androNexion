@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -20,15 +19,12 @@ import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.manager.PlayServicesManager;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
-
-import java.util.List;
 
 import javax.inject.Inject;
 

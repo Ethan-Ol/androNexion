@@ -15,11 +15,7 @@ import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
-import com.nexion.tchatroom.model.Room;
 import com.squareup.otto.Bus;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.inject.Singleton;
 

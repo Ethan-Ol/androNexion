@@ -11,14 +11,10 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -87,7 +83,6 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
 
     @Subscribe
     public void onRoomUnavailable(OnRoomUnavailableEvent event) {
-        new CurrentRoomManager(getApplicationContext()).set(0);
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
     }

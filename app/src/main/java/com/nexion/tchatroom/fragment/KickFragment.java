@@ -12,14 +12,11 @@ import android.view.ViewGroup;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.list.KickAdapter;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

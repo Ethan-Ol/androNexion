@@ -19,8 +19,6 @@ import com.nexion.tchatroom.event.LoadingEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.event.RequestFailedEvent;
-import com.nexion.tchatroom.manager.CurrentRoomManager;
-import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

@@ -8,13 +8,8 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
-import com.nexion.tchatroom.model.Beacon;
-import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
