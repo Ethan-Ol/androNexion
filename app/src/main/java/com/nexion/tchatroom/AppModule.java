@@ -49,18 +49,6 @@ import dagger.Provides;
         }
 )
 public class AppModule {
-    private App app;
-
-    public AppModule(App app) {
-        this.app = app;
-    }
-
-    @Provides
-    @Singleton
-    public Context provideApplicationContext() {
-        return app;
-    }
-
     @Provides
     @Singleton
     public Bus provideBus() {

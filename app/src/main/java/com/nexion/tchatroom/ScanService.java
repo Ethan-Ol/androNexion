@@ -17,8 +17,7 @@ public class ScanService extends IntentService {
     private static final String ACTION_START = "com.nexion.tchatroom.action.START";
     private static final String ACTION_STOP = "com.nexion.tchatroom.action.STOP";
 
-    @Inject
-    BeaconOrganizer beaconOrganizer;
+    private final BeaconOrganizer beaconOrganizer;
 
     public static void startActionScan(Context context) {
         Intent intent = new Intent(context, ScanService.class);
@@ -34,6 +33,7 @@ public class ScanService extends IntentService {
 
     public ScanService() {
         super("ScanService");
+        beaconOrganizer = new BeaconOrganizer(getApplicationContext());
     }
 
     @Override

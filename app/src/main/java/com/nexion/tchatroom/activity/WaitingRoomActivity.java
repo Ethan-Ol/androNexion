@@ -37,10 +37,10 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     @Inject
     Bus bus;
-    @Inject
-    BeaconOrganizer beaconOrganizer;
 
+    private BeaconOrganizer beaconOrganizer;
     private APIRequester apiRequester;
+
     private Integer mAvailableRoomId;
 
     @Override
@@ -49,6 +49,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         setContentView(R.layout.activity_waiting_room);
         ((App) getApplication()).inject(this);
 
+        beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
         apiRequester = new APIRequester(getApplicationContext(), bus);
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);

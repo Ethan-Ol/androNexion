@@ -1,8 +1,8 @@
 package com.nexion.tchatroom;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
+
+import com.nexion.beaconManagment.BeaconOrganizer;
 
 import dagger.ObjectGraph;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -14,8 +14,8 @@ public class App extends Application {
     private static final String TAG = "App";
 
     private ObjectGraph objectGraph;
-    private AlarmManager alarmManager;
-    private PendingIntent alarmIntent;
+    private BeaconOrganizer mBeaconOrganizer;
+    private BeaconOrganizer beaconOrganizer;
 
     @Override
     public void onCreate() {
@@ -27,12 +27,18 @@ public class App extends Application {
                         .build()
         );
 
-        objectGraph = ObjectGraph.create(new AppModule(this));
+        objectGraph = ObjectGraph.create(new AppModule());
         objectGraph.inject(this);
         objectGraph.injectStatics();
+
+        mBeaconOrganizer = new BeaconOrganizer(this);
     }
 
     public void inject(Object object) {
         objectGraph.inject(object);
+    }
+
+    public BeaconOrganizer getBeaconOrganizer() {
+        return beaconOrganizer;
     }
 }

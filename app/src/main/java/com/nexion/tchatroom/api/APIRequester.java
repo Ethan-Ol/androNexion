@@ -11,7 +11,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.nexion.tchatroom.event.RequestFailedEvent;
 import com.nexion.tchatroom.event.RoomJoinedEvent;
-import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.BeaconRoom;
 import com.nexion.tchatroom.model.ChatRoom;
@@ -86,7 +85,6 @@ public class APIRequester {
                     public void onResponse(JSONObject response) {
                         try {
                             listener.onBeaconsRoomInfoReceived(JSONParser.parseJSONBeaconRooms(response));
-                            bus.post(new RoomsInfoReceivedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -10,7 +10,6 @@ import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
 import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
-import com.nexion.tchatroom.event.RoomsInfoReceivedEvent;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.BeaconRoom;
 import com.squareup.otto.Bus;
@@ -25,12 +24,10 @@ import org.altbeacon.beacon.Region;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by ethan on 24/03/15.
  */
-@Singleton
 public class BeaconOrganizer implements BeaconConsumer {
 
     private static final String TAG = "BeaconOrganizer";
@@ -45,10 +42,9 @@ public class BeaconOrganizer implements BeaconConsumer {
     private org.altbeacon.beacon.BeaconManager m_manager;
     boolean started;
 
-    @Inject
     public BeaconOrganizer(Context context) {
         this.m_context = context;
-        this.rooms = rooms; // TODO APIRequester
+        // TODO APIRequester to get rooms
         started = false;
 
         m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(m_context);
@@ -64,13 +60,6 @@ public class BeaconOrganizer implements BeaconConsumer {
     @Subscribe
     public void onBluetoothDesactivated(BluetoothDisabledEvent event) {
         stop();
-    }
-
-    @Subscribe
-    public void onRoomsIsReceived(RoomsInfoReceivedEvent event) {
-        Log.i(TAG, "Room received");
-        stop();
-        start();
     }
 
     public void start() {
