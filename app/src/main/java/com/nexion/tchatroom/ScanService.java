@@ -13,7 +13,6 @@ import javax.inject.Inject;
  * a service on a separate handler thread.
  */
 public class ScanService extends IntentService {
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_START = "com.nexion.tchatroom.action.START";
     private static final String ACTION_STOP = "com.nexion.tchatroom.action.STOP";
 

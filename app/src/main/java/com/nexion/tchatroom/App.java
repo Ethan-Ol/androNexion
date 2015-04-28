@@ -15,7 +15,6 @@ public class App extends Application {
 
     private ObjectGraph objectGraph;
     private BeaconOrganizer mBeaconOrganizer;
-    private BeaconOrganizer beaconOrganizer;
 
     @Override
     public void onCreate() {
@@ -39,6 +38,6 @@ public class App extends Application {
     }
 
     public BeaconOrganizer getBeaconOrganizer() {
-        return beaconOrganizer;
+        return mBeaconOrganizer;
     }
 }

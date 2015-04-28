@@ -6,6 +6,7 @@ import android.content.ServiceConnection;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.event.OnRoomAvailableEvent;
@@ -16,10 +17,12 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -28,26 +31,31 @@ import javax.inject.Inject;
 /**
  * Created by ethan on 24/03/15.
  */
-public class BeaconOrganizer implements BeaconConsumer {
+public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoomInfoListener {
 
     private static final String TAG = "BeaconOrganizer";
 
     @Inject
     Bus bus;
 
-    List<BeaconRoom> rooms;
-    BeaconRoom currentRoom;
-    Context m_context;
+    private List<BeaconRoom> mRooms;
+    private BeaconRoom currentRoom;
+    private Context mContext;
 
-    private org.altbeacon.beacon.BeaconManager m_manager;
+    private BeaconManager m_manager;
     boolean started;
 
     public BeaconOrganizer(Context context) {
-        this.m_context = context;
-        // TODO APIRequester to get rooms
+        this.mContext = context;
+        APIRequester apiRequester = new APIRequester(mContext, bus);
+        try {
+            apiRequester.requestRoomsInfo(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         started = false;
 
-        m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(m_context);
+        m_manager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(mContext);
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         m_manager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
     }
@@ -63,7 +71,7 @@ public class BeaconOrganizer implements BeaconConsumer {
     }
 
     public void start() {
-        if (started == false) {
+        if (!started) {
             Log.i(TAG, "Start " + TAG);
             bus.register(this);
             started = true;
@@ -72,7 +80,7 @@ public class BeaconOrganizer implements BeaconConsumer {
     }
 
     public void stop() {
-        if (started == true) {
+        if (started) {
             started = false;
             m_manager.unbind(this);
             bus.unregister(this);
@@ -93,7 +101,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                     }
                 }
 
-                for (BeaconRoom r : rooms) {
+                for (BeaconRoom r : mRooms) {
                     if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
                         if (currentRoom != null) {
@@ -130,7 +138,7 @@ public class BeaconOrganizer implements BeaconConsumer {
                 }
 
                 if (state != 0) {
-                    for (BeaconRoom r : rooms) {
+                    for (BeaconRoom r : mRooms) {
                         if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
 
                             if (currentRoom != null) {
@@ -144,15 +152,15 @@ public class BeaconOrganizer implements BeaconConsumer {
             }
         });
 
-        if (rooms != null)
-            Log.i(TAG, "rooms size is " + rooms.size());
+        if (mRooms != null)
+            Log.i(TAG, "rooms size is " + mRooms.size());
         else
             Log.i(TAG, "rooms is null");
 
         int i = 0;
 
-        if (rooms != null) {
-            for (BeaconRoom r : rooms) {
+        if (mRooms != null) {
+            for (BeaconRoom r : mRooms) {
                 for (Beacon b : r.getBeacons()) {
                     try {
                         tmpregion = new Region("" + r.getId(), Identifier.parse(b.getUUID()), null, null);
@@ -173,17 +181,22 @@ public class BeaconOrganizer implements BeaconConsumer {
     }
 
     @Override
+    public void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms) {
+        this.mRooms = rooms;
+    }
+
+    @Override
     public Context getApplicationContext() {
-        return m_context;
+        return mContext;
     }
 
     @Override
     public void unbindService(ServiceConnection serviceConnection) {
-        m_context.unbindService(serviceConnection);
+        mContext.unbindService(serviceConnection);
     }
 
     @Override
     public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return m_context.bindService(intent, serviceConnection, i);
+        return mContext.bindService(intent, serviceConnection, i);
     }
 }
