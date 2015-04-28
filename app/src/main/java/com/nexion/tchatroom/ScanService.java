@@ -6,8 +6,6 @@ import android.content.Intent;
 
 import com.nexion.beaconManagment.BeaconOrganizer;
 
-import javax.inject.Inject;
-
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -16,7 +14,7 @@ public class ScanService extends IntentService {
     private static final String ACTION_START = "com.nexion.tchatroom.action.START";
     private static final String ACTION_STOP = "com.nexion.tchatroom.action.STOP";
 
-    private final BeaconOrganizer beaconOrganizer;
+    private BeaconOrganizer mBeaconOrganizer;
 
     public static void startActionScan(Context context) {
         Intent intent = new Intent(context, ScanService.class);
@@ -32,12 +30,14 @@ public class ScanService extends IntentService {
 
     public ScanService() {
         super("ScanService");
-        beaconOrganizer = new BeaconOrganizer(getApplicationContext());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        ((App) getApplication()).inject(this);
+        App app = (App) getApplication();
+        app.inject(this);
+        mBeaconOrganizer = app.getBeaconOrganizer();
+
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_START.equals(action)) {
@@ -49,10 +49,10 @@ public class ScanService extends IntentService {
     }
 
     private void handleStartScan() {
-        beaconOrganizer.start();
+        mBeaconOrganizer.start();
     }
 
     private void handleStopScan() {
-        beaconOrganizer.stop();
+        mBeaconOrganizer.stop();
     }
 }

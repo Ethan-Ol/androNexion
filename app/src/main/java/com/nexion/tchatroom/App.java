@@ -3,6 +3,9 @@ package com.nexion.tchatroom;
 import android.app.Application;
 
 import com.nexion.beaconManagment.BeaconOrganizer;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -13,6 +16,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class App extends Application {
     private static final String TAG = "App";
 
+    @Inject
+    Bus bus;
     private ObjectGraph objectGraph;
     private BeaconOrganizer mBeaconOrganizer;
 
@@ -30,7 +35,7 @@ public class App extends Application {
         objectGraph.inject(this);
         objectGraph.injectStatics();
 
-        mBeaconOrganizer = new BeaconOrganizer(this);
+        mBeaconOrganizer = new BeaconOrganizer(this, bus);
     }
 
     public void inject(Object object) {

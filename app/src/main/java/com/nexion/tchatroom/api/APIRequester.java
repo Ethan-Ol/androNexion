@@ -49,8 +49,10 @@ public class APIRequester {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("ERROR", error.toString());
-                if (error.networkResponse != null)
-                    bus.post(new RequestFailedEvent(context, error.networkResponse.statusCode));
+                Integer statusCode = error.networkResponse == null ? null : error.networkResponse.statusCode;
+                if(bus != null) {
+                    bus.post(new RequestFailedEvent(context, statusCode));
+                }
             }
         };
     }

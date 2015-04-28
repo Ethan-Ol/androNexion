@@ -156,7 +156,10 @@ public class LoginFragment extends Fragment {
 
     @Subscribe
     public void onRequestFailedEvent(RequestFailedEvent event) {
-        Toast.makeText(getActivity(), event.toString(), Toast.LENGTH_SHORT).show();
+        String msg = event.toString();
+        if(msg != null) {
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        }
         mLoaderLayout.setVisibility(View.GONE);
     }
 

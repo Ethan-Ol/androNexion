@@ -10,15 +10,19 @@ import com.nexion.tchatroom.R;
 public class RequestFailedEvent {
 
     private final Context mContext;
-    private final int mStatusCode;
+    private final Integer mStatusCode;
 
-    public RequestFailedEvent(Context context, int statusCode) {
+    public RequestFailedEvent(Context context, Integer statusCode) {
         mContext = context;
         mStatusCode = statusCode;
     }
 
     @Override
     public String toString() {
+
+        if(mStatusCode == null)
+            return null;
+
         switch (mStatusCode) {
             case 404:
                 return mContext.getString(R.string.error_404);
