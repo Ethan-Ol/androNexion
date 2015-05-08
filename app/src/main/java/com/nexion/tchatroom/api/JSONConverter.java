@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by DarzuL on 14/03/2015.
  */
-public final class JSONConverter implements JSONFields {
+final class JSONConverter implements JSONFields {
 
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
         return new User(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_PSEUDO), jsonObject.getInt(FIELD_ACL));
@@ -41,7 +41,7 @@ public final class JSONConverter implements JSONFields {
         return new BeaconRoom(roomId, roomName, beacons);
     }
 
-    public static Beacon jsonObjectToBeacon(JSONObject jsonObject, int roomId) throws JSONException {
+    private static Beacon jsonObjectToBeacon(JSONObject jsonObject, int roomId) throws JSONException {
         return new Beacon(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_UUID), roomId);
     }
 }

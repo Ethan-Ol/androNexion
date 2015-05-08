@@ -8,27 +8,21 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.App;
+import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
-import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.PlayServicesManager;
-import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
-
-import org.json.JSONException;
 
 import javax.inject.Inject;
 
-public class WaitingRoomActivity extends FragmentActivity implements WaitingRoomFragment.OnFragmentInteractionListener, APIRequester.RoomJoinListener {
+public class WaitingRoomActivity extends FragmentActivity implements WaitingRoomFragment.OnFragmentInteractionListener {
 
     private final static String WAITING_ROOM_TAG = "WaitingRoom";
     private static final int REQUEST_ENABLE_BT = 150;
@@ -39,7 +33,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     Bus bus;
 
     private BeaconOrganizer beaconOrganizer;
-    private APIRequester apiRequester;
     private Integer mAvailableRoomId;
 
     @Override
@@ -49,7 +42,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         ((App) getApplication()).inject(this);
 
         beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
-        apiRequester = new APIRequester(getApplicationContext());
+        APIRequester apiRequester = new APIRequester(getApplicationContext());
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);
         }
@@ -95,25 +88,12 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     @Override
     public void onJoinRoom() {
-        try {
-            apiRequester.joinRoom(mAvailableRoomId, "", this);
-
-            WaitingRoomFragment fragment = getWaitingRoomFragment();
-            if(fragment != null) {
-                fragment.onLoading();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        startChatRoom(mAvailableRoomId);
     }
 
-    @Override
-    public void onRoomJoined(ChatRoom room) {
-        startChatRoom();
-    }
-
-    private void startChatRoom() {
-        startActivity(new Intent(getApplicationContext(), ChatRoomActivity.class));
+    private void startChatRoom(int roomId) {
+        Intent intent = ChatRoomActivity.newIntent(this, roomId);
+        startActivity(intent);
     }
 
 
@@ -161,19 +141,5 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        ErrorHandler.toastError(this, error);
-
-        WaitingRoomFragment fragment = getWaitingRoomFragment();
-        if(fragment != null) {
-            fragment.onEndLoading();
-        }
-    }
-
-    private WaitingRoomFragment getWaitingRoomFragment() {
-        return (WaitingRoomFragment) getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_TAG);
     }
 }

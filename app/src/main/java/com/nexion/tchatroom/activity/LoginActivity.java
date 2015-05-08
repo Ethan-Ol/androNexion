@@ -82,7 +82,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         }
     }
 
-    public void startWaitingRoom() {
+    private void startWaitingRoom() {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
     }

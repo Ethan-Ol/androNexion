@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PlayServicesManager {
 
     private static final String TAG = PlayServicesManager.class.getSimpleName();
-    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
     private final String SENDER_ID = "520811926007";

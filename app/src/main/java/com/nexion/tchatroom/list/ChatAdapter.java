@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.NexionMessage;
+import com.nexion.tchatroom.model.User;
 
 import java.text.DateFormat;
 import java.util.regex.Matcher;
@@ -34,12 +35,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private final static Pattern PATTERN = Pattern.compile(REG_URL, 0);
 
     private final Context mContext;
-    private final ChatRoom mRoom;
+    private final ChatRoom mChatRoom;
 
     public ChatAdapter(Context context, ChatRoom room) {
         mContext = context;
         ViewHolder.sAdapter = this;
-        mRoom = room;
+        mChatRoom = room;
     }
 
     @Override
@@ -73,18 +74,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        NexionMessage message = mRoom.getMessage(position);
+        NexionMessage message = mChatRoom.getMessage(position);
         viewHolder.refreshView(message);
     }
 
     @Override
     public int getItemCount() {
-        return mRoom.getMessages().size();
+        return mChatRoom.getMessages().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mRoom.getMessage(position).getType();
+        return mChatRoom.getMessage(position).getType();
     }
 
     private void onOpenUrl(String url) {
@@ -111,7 +112,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         void refreshView(NexionMessage message) {
-            pseudoTv.setText(sAdapter.mRoom.getUser(message.getAuthorId()).getPseudo());
+            User author = sAdapter.mChatRoom.getUser(message.getAuthorId());
+            pseudoTv.setText(author == null ? sAdapter.mContext.getString(R.string.unknown_user) : author.getPseudo());
             messageTv.setText(message.getContent());
 
             String dateText;

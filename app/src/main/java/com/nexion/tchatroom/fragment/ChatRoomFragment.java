@@ -32,9 +32,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -43,12 +41,12 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class ChatRoomFragment extends Fragment implements KeyFields {
-    private static final String ARG_ROOM = "mRoom";
     public static final String TAG = "ChatRoomFragment";
 
     private User mUser;
-    private ChatRoom mRoom;
+    private ChatRoom mChatRoom;
     private OnFragmentInteractionListener mListener;
+    private ChatAdapter mAdapter;
 
     @InjectView(R.id.toolBar)
     Toolbar mToolbar;
@@ -64,11 +62,6 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     @Inject
     Bus bus;
 
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ChatAdapter mAdapter;
-    private Map<Integer, User> mUserMap;
-    private List<NexionMessage> mMessages;
-
     public static ChatRoomFragment newInstance() {
         return new ChatRoomFragment();
     }
@@ -82,16 +75,18 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
 
+        mChatRoom = mListener.fragmentCreated();
+
+        // Create current user
         SharedPreferences sharedPref = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         int userId = sharedPref.getInt(KEY_USER_ID, 0);
         String userPseudo = sharedPref.getString(KEY_USER_PSEUDO, "");
         int userAcl = sharedPref.getInt(KEY_USER_ACL, 0);
         mUser = new User(userId, userPseudo, userAcl);
 
-        mUserMap = new HashMap<>();
-        mUserMap.put(mUser.getId(), mUser);
+        mChatRoom.addUser(mUser);
 
-        mAdapter = new ChatAdapter(getActivity(), mRoom);
+        mAdapter = new ChatAdapter(getActivity(), mChatRoom);
     }
 
     @Override
@@ -100,12 +95,11 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         View v = inflater.inflate(R.layout.fragment_chat_room, container, false);
         ButterKnife.inject(this, v);
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
 
-        titleTv.setText(mRoom.getName());
+        titleTv.setText(mChatRoom.getName());
 
         messageEt.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -188,14 +182,14 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     }
 
     private void addMessage(NexionMessage msg) {
-        mRoom.addMessage(msg);
-        int messageCount = mRoom.countMessages();
-        mAdapter.notifyItemInserted(mRoom.countMessages());
+        mChatRoom.addMessage(msg);
+        int messageCount = mChatRoom.countMessages();
+        mAdapter.notifyItemInserted(mChatRoom.countMessages());
         mRecyclerView.scrollToPosition(messageCount - 1);
     }
 
     private void unPendingMsg() {
-        List<NexionMessage> messages = mRoom.getMessages();
+        List<NexionMessage> messages = mChatRoom.getMessages();
         int len = messages.size();
 
         for (int i = len - 1; i >= 0; i--) {
@@ -209,7 +203,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
     @Subscribe
     public void onMessageReceive(MessageReceivedEvent event) {
-        User author = mUserMap.get(event.getAuthorId());
+        User author = mChatRoom.getUser(event.getAuthorId());
 
         int type = author.getId() == mUser.getId() ?
                 NexionMessage.MESSAGE_FROM_USER :
@@ -229,15 +223,15 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     @Subscribe
     public void onUserJoined(JoinReceivedEvent event) {
         User user = event.getUser();
-        mRoom.addUser(user);
+        mChatRoom.addUser(user);
         NexionMessage msg = new NexionMessage(getString(R.string.has_joined_room, user.getPseudo()), null, null, NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
     }
 
     @Subscribe
     public void onUserLeft(LeaveReceivedEvent event) {
-        String pseudo = mUserMap.get(event.getUserId()).getPseudo();
-        mUserMap.remove(event.getUserId());
+        String pseudo = mChatRoom.getUser(event.getUserId()).getPseudo();
+        mChatRoom.removeUser(event.getUserId());
         NexionMessage msg = new NexionMessage(getString(R.string.has_left_room, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
     }
@@ -245,8 +239,8 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     @Subscribe
     public void onUserKicked(KickReceivedEvent event) {
         int userId = event.getUserId();
-        String pseudo = mUserMap.get(userId).getPseudo();
-        mUserMap.remove(userId);
+        String pseudo = mChatRoom.getUser(userId).getPseudo();
+        mChatRoom.removeUser(userId);
 
         NexionMessage msg = new NexionMessage(getString(R.string.has_kicked, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
@@ -257,10 +251,13 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     }
 
     public interface OnFragmentInteractionListener {
-        public void sendMessage(String content);
 
-        public void leaveRoom();
+        ChatRoom fragmentCreated();
 
-        public void startKickActivity();
+        void sendMessage(String content);
+
+        void leaveRoom();
+
+        void startKickActivity();
     }
 }

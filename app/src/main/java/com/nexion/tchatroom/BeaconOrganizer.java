@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Created by ethan on 24/03/15.
- *
+ * <p/>
  * Manage which beacon is close to the phone
  */
 public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoomInfoListener {

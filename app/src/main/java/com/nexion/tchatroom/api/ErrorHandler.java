@@ -9,7 +9,7 @@ import com.nexion.tchatroom.R;
 
 /**
  * Created by DarzuL on 08/05/2015.
- *
+ * <p/>
  * Class to manage Api errors
  */
 public class ErrorHandler {

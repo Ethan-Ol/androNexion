@@ -34,8 +34,6 @@ public class LoginFragment extends Fragment {
     @InjectView(R.id.passwordEt)
     EditText mPasswordEt;
 
-    private String mUsername;
-
     private OnFragmentInteractionListener mListener;
 
     public static LoginFragment newInstance() {
@@ -50,10 +48,6 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
-
-        if (getArguments() != null) {
-            mUsername = getArguments().getString(ARG_USERNAME);
-        }
     }
 
     @Override
@@ -131,6 +125,6 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onLogin(String username, String password);
+        void onLogin(String username, String password);
     }
 }

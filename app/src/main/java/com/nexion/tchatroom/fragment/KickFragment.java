@@ -33,13 +33,12 @@ public class KickFragment extends Fragment {
         return new KickFragment();
     }
 
-    User mUser;
-    ChatRoom mRoom;
+    private User mUser;
+    private ChatRoom mRoom;
 
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
-    RecyclerView.LayoutManager mLayoutManager;
-    KickAdapter mAdapter;
+    private KickAdapter mAdapter;
 
 
     public KickFragment() {
@@ -63,8 +62,7 @@ public class KickFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         mRecyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
 
         return v;
@@ -93,7 +91,7 @@ public class KickFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onKick(List<User> userSelected);
+        void onKick(List<User> userSelected);
     }
 
 }

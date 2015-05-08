@@ -3,7 +3,7 @@ package com.nexion.tchatroom.api;
 /**
  * Created by DarzuL on 14/03/2015.
  */
-public interface JSONFields {
+interface JSONFields {
 
     String FIELD_ID = "id";
 

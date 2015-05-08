@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothAdapter;
 
 /**
  * Created by DarzuL on 21/03/2015.
+ *
+ * Check bluetooth availability
  */
 public class BluetoothManager {
     private static BluetoothManager ourInstance = new BluetoothManager();
@@ -12,8 +14,7 @@ public class BluetoothManager {
         return ourInstance;
     }
 
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothReceiver bluetoothReceiver;
+    private BluetoothAdapter mBluetoothAdapter;
 
     private BluetoothManager() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -25,15 +26,5 @@ public class BluetoothManager {
 
     public boolean isBluetoothEnabled() {
         return mBluetoothAdapter.isEnabled();
-    }
-
-    public void startDiscovering() {
-        if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.startDiscovery();
-        }
-    }
-
-    public BluetoothReceiver getBluetoothReceiver() {
-        return bluetoothReceiver;
     }
 }

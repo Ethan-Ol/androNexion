@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.nexion.tchatroom.fragment.ChatRoomFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.nexion.tchatroom.fragment.ChatRoomFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/messageBar"
         android:layout_below="@+id/toolBar"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"/>
 
     <LinearLayout
         android:id="@+id/messageBar"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:hint="@string/tape_your_message"
-            android:inputType="text" />
+            android:inputType="text"/>
 
         <ImageButton
             android:id="@+id/sendBtn"
@@ -34,7 +34,7 @@
             android:layout_weight="0"
             android:background="@drawable/image_button"
             android:contentDescription="@string/desc_send_btn"
-            android:src="@drawable/ic_menu_send" />
+            android:src="@drawable/ic_menu_send"/>
 
     </LinearLayout>
 
@@ -42,7 +42,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"/>
 
     <ImageButton
         android:id="@+id/leaveBtn"
@@ -52,7 +52,7 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/image_button"
         android:contentDescription="@string/kick_user"
-        android:src="@android:drawable/ic_menu_directions" />
+        android:src="@android:drawable/ic_menu_directions"/>
 
     <ImageButton
         android:id="@+id/kickBtn"
@@ -62,16 +62,19 @@
         android:layout_toStartOf="@id/leaveBtn"
         android:background="@drawable/image_button"
         android:contentDescription="@string/exit_desc"
-        android:src="@drawable/ic_menu_blocked_user" />
+        android:src="@drawable/ic_menu_blocked_user"/>
 
     <TextView
         android:id="@+id/title"
         style="@style/TextTitle"
         android:layout_width="wrap_content"
         android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginEnd="96dip"
         android:layout_marginLeft="48dip"
+        android:layout_marginRight="96dip"
         android:layout_marginStart="48dip"
         android:contentDescription="@string/title_room_desc"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true"/>
 
 </RelativeLayout>

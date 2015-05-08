@@ -2,8 +2,8 @@ package com.nexion.tchatroom.model;
 
 
 public class Beacon extends AbstractEntity {
-    String UUID;
-    int roomId;
+    private String UUID;
+    private int roomId;
 
     public Beacon(int id, String UUID, int roomId) {
         this.id = id;
@@ -15,7 +15,7 @@ public class Beacon extends AbstractEntity {
         return UUID;
     }
 
-    public int getRoom() {
+    public int getRoomId() {
         return roomId;
     }
 }

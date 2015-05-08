@@ -37,8 +37,8 @@ public class ChatRoom extends Room {
         userMap.put(user.getId(), user);
     }
 
-    public void removeUser(User user) {
-        userMap.remove(user.getId());
+    public void removeUser(int userId) {
+        userMap.remove(userId);
     }
 
     public NexionMessage getMessage(int position) {

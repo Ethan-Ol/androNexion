@@ -43,5 +43,6 @@
     <string name="has_left_room">%s a quitté la salle</string>
     <string name="has_kicked">%s a été kick</string>
     <string name="title_activity_kick">KickActivity</string>
+    <string name="unknown_user">\???</string>
 
 </resources>
