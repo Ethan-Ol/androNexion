@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.android.volley.VolleyError;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.event.LoadingEvent;
+import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.User;
@@ -35,7 +36,7 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
         setContentView(R.layout.activity_login);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus);
+        apiRequester = new APIRequester(getApplicationContext());
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
         if (fragment == null) {
@@ -72,7 +73,10 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
     public void onLogin(String username, String password) {
         try {
             apiRequester.requestToken(username, password, LoginActivity.this);
-            bus.post(new LoadingEvent());
+            LoginFragment fragment = getLoginFragment();
+            if (fragment != null) {
+                fragment.onLoading();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -94,5 +98,19 @@ public class LoginActivity extends FragmentActivity implements LoginFragment.OnF
                 .apply();
 
         startWaitingRoom();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        ErrorHandler.toastError(this, error);
+
+        LoginFragment fragment = getLoginFragment();
+        if (fragment != null) {
+            fragment.onEndLoading();
+        }
+    }
+
+    private LoginFragment getLoginFragment() {
+        return (LoginFragment) getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
     }
 }

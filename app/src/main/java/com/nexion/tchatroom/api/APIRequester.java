@@ -9,13 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.nexion.tchatroom.event.RequestFailedEvent;
-import com.nexion.tchatroom.event.RoomJoinedEvent;
+import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.BeaconRoom;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
-import com.squareup.otto.Bus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,31 +31,16 @@ public class APIRequester {
 
     private final RequestQueue queue;
     private final JSONFactory jsonFactory;
-    private final Bus bus;
 
     private String token;
 
-    public APIRequester(final Context context, final Bus bus) {
+    public APIRequester(final Context context) {
         queue = Volley.newRequestQueue(context);
         token = context.getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
                 .getString(KeyFields.KEY_TOKEN, null);
 
         this.jsonFactory = new JSONFactory();
-        this.bus = bus;
-
-        errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", error.toString());
-                Integer statusCode = error.networkResponse == null ? null : error.networkResponse.statusCode;
-                if(bus != null) {
-                    bus.post(new RequestFailedEvent(context, statusCode));
-                }
-            }
-        };
     }
-
-    Response.ErrorListener errorListener;
 
     public void requestToken(String login, String password, final UserInfoListener listener) throws JSONException {
         String page = "/getToken.php";
@@ -75,7 +58,7 @@ public class APIRequester {
                         }
                     }
                 },
-                errorListener));
+                listener));
     }
 
     public void requestRoomsInfo(final BeaconsRoomInfoListener listener) throws JSONException {
@@ -92,7 +75,7 @@ public class APIRequester {
                         }
                     }
                 },
-                errorListener));
+                listener));
     }
 
     public void postMessage(String content) throws JSONException {
@@ -110,13 +93,12 @@ public class APIRequester {
                     public void onResponse(JSONObject response) {
                         try {
                             listener.onRoomJoined(JSONParser.parseJSONRoomResponse(response));
-                            bus.post(new RoomJoinedEvent());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 },
-                errorListener));
+                listener));
     }
 
     public void leaveRoom() throws JSONException {
@@ -145,15 +127,15 @@ public class APIRequester {
                 null));
     }
 
-    public static interface UserInfoListener {
-        public void onUserConnected(String token, User user);
+    public interface UserInfoListener extends Response.ErrorListener {
+        void onUserConnected(String token, User user);
     }
 
-    public static interface RoomJoinListener {
-        public void onRoomJoined(ChatRoom room);
+    public interface RoomJoinListener extends Response.ErrorListener {
+        void onRoomJoined(ChatRoom room);
     }
 
-    public static interface BeaconsRoomInfoListener {
-        public void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms);
+    public interface BeaconsRoomInfoListener extends Response.ErrorListener {
+        void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms);
     }
 }

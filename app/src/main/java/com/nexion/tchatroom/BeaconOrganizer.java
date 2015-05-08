@@ -6,7 +6,9 @@ import android.content.ServiceConnection;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.android.volley.VolleyError;
 import com.nexion.tchatroom.api.APIRequester;
+import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.model.Beacon;
@@ -27,6 +29,8 @@ import java.util.List;
 
 /**
  * Created by ethan on 24/03/15.
+ *
+ * Manage which beacon is close to the phone
  */
 public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoomInfoListener {
 
@@ -53,7 +57,7 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
     public BeaconOrganizer(Context context, Bus bus) {
         this.mContext = context;
         this.mBus = bus;
-        APIRequester apiRequester = new APIRequester(mContext, bus);
+        APIRequester apiRequester = new APIRequester(context);
         try {
             apiRequester.requestRoomsInfo(this);
         } catch (JSONException e) {
@@ -196,7 +200,12 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
         }
     }
 
-    public static interface BeaconOrganizerListener {
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        ErrorHandler.toastError(mContext, error);
+    }
+
+    public interface BeaconOrganizerListener {
         void onRoomAvailable(int roomId);
 
         void onRoomUnavailable();

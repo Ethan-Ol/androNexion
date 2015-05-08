@@ -33,7 +33,7 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         setContentView(R.layout.activity_chat_room);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus);
+        apiRequester = new APIRequester(getApplicationContext());
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CHAT_ROOM_TAG);
         if (fragment == null) {

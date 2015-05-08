@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nexion.tchatroom.BeaconOrganizer;
@@ -15,7 +16,9 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
+import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
+import com.nexion.tchatroom.fragment.LoginFragment;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.PlayServicesManager;
 import com.nexion.tchatroom.model.ChatRoom;
@@ -46,7 +49,7 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
         ((App) getApplication()).inject(this);
 
         beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
-        apiRequester = new APIRequester(getApplicationContext(), bus);
+        apiRequester = new APIRequester(getApplicationContext());
         if (checkPlayServices()) {
             new PlayServicesManager(getApplicationContext(), apiRequester);
         }
@@ -94,7 +97,11 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     public void onJoinRoom() {
         try {
             apiRequester.joinRoom(mAvailableRoomId, "", this);
-            startChatRoom();
+
+            WaitingRoomFragment fragment = getWaitingRoomFragment();
+            if(fragment != null) {
+                fragment.onLoading();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -154,5 +161,19 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        ErrorHandler.toastError(this, error);
+
+        WaitingRoomFragment fragment = getWaitingRoomFragment();
+        if(fragment != null) {
+            fragment.onEndLoading();
+        }
+    }
+
+    private WaitingRoomFragment getWaitingRoomFragment() {
+        return (WaitingRoomFragment) getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_TAG);
     }
 }

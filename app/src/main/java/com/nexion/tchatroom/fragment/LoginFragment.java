@@ -15,13 +15,6 @@ import android.widget.Toast;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
-import com.nexion.tchatroom.event.EndLoadingEvent;
-import com.nexion.tchatroom.event.LoadingEvent;
-import com.nexion.tchatroom.event.RequestFailedEvent;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,9 +37,6 @@ public class LoginFragment extends Fragment {
     private String mUsername;
 
     private OnFragmentInteractionListener mListener;
-
-    @Inject
-    Bus bus;
 
     public static LoginFragment newInstance() {
         return new LoginFragment();
@@ -99,18 +89,6 @@ public class LoginFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        bus.register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        bus.unregister(this);
-    }
-
     @OnClick(R.id.connectionBtn)
     public void onLogin() {
         if (mListener != null) {
@@ -144,22 +122,11 @@ public class LoginFragment extends Fragment {
         mListener = null;
     }
 
-    @Subscribe
-    public void onLoading(LoadingEvent event) {
+    public void onLoading() {
         mLoaderLayout.setVisibility(View.VISIBLE);
     }
 
-    @Subscribe
-    public void onEndLoading(EndLoadingEvent event) {
-        mLoaderLayout.setVisibility(View.GONE);
-    }
-
-    @Subscribe
-    public void onRequestFailedEvent(RequestFailedEvent event) {
-        String msg = event.toString();
-        if(msg != null) {
-            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-        }
+    public void onEndLoading() {
         mLoaderLayout.setVisibility(View.GONE);
     }
 

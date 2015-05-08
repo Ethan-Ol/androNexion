@@ -10,18 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.R;
-import com.nexion.tchatroom.event.EndLoadingEvent;
-import com.nexion.tchatroom.event.LoadingEvent;
-import com.nexion.tchatroom.event.RequestFailedEvent;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,7 +24,7 @@ import butterknife.OnClick;
  * <p/>
  * Waiting mRoom fragment when mUser is not in a mRoom
  */
-public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.BeaconOrganizerListener{
+public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.BeaconOrganizerListener {
     public static final String TAG = "NoChatRoomFragment";
 
     @InjectView(R.id.loaderLayout)
@@ -41,9 +33,6 @@ public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.Bea
     TextView mInfoTv;
     @InjectView(R.id.connectBtn)
     Button mConnectBtn;
-
-    @Inject
-    Bus bus;
 
     private OnFragmentInteractionListener mListener;
 
@@ -98,7 +87,6 @@ public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.Bea
     @Override
     public void onStart() {
         super.onStart();
-        bus.register(this);
 
         Integer roomId;
         if ((roomId = BeaconOrganizer.attachListener(this)) != null) {
@@ -109,39 +97,28 @@ public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.Bea
     @Override
     public void onStop() {
         super.onStop();
-        bus.unregister(this);
         BeaconOrganizer.detachListener(this);
     }
 
-    @Subscribe
     public void onRoomAvailable(int roomId) {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.VISIBLE);
         mListener.onRoomAvailable(roomId);
     }
 
-    @Subscribe
     public void onRoomUnavailable() {
         mConnectBtn.setVisibility(View.GONE);
         mInfoTv.setVisibility(View.VISIBLE);
         mListener.onRoomUnavailable();
     }
 
-    @Subscribe
-    public void onLoading(LoadingEvent event) {
+    public void onLoading() {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.GONE);
         mLoaderLayout.setVisibility(View.VISIBLE);
     }
 
-    @Subscribe
-    public void onEndLoading(EndLoadingEvent event) {
-        mLoaderLayout.setVisibility(View.GONE);
-    }
-
-    @Subscribe
-    public void onRequestFailedEvent(RequestFailedEvent event) {
-        Toast.makeText(getActivity(), event.toString(), Toast.LENGTH_SHORT).show();
+    public void onEndLoading() {
         mLoaderLayout.setVisibility(View.GONE);
     }
 
@@ -153,7 +130,9 @@ public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.Bea
 
     public interface OnFragmentInteractionListener {
         void onJoinRoom();
+
         void onRoomAvailable(int roomId);
+
         void onRoomUnavailable();
     }
 }

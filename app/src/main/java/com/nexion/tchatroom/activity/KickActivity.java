@@ -39,7 +39,7 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
         setContentView(R.layout.activity_chat_room);
         ((App) getApplication()).inject(this);
 
-        apiRequester = new APIRequester(getApplicationContext(), bus);
+        apiRequester = new APIRequester(getApplicationContext());
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
         if (fragment == null) {
