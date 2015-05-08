@@ -1,4 +1,4 @@
-package com.nexion.beaconManagment;
+package com.nexion.tchatroom;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,6 @@ import android.util.Log;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothDisabledEvent;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
-import com.nexion.tchatroom.event.OnRoomAvailableEvent;
-import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.BeaconRoom;
 import com.squareup.otto.Bus;
@@ -24,6 +22,7 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
 import org.json.JSONException;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,11 +31,21 @@ import java.util.List;
 public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoomInfoListener {
 
     private static final String TAG = "BeaconOrganizer";
+    private static final List<BeaconOrganizerListener> sListeners = new LinkedList<>();
+    private static BeaconRoom mAvailableRoom;
+
+    public static Integer attachListener(BeaconOrganizerListener listener) {
+        sListeners.add(listener);
+        return mAvailableRoom == null ? null : mAvailableRoom.getId();
+    }
+
+    public static void detachListener(BeaconOrganizerListener listener) {
+        sListeners.remove(listener);
+    }
 
     private final Context mContext;
     private final Bus mBus;
     private List<BeaconRoom> mRooms;
-    private BeaconRoom currentRoom;
 
     private BeaconManager m_manager;
     boolean started;
@@ -92,20 +101,20 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
             public void didEnterRegion(Region region) {
                 Log.i(TAG, "I just saw an beacon for the first time ! " + region.getUniqueId());
 
-                if (currentRoom != null) {
-                    if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
+                if (mAvailableRoom != null) {
+                    if (Integer.toString(mAvailableRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         return;
                     }
                 }
 
-                for (BeaconRoom r : mRooms) {
-                    if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
+                for (BeaconRoom room : mRooms) {
+                    if (Integer.toString(room.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                        if (currentRoom != null) {
-                            mBus.post(new OnRoomUnavailableEvent(currentRoom.getId()));
+                        if (mAvailableRoom != null) {
+                            onRoomUnavailable();
                         }
-                        currentRoom = r;
-                        mBus.post(new OnRoomAvailableEvent(currentRoom.getId()));
+                        mAvailableRoom = room;
+                        onRoomAvailable(mAvailableRoom.getId());
                     }
                 }
             }
@@ -113,10 +122,10 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
             @Override
             public void didExitRegion(Region region) {
                 Log.i(TAG, "Exit of region : " + region.getUniqueId());
-                if (currentRoom != null) {
-                    if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
-                        mBus.post(new OnRoomUnavailableEvent(currentRoom.getId()));
-                        currentRoom = null;
+                if (mAvailableRoom != null) {
+                    if (Integer.toString(mAvailableRoom.getId()).compareTo(region.getUniqueId()) == 0) {
+                        onRoomUnavailable();
+                        mAvailableRoom = null;
                     }
                 }
             }
@@ -124,25 +133,25 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
             @Override
             public void didDetermineStateForRegion(int state, Region region) {
                 Log.i(TAG, "Change state of region : " + region.getUniqueId() + " state : " + state);
-                if (currentRoom != null) {
-                    if (Integer.toString(currentRoom.getId()).compareTo(region.getUniqueId()) == 0) {
+                if (mAvailableRoom != null) {
+                    if (Integer.toString(mAvailableRoom.getId()).compareTo(region.getUniqueId()) == 0) {
                         if (state == 0) {
-                            mBus.post(new OnRoomUnavailableEvent(currentRoom.getId()));
-                            currentRoom = null;
+                            onRoomUnavailable();
+                            mAvailableRoom = null;
                         }
                         return;
                     }
                 }
 
                 if (state != 0) {
-                    for (BeaconRoom r : mRooms) {
-                        if (Integer.toString(r.getId()).compareTo(region.getUniqueId()) == 0) {
+                    for (BeaconRoom room : mRooms) {
+                        if (Integer.toString(room.getId()).compareTo(region.getUniqueId()) == 0) {
 
-                            if (currentRoom != null) {
-                                mBus.post(new OnRoomUnavailableEvent(currentRoom.getId()));
+                            if (mAvailableRoom != null) {
+                                onRoomUnavailable();
                             }
-                            currentRoom = r;
-                            mBus.post(new OnRoomAvailableEvent(currentRoom.getId()));
+                            mAvailableRoom = room;
+                            onRoomAvailable(mAvailableRoom.getId());
                         }
                     }
                 }
@@ -173,8 +182,24 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
                 }
             }
         }
+    }
 
+    private void onRoomAvailable(int roomId) {
+        for (BeaconOrganizerListener listener : sListeners) {
+            listener.onRoomAvailable(roomId);
+        }
+    }
 
+    private void onRoomUnavailable() {
+        for (BeaconOrganizerListener listener : sListeners) {
+            listener.onRoomUnavailable();
+        }
+    }
+
+    public static interface BeaconOrganizerListener {
+        void onRoomAvailable(int roomId);
+
+        void onRoomUnavailable();
     }
 
     @Override
@@ -193,7 +218,7 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
     }
 
     @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return mContext.bindService(intent, serviceConnection, i);
+    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int flag) {
+        return mContext.bindService(intent, serviceConnection, flag);
     }
 }

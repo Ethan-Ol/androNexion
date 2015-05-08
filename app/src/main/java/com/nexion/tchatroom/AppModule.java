@@ -1,9 +1,5 @@
 package com.nexion.tchatroom;
 
-import android.content.Context;
-
-import com.nexion.beaconManagment.BeaconOrganizer;
-import com.nexion.beaconManagment.Main2Activity;
 import com.nexion.tchatroom.activity.ChatRoomActivity;
 import com.nexion.tchatroom.activity.KickActivity;
 import com.nexion.tchatroom.activity.LoginActivity;
@@ -41,7 +37,6 @@ import dagger.Provides;
                 APIRequester.class,
                 JSONParser.class,
                 JSONFactory.class,
-                Main2Activity.class,
                 BluetoothReceiver.class,
                 BeaconOrganizer.class,
                 ScanService.class,

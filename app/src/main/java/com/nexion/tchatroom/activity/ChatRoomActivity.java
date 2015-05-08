@@ -7,12 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.nexion.tchatroom.App;
+import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
@@ -20,7 +19,7 @@ import javax.inject.Inject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragment.OnFragmentInteractionListener {
+public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
     private final static String CHAT_ROOM_TAG = "ChatRoom";
     private APIRequester apiRequester;
@@ -81,8 +80,13 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Subscribe
-    public void onRoomUnavailable(OnRoomUnavailableEvent event) {
+    @Override
+    public void onRoomAvailable(int roomId) {
+        // TODO Another room is available
+    }
+
+    @Override
+    public void onRoomUnavailable() {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
     }

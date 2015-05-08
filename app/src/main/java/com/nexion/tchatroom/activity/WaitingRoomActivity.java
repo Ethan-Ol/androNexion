@@ -10,19 +10,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.nexion.beaconManagment.BeaconOrganizer;
+import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
-import com.nexion.tchatroom.event.OnRoomAvailableEvent;
-import com.nexion.tchatroom.event.OnRoomUnavailableEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.PlayServicesManager;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
 
@@ -40,7 +37,6 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
 
     private BeaconOrganizer beaconOrganizer;
     private APIRequester apiRequester;
-
     private Integer mAvailableRoomId;
 
     @Override
@@ -81,15 +77,16 @@ public class WaitingRoomActivity extends FragmentActivity implements WaitingRoom
     public void onStop() {
         super.onStop();
         bus.unregister(this);
+
     }
 
-    @Subscribe
-    public void onRoomAvailable(OnRoomAvailableEvent event) {
-        mAvailableRoomId = event.getRoomId();
+    @Override
+    public void onRoomAvailable(int roomId) {
+        mAvailableRoomId = roomId;
     }
 
-    @Subscribe
-    public void onRoomUnavailable(OnRoomUnavailableEvent event) {
+    @Override
+    public void onRoomUnavailable() {
         mAvailableRoomId = null;
     }
 

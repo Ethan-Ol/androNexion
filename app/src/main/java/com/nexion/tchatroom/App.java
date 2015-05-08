@@ -2,7 +2,6 @@ package com.nexion.tchatroom;
 
 import android.app.Application;
 
-import com.nexion.beaconManagment.BeaconOrganizer;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
