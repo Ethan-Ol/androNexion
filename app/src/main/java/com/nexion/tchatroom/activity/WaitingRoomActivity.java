@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,7 +21,7 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
-public class WaitingRoomActivity extends FragmentActivity implements WaitingRoomFragment.OnFragmentInteractionListener {
+public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener {
 
     private final static String WAITING_ROOM_TAG = "WaitingRoom";
     private static final int REQUEST_ENABLE_BT = 150;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -22,9 +21,7 @@ import org.json.JSONException;
 
 import javax.inject.Inject;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener {
+public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener {
 
     private final static String CHAT_ROOM_TAG = "ChatRoom";
     private final static String EXTRA_ROOM_ID = "room_id";
@@ -94,11 +91,6 @@ public class ChatRoomActivity extends FragmentActivity implements ChatRoomFragme
     @Override
     public void startKickActivity() {
         startActivity(new Intent(getApplicationContext(), KickActivity.class));
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

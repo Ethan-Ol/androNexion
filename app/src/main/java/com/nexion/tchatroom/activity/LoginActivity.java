@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.android.volley.VolleyError;
 import com.nexion.tchatroom.App;
@@ -20,7 +19,7 @@ import org.json.JSONException;
 
 import javax.inject.Inject;
 
-public class LoginActivity extends FragmentActivity implements LoginFragment.OnFragmentInteractionListener, APIRequester.UserInfoListener, KeyFields {
+public class LoginActivity extends BaseActivity implements LoginFragment.OnFragmentInteractionListener, APIRequester.UserInfoListener, KeyFields {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private final static String LOGIN_FRAGMENT_TAG = "LoginFragment";

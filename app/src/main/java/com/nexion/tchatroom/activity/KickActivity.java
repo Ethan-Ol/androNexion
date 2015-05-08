@@ -1,9 +1,7 @@
 package com.nexion.tchatroom.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
@@ -18,14 +16,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 /**
  * Created by DarzuL on 27/03/2015.
  * <p/>
  * Kick activity
  */
-public class KickActivity extends FragmentActivity implements KickFragment.OnFragmentInteractionListener {
+public class KickActivity extends BaseActivity implements KickFragment.OnFragmentInteractionListener {
 
     private final static String KICK_FRAGMENT_TAG = "ChatRoom";
     private APIRequester apiRequester;
@@ -73,10 +69,5 @@ public class KickActivity extends FragmentActivity implements KickFragment.OnFra
             }
         }
         finish();
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }
