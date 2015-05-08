@@ -52,9 +52,6 @@
             android:value="AIzaSyCS8QHl_gZTtQoFIdJ02RyUjs5_Vx47JV0" />
 
         <activity
-            android:name=".activity.KickActivity"
-            android:label="@string/title_activity_kick" />
-        <activity
             android:name=".activity.ChatRoomActivity"
             android:label="@string/title_activity_chat_room" />
         <activity

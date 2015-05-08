@@ -1,7 +1,6 @@
 package com.nexion.tchatroom;
 
 import com.nexion.tchatroom.activity.ChatRoomActivity;
-import com.nexion.tchatroom.activity.KickActivity;
 import com.nexion.tchatroom.activity.LoginActivity;
 import com.nexion.tchatroom.activity.WaitingRoomActivity;
 import com.nexion.tchatroom.api.APIRequester;
@@ -29,7 +28,6 @@ import dagger.Provides;
                 LoginActivity.class,
                 WaitingRoomActivity.class,
                 ChatRoomActivity.class,
-                KickActivity.class,
                 LoginFragment.class,
                 WaitingRoomFragment.class,
                 ChatRoomFragment.class,

@@ -152,7 +152,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
     @OnClick(R.id.kickBtn)
     void openKickDialog() {
-        mListener.startKickActivity();
+        mListener.startKickFragment();
     }
 
     @OnClick(R.id.leaveBtn)
@@ -258,6 +258,6 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
         void leaveRoom();
 
-        void startKickActivity();
+        void startKickFragment();
     }
 }

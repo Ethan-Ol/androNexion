@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 
 /**
  * Created by DarzuL on 21/03/2015.
- *
+ * <p/>
  * Check bluetooth availability
  */
 public class BluetoothManager {

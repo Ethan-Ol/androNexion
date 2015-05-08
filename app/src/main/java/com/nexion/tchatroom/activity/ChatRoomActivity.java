@@ -14,16 +14,22 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
+import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.model.ChatRoom;
+import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import org.json.JSONException;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener {
+public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.OnFragmentInteractionListener,
+        BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener, KickFragment.OnFragmentInteractionListener {
 
-    private final static String CHAT_ROOM_TAG = "ChatRoom";
+    private final static String CHAT_ROOM_FRAGMENT_TAG = "ChatRoom";
+    private final static String KICK_FRAGMENT_TAG = "Kick";
     private final static String EXTRA_ROOM_ID = "room_id";
 
     public static Intent newIntent(Context context, int roomId) {
@@ -89,8 +95,14 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     }
 
     @Override
-    public void startKickActivity() {
-        startActivity(new Intent(getApplicationContext(), KickActivity.class));
+    public void startKickFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
+        if (fragment == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, KickFragment.newInstance(), KICK_FRAGMENT_TAG)
+                    .commit();
+        }
     }
 
     @Override
@@ -120,11 +132,11 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
         mChatRoom = room;
         mLoaderPb.setVisibility(View.GONE);
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(CHAT_ROOM_TAG);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(CHAT_ROOM_FRAGMENT_TAG);
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, ChatRoomFragment.newInstance(), CHAT_ROOM_TAG)
+                    .add(R.id.container, ChatRoomFragment.newInstance(), CHAT_ROOM_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -137,5 +149,17 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     @Override
     public void onErrorResponse(VolleyError error) {
         ErrorHandler.toastError(this, error);
+    }
+
+    @Override
+    public void onKick(List<User> userSelected) {
+        for (User user : userSelected) {
+            try {
+                apiRequester.kickUser(user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        finish();
     }
 }
