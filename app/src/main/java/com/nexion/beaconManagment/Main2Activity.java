@@ -38,6 +38,9 @@ public class Main2Activity extends Activity {
         Beacon b = new Beacon();
         b.setUUID("11111111-1111-1111-1111111111111111");
         beacons.add(b);
+        b = new Beacon();
+        b.setUUID("11111111-1111-1111-1111111111111112");
+        beacons.add(b);
         Room a = new Room();
         a.setName("Appartement");
         a.setBeacons(beacons);
