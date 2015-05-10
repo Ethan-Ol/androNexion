@@ -99,7 +99,12 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
 
     @Override
     public void onJoinRoom() {
-        startChatRoom(mAvailableRoomId);
+        if(App.DEBUG) {
+            startChatRoom(1);
+        }
+        else {
+            startChatRoom(mAvailableRoomId);
+        }
     }
 
     private WaitingRoomFragment getWaitingRoomFragment() {

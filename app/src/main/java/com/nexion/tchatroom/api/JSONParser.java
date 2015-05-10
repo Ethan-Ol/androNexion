@@ -40,11 +40,10 @@ public class JSONParser implements JSONFields {
         return rooms;
     }
 
-    static ChatRoom parseJSONRoomResponse(JSONObject response) throws JSONException {
-        int roomId = response.getInt(FIELD_ID);
+    static ChatRoom parseJSONRoomResponse(int roomId, JSONObject response) throws JSONException {
         String roomName = response.getString(FIELD_ROOM_NAME);
-        JSONArray usersJSONArray = response.getJSONArray(FIELD_USERS);
         JSONArray messagesJSONArray = response.getJSONArray(FIELD_MESSAGES);
+        JSONArray usersJSONArray = response.getJSONArray(FIELD_USERS);
 
         Map<Integer, User> userMap = new HashMap<>();
         List<NexionMessage> messages = new LinkedList<NexionMessage>();

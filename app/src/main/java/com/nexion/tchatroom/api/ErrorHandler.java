@@ -21,6 +21,14 @@ public class ErrorHandler {
         if (statusCode == null)
             return;
 
+        if (statusCode >= 500 && statusCode < 600) {
+            msg = context.getString(R.string.error_5xx);
+        } else if (statusCode >= 300 && statusCode < 400) {
+            msg = context.getString(R.string.error_3xx);
+        } else {
+            msg = context.getString(R.string.error_unknown);
+        }
+
         switch (statusCode) {
             case 404:
                 msg = context.getString(R.string.error_404);
@@ -29,14 +37,6 @@ public class ErrorHandler {
             case 403:
                 msg = context.getString(R.string.error_403);
                 break;
-        }
-
-        if (statusCode >= 500 && statusCode < 600) {
-            msg = context.getString(R.string.error_5xx);
-        } else if (statusCode >= 300 && statusCode < 400) {
-            msg = context.getString(R.string.error_3xx);
-        } else {
-            msg = context.getString(R.string.error_unknown);
         }
 
         if (msg != null) {

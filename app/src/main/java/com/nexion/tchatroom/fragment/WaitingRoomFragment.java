@@ -54,9 +54,13 @@ public class WaitingRoomFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_waiting_room, container, false);
         ButterKnife.inject(this, v);
 
-        //TODO debug mode
-        mInfoTv.setVisibility(View.VISIBLE);
-        //mConnectBtn.setVisibility(View.VISIBLE);
+        if(App.DEBUG) {
+            mConnectBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            mInfoTv.setVisibility(View.VISIBLE);
+        }
+
 
         return v;
     }
@@ -102,9 +106,5 @@ public class WaitingRoomFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onJoinRoom();
-
-        void onRoomAvailable(int roomId);
-
-        void onRoomUnavailable();
     }
 }

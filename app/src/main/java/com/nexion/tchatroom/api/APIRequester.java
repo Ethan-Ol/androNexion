@@ -89,7 +89,7 @@ public class APIRequester {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            listener.onRoomJoined(JSONParser.parseJSONRoomResponse(response));
+                            listener.onRoomJoined(JSONParser.parseJSONRoomResponse(roomId, response));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

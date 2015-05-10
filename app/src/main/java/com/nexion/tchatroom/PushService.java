@@ -28,7 +28,7 @@ public class PushService extends IntentService {
     private static final String PSEUDO = "pseudo";
     private static final String ACL = "acl";
 
-    private static final String AUTHOR_ID = "id";
+    private static final String AUTHOR_ID = "author_id";
     private static final String CONTENT = "content";
     private static final String DATE = "dateTime";
 

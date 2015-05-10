@@ -149,6 +149,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     @Override
     public void onErrorResponse(VolleyError error) {
         ErrorHandler.toastError(this, error);
+        //finish();
     }
 
     @Override

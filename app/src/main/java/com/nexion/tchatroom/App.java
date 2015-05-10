@@ -14,6 +14,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  */
 public class App extends Application {
     private static final String TAG = "App";
+    public static final boolean DEBUG = false;
 
     @Inject
     Bus bus;
