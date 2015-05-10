@@ -4,6 +4,7 @@ public class User extends AbstractEntity {
 
     public static final int ACL_TEACHER = 1;
     public static final int ACL_STUDENT = 0;
+    public static int currentUserId;
 
     private String pseudo;
     private int acl;

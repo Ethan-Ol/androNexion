@@ -48,4 +48,31 @@ public class ChatRoom extends Room {
     public User getUser(int authorId) {
         return userMap.get(authorId);
     }
+
+    /**
+     * Assign the right the message type for each message of the chatRoom
+     *
+     * @param chatRoom the chatRoom to compute
+     */
+    public static void compute(ChatRoom chatRoom) {
+
+        for (NexionMessage message : chatRoom.getMessages()) {
+            User author = chatRoom.getUser(message.getAuthorId());
+            int type = computeType(author);
+            message.setType(type);
+        }
+    }
+
+    /**
+     * Find the message type
+     * @param author The message's author
+     * @return The message's type
+     */
+    public static int computeType(User author) {
+        return author.getId() == User.currentUserId ?
+                NexionMessage.MESSAGE_FROM_USER :
+                author.isAdmin() ?
+                        NexionMessage.MESSAGE_FROM_TEACHER :
+                        NexionMessage.MESSAGE_FROM_STUDENT;
+    }
 }

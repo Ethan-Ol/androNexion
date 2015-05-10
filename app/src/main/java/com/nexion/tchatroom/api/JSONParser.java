@@ -46,7 +46,7 @@ public class JSONParser implements JSONFields {
         JSONArray usersJSONArray = response.getJSONArray(FIELD_USERS);
 
         Map<Integer, User> userMap = new HashMap<>();
-        List<NexionMessage> messages = new LinkedList<NexionMessage>();
+        List<NexionMessage> messages = new LinkedList<>();
         int len = usersJSONArray.length();
         for (int i = 0; i < len; i++) {
             User user = JSONConverter.jsonObjectToUser(usersJSONArray.getJSONObject(i));
@@ -59,6 +59,9 @@ public class JSONParser implements JSONFields {
             messages.add(message);
         }
 
-        return new ChatRoom(roomId, roomName, userMap, messages);
+        ChatRoom chatRoom = new ChatRoom(roomId, roomName, userMap, messages);
+        ChatRoom.compute(chatRoom);
+
+        return chatRoom;
     }
 }

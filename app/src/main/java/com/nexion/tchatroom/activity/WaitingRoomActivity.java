@@ -1,7 +1,9 @@
 package com.nexion.tchatroom.activity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,7 +18,9 @@ import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
+import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.PlayServicesManager;
+import com.nexion.tchatroom.model.User;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
@@ -39,6 +43,14 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
         ((App) getApplication()).inject(this);
+
+        SharedPreferences sharedPref = getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
+        if(sharedPref.contains(KeyFields.KEY_USER_ID)) {
+            User.currentUserId = sharedPref.getInt(KeyFields.KEY_USER_ID, -1);
+        } else {
+            Log.e(TAG, "No user ID found");
+            finish();
+        }
 
         beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
         APIRequester apiRequester = new APIRequester(getApplicationContext());

@@ -13,8 +13,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  * Created by DarzuL on 08/03/2015.
  */
 public class App extends Application {
-    private static final String TAG = "App";
-    public static final boolean DEBUG = false;
+    private static final String TAG = App.class.getSimpleName();
+    public static final boolean DEBUG = true;
 
     @Inject
     Bus bus;

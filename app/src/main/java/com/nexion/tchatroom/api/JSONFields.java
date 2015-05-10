@@ -12,12 +12,12 @@ interface JSONFields {
     String FIELD_TOKEN = "token";
 
     String FIELD_USERS = "users";
-    String FIELD_USER_ID = "user_id";
     String FIELD_PSEUDO = "pseudo";
     String FIELD_ACL = "acl";
     String FIELD_KICK_DURATION = "duration";
 
     String FIELD_MESSAGES = "messages";
+    String FIELD_AUTHOR_ID = "author_id";
     String FIELD_CONTENT = "content";
     String FIELD_DATE = "date";
 

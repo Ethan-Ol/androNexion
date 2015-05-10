@@ -204,12 +204,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     @Subscribe
     public void onMessageReceive(MessageReceivedEvent event) {
         User author = mChatRoom.getUser(event.getAuthorId());
-
-        int type = author.getId() == mUser.getId() ?
-                NexionMessage.MESSAGE_FROM_USER :
-                author.isAdmin() ?
-                        NexionMessage.MESSAGE_FROM_TEACHER :
-                        NexionMessage.MESSAGE_FROM_STUDENT;
+        int type = ChatRoom.computeType(author);
 
         NexionMessage message = new NexionMessage(event.getContent(), event.getDateTime(), author.getId(), type);
 

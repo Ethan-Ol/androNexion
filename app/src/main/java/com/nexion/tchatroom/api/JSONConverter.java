@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by DarzuL on 14/03/2015.
+ *
+ * Convert JSON to java object
  */
 final class JSONConverter implements JSONFields {
 
@@ -22,7 +24,7 @@ final class JSONConverter implements JSONFields {
     }
 
     static NexionMessage jsonObjectToMessage(JSONObject jsonObject) throws JSONException {
-        return new NexionMessage(jsonObject.getString(FIELD_CONTENT), jsonObject.getLong(FIELD_DATE), jsonObject.getInt(FIELD_USER_ID));
+        return new NexionMessage(jsonObject.getString(FIELD_CONTENT), jsonObject.getLong(FIELD_DATE), jsonObject.getInt(FIELD_AUTHOR_ID));
     }
 
     public static BeaconRoom jsonObjectToBeaconRoom(JSONObject jsonObject) throws JSONException {

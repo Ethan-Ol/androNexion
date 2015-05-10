@@ -93,8 +93,10 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnFragm
                 .putString(KEY_TOKEN, token)
                 .putInt(KEY_USER_ID, user.getId())
                 .putString(KEY_USER_PSEUDO, user.getPseudo())
-                .putBoolean(KEY_USER_ACL, user.isAdmin())
+                .putInt(KEY_USER_ACL, user.getAcl())
                 .apply();
+
+        User.currentUserId = user.getId();
 
         startWaitingRoom();
     }
