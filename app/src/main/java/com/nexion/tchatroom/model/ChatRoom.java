@@ -45,7 +45,7 @@ public class ChatRoom extends Room {
         return messages.get(position);
     }
 
-    public User getUser(int authorId) {
+    public User getUser(Integer authorId) {
         return userMap.get(authorId);
     }
 

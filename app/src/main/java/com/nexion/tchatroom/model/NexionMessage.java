@@ -53,7 +53,7 @@ public class NexionMessage extends AbstractEntity {
         return sendAt;
     }
 
-    public int getAuthorId() {
+    public Integer getAuthorId() {
         return authorId;
     }
 
