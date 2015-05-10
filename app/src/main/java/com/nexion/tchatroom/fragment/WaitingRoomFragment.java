@@ -24,7 +24,7 @@ import butterknife.OnClick;
  * <p/>
  * Waiting mRoom fragment when mUser is not in a mRoom
  */
-public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.BeaconOrganizerListener {
+public class WaitingRoomFragment extends Fragment {
     public static final String TAG = "NoChatRoomFragment";
 
     @InjectView(R.id.loaderLayout)
@@ -84,42 +84,14 @@ public class WaitingRoomFragment extends Fragment implements BeaconOrganizer.Bea
         mListener = null;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Integer roomId;
-        if ((roomId = BeaconOrganizer.attachListener(this)) != null) {
-            mListener.onRoomAvailable(roomId);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        BeaconOrganizer.detachListener(this);
-    }
-
-    public void onRoomAvailable(int roomId) {
+    public void onRoomAvailable() {
         mInfoTv.setVisibility(View.GONE);
         mConnectBtn.setVisibility(View.VISIBLE);
-        mListener.onRoomAvailable(roomId);
     }
 
     public void onRoomUnavailable() {
         mConnectBtn.setVisibility(View.GONE);
         mInfoTv.setVisibility(View.VISIBLE);
-        mListener.onRoomUnavailable();
-    }
-
-    public void onLoading() {
-        mInfoTv.setVisibility(View.GONE);
-        mConnectBtn.setVisibility(View.GONE);
-        mLoaderLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void onEndLoading() {
-        mLoaderLayout.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.connectBtn)

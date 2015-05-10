@@ -21,9 +21,9 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
-public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener {
+public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
-    private final static String WAITING_ROOM_TAG = "WaitingRoom";
+    private final static String WAITING_ROOM_FRAGMENT_TAG = "WaitingRoom";
     private static final int REQUEST_ENABLE_BT = 150;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "WaitingRoomActivity";
@@ -46,11 +46,11 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
             new PlayServicesManager(getApplicationContext(), apiRequester);
         }
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_TAG);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_FRAGMENT_TAG);
         if (fragment == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container, WaitingRoomFragment.newInstance(), WAITING_ROOM_TAG)
+                    .add(R.id.container, WaitingRoomFragment.newInstance(), WAITING_ROOM_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -59,6 +59,10 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     protected void onStart() {
         super.onStart();
         bus.register(this);
+        Integer roomId;
+        if ((roomId = BeaconOrganizer.attachListener(this)) != null) {
+            onRoomAvailable(roomId);
+        }
     }
 
     @Override
@@ -72,22 +76,34 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     public void onStop() {
         super.onStop();
         bus.unregister(this);
-
+        BeaconOrganizer.detachListener(this);
     }
 
     @Override
     public void onRoomAvailable(int roomId) {
         mAvailableRoomId = roomId;
+        WaitingRoomFragment fragment = getWaitingRoomFragment();
+        if(fragment != null) {
+            fragment.onRoomAvailable();
+        }
     }
 
     @Override
     public void onRoomUnavailable() {
         mAvailableRoomId = null;
+        WaitingRoomFragment fragment = getWaitingRoomFragment();
+        if(fragment != null) {
+            fragment.onRoomUnavailable();
+        }
     }
 
     @Override
     public void onJoinRoom() {
         startChatRoom(mAvailableRoomId);
+    }
+
+    private WaitingRoomFragment getWaitingRoomFragment() {
+        return (WaitingRoomFragment) getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_FRAGMENT_TAG);
     }
 
     private void startChatRoom(int roomId) {
