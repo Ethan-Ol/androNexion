@@ -11,6 +11,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by DarzuL on 08/03/2015.
+ *
+ * An extended app
  */
 public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
@@ -35,7 +37,7 @@ public class App extends Application {
         objectGraph.inject(this);
         objectGraph.injectStatics();
 
-        mBeaconOrganizer = new BeaconOrganizer(this, bus);
+        mBeaconOrganizer = new BeaconOrganizer(this);
     }
 
     public void inject(Object object) {

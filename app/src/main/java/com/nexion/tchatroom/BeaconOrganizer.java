@@ -9,12 +9,8 @@ import android.util.Log;
 import com.android.volley.VolleyError;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.ErrorHandler;
-import com.nexion.tchatroom.event.BluetoothDisabledEvent;
-import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.model.Beacon;
 import com.nexion.tchatroom.model.BeaconRoom;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -49,15 +45,13 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
     }
 
     private final Context mContext;
-    private final Bus mBus;
     private List<BeaconRoom> mRooms;
 
     private BeaconManager m_manager;
     boolean started;
 
-    public BeaconOrganizer(Context context, Bus bus) {
+    public BeaconOrganizer(Context context) {
         this.mContext = context;
-        this.mBus = bus;
         APIRequester apiRequester = new APIRequester(context);
         try {
             apiRequester.requestRoomsInfo(this);
@@ -71,20 +65,9 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
         m_manager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
     }
 
-    @Subscribe
-    public void onBluetoothActivated(BluetoothEnabledEvent event) {
-        start();
-    }
-
-    @Subscribe
-    public void onBluetoothDesactivated(BluetoothDisabledEvent event) {
-        stop();
-    }
-
     public void start() {
         if (!started) {
-            Log.i(TAG, "Start " + TAG);
-            mBus.register(this);
+            Log.i(TAG, "Start scanning");
             started = true;
             m_manager.bind(this);
         }
@@ -92,9 +75,9 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
 
     public void stop() {
         if (started) {
+            Log.i(TAG, "End scanning");
             started = false;
             m_manager.unbind(this);
-            mBus.unregister(this);
         }
     }
 

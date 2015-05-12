@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -16,7 +15,6 @@ import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
-import com.nexion.tchatroom.event.BluetoothEnabledEvent;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.PlayServicesManager;
@@ -28,7 +26,6 @@ import javax.inject.Inject;
 public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
     private final static String WAITING_ROOM_FRAGMENT_TAG = "WaitingRoom";
-    private static final int REQUEST_ENABLE_BT = 150;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "WaitingRoomActivity";
 
@@ -45,7 +42,7 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         ((App) getApplication()).inject(this);
 
         SharedPreferences sharedPref = getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
-        if(sharedPref.contains(KeyFields.KEY_USER_ID)) {
+        if (sharedPref.contains(KeyFields.KEY_USER_ID)) {
             User.currentUserId = sharedPref.getInt(KeyFields.KEY_USER_ID, -1);
         } else {
             Log.e(TAG, "No user ID found");
@@ -65,6 +62,10 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
                     .add(R.id.container, WaitingRoomFragment.newInstance(), WAITING_ROOM_FRAGMENT_TAG)
                     .commit();
         }
+
+        if(!checkBluetooth()) {
+            requestBluetoothActivation();
+        }
     }
 
     @Override
@@ -74,6 +75,10 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         Integer roomId;
         if ((roomId = BeaconOrganizer.attachListener(this)) != null) {
             onRoomAvailable(roomId);
+        }
+
+        if (checkBluetooth()) {
+            beaconOrganizer.start();
         }
     }
 
@@ -95,7 +100,7 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     public void onRoomAvailable(int roomId) {
         mAvailableRoomId = roomId;
         WaitingRoomFragment fragment = getWaitingRoomFragment();
-        if(fragment != null) {
+        if (fragment != null) {
             fragment.onRoomAvailable();
         }
     }
@@ -104,17 +109,16 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     public void onRoomUnavailable() {
         mAvailableRoomId = null;
         WaitingRoomFragment fragment = getWaitingRoomFragment();
-        if(fragment != null) {
+        if (fragment != null) {
             fragment.onRoomUnavailable();
         }
     }
 
     @Override
     public void onJoinRoom() {
-        if(App.DEBUG) {
+        if (App.DEBUG) {
             startChatRoom(1);
-        }
-        else {
+        } else {
             startChatRoom(mAvailableRoomId);
         }
     }
@@ -144,34 +148,14 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         return true;
     }
 
-
-    private void checkBluetooth() {
+    private boolean checkBluetooth() {
         BluetoothManager bluetoothManager = BluetoothManager.getInstance();
-        if (bluetoothManager.isBluetoothAvailable()) {
-            if (!bluetoothManager.isBluetoothEnabled()) {
-                requestBluetoothActivation();
-            } else {
-                beaconOrganizer.start();
-            }
-        } else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_SHORT).show();
-        }
+        return bluetoothManager.isBluetoothEnabled();
     }
 
 
     private void requestBluetoothActivation() {
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(discoverableIntent, REQUEST_ENABLE_BT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_ENABLE_BT:
-                if (resultCode == RESULT_OK) {
-                    bus.post(new BluetoothEnabledEvent());
-                }
-                break;
-        }
+        startActivity(discoverableIntent);
     }
 }
