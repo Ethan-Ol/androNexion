@@ -219,8 +219,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     public void onUserJoined(JoinReceivedEvent event) {
         User user = event.getUser();
         mChatRoom.addUser(user);
-        NexionMessage msg = new NexionMessage(getString(R.string.has_joined_room, user.getPseudo()), null, null, NexionMessage.MESSAGE_FROM_BOT);
-        addMessage(msg);
+        addMessage(new NexionMessage(getString(R.string.has_joined_room, user.getPseudo()), null, null, NexionMessage.MESSAGE_FROM_BOT));
     }
 
     @Subscribe

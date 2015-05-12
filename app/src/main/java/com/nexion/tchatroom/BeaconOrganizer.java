@@ -24,6 +24,7 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.Region;
 import org.json.JSONException;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import java.util.List;
 public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoomInfoListener {
 
     private static final String TAG = "BeaconOrganizer";
-    private static final List<BeaconOrganizerListener> sListeners = new LinkedList<>();
+    private static final List<BeaconOrganizerListener> sListeners = Collections.synchronizedList(new LinkedList<BeaconOrganizerListener>());
     private static BeaconRoom mAvailableRoom;
 
     public static Integer attachListener(BeaconOrganizerListener listener) {
@@ -189,14 +190,18 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
     }
 
     private void onRoomAvailable(int roomId) {
-        for (BeaconOrganizerListener listener : sListeners) {
-            listener.onRoomAvailable(roomId);
+        synchronized (sListeners) {
+            for (BeaconOrganizerListener listener : sListeners) {
+                listener.onRoomAvailable(roomId);
+            }
         }
     }
 
     private void onRoomUnavailable() {
-        for (BeaconOrganizerListener listener : sListeners) {
-            listener.onRoomUnavailable();
+        synchronized (sListeners) {
+            for (BeaconOrganizerListener listener : sListeners) {
+                listener.onRoomUnavailable();
+            }
         }
     }
 
