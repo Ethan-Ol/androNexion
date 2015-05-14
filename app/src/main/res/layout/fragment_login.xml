@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.nexion.tchatroom.fragment.LoginFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.nexion.tchatroom.fragment.LoginFragment">
 
     <ImageView
         android:id="@+id/logo"
@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="24dip"
         android:contentDescription="@string/desc_logo"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:id="@+id/connectionLayout"
@@ -25,29 +25,33 @@
             android:id="@+id/usernameEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:cursorVisible="true"
             android:hint="@string/username_hint"
-            android:inputType="textVisiblePassword|textNoSuggestions" />
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
         <EditText
             android:id="@+id/passwordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dip"
+            android:cursorVisible="true"
             android:hint="@string/password_hint"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
         <Button
             android:id="@+id/connectionBtn"
             style="@style/ActionBtn"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dip"
-            android:text="@string/connection_btn" />
+            android:text="@string/connection_btn"/>
     </LinearLayout>
 
     <include
         layout="@layout/loader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/connectionLayout" />
+        android:layout_below="@id/connectionLayout"/>
 
 </RelativeLayout>
