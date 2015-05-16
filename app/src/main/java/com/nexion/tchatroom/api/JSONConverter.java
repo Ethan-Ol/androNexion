@@ -20,7 +20,7 @@ import java.util.List;
 final class JSONConverter implements JSONFields {
 
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
-        return new User(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_PSEUDO), jsonObject.getInt(FIELD_ACL));
+        return new User(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_PSEUDO), jsonObject.getInt(FIELD_ACL), jsonObject.getInt(FIELD_IN_ROOM) == User.IN_ROOM);
     }
 
     static NexionMessage jsonObjectToMessage(JSONObject jsonObject) throws JSONException {

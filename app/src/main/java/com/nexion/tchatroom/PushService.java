@@ -95,7 +95,7 @@ public class PushService extends IntentService {
     private void handleActionJoin(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            User author = new User(jobj.getInt(ID), jobj.getString(PSEUDO), jobj.getInt(ACL));
+            User author = new User(jobj.getInt(ID), jobj.getString(PSEUDO), jobj.getInt(ACL), true);
             bus.post(new JoinReceivedEvent(author));
         } catch (JSONException e) {
             e.printStackTrace();

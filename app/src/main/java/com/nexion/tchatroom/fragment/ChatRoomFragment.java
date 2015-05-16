@@ -82,7 +82,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         int userId = sharedPref.getInt(KEY_USER_ID, 0);
         String userPseudo = sharedPref.getString(KEY_USER_PSEUDO, "");
         int userAcl = sharedPref.getInt(KEY_USER_ACL, 0);
-        mUser = new User(userId, userPseudo, userAcl);
+        mUser = new User(userId, userPseudo, userAcl, true);
 
         mChatRoom.addUser(mUser);
 

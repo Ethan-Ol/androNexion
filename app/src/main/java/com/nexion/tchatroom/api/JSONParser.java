@@ -16,6 +16,8 @@ import java.util.Map;
 
 /**
  * Created by DarzuL on 14/03/2015.
+ *
+ * Transform json to java object
  */
 public class JSONParser implements JSONFields {
 
@@ -24,7 +26,7 @@ public class JSONParser implements JSONFields {
     }
 
     static User getUserInfo(JSONObject response) throws JSONException {
-        return new User(response.getInt(FIELD_ID), response.getString(FIELD_PSEUDO), response.getInt(FIELD_ACL));
+        return new User(response.getInt(FIELD_ID), response.getString(FIELD_PSEUDO), response.getInt(FIELD_ACL), false);
     }
 
     static List<BeaconRoom> parseJSONBeaconRooms(JSONObject response) throws JSONException {
