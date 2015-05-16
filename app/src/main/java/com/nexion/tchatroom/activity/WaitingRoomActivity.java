@@ -117,21 +117,35 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     @Override
     public void onJoinRoom() {
         if (App.DEBUG) {
-            startChatRoom(1);
+            startChatRoomActivity(1);
         } else {
-            startChatRoom(mAvailableRoomId);
+            startChatRoomActivity(mAvailableRoomId);
         }
+    }
+
+    @Override
+    public void onLogOut() {
+        getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
+                .edit()
+                .remove(KeyFields.KEY_TOKEN)
+                .apply();
+        startLoginActivity();
+        finish();
     }
 
     private WaitingRoomFragment getWaitingRoomFragment() {
         return (WaitingRoomFragment) getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_FRAGMENT_TAG);
     }
 
-    private void startChatRoom(int roomId) {
+    private void startChatRoomActivity(int roomId) {
         Intent intent = ChatRoomActivity.newIntent(this, roomId);
         startActivity(intent);
     }
 
+    private void startLoginActivity() {
+        Intent intent = LoginActivity.newIntent(this);
+        startActivity(intent);
+    }
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);

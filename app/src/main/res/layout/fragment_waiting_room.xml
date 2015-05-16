@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <ImageView
         android:id="@+id/logo"
@@ -11,7 +11,7 @@
         android:layout_margin="24dip"
         android:contentDescription="@string/desc_logo"
         android:gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/infoTv"
@@ -21,20 +21,35 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="@string/text_no_room_found"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/connectBtn"
-        android:layout_width="wrap_content"
+        style="@style/ActionBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/join_room"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <include
         layout="@layout/loader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:id="@+id/log_out"
+        style="@style/TextClickable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="12dip"
+        android:singleLine="true"
+        android:text="@string/text_log_out"/>
 
 </RelativeLayout>

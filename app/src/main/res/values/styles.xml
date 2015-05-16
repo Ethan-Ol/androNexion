@@ -12,7 +12,7 @@
         <item name="android:layout_marginLeft">12dip</item>
         <item name="android:layout_marginRight">12dip</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">48dip</item>
     </style>
 
     <style name="Pseudo">
@@ -29,7 +29,12 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Date">
+    <style name="TextClickable" parent="Text">
+        <item name="android:textColor">@color/clickable_tv</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="TextDate">
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">italic</item>
     </style>

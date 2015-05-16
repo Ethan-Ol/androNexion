@@ -103,8 +103,14 @@ public class WaitingRoomFragment extends Fragment {
         mListener.onJoinRoom();
     }
 
+    @OnClick(R.id.log_out)
+    void onLogOut() {
+        mListener.onLogOut();
+    }
+
 
     public interface OnFragmentInteractionListener {
         void onJoinRoom();
+        void onLogOut();
     }
 }

@@ -42,9 +42,10 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnFragm
             if (getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE).contains(KeyFields.KEY_TOKEN)) {
                 startWaitingRoom();
             } else {
+                String userLogin = getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE).getString(KeyFields.KEY_USER_PSEUDO, "");
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.container, LoginFragment.newInstance(), LOGIN_FRAGMENT_TAG)
+                        .add(R.id.container, LoginFragment.newInstance(userLogin), LOGIN_FRAGMENT_TAG)
                         .commit();
             }
         }
@@ -113,5 +114,9 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnFragm
 
     private LoginFragment getLoginFragment() {
         return (LoginFragment) getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT_TAG);
+    }
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, LoginActivity.class);
     }
 }

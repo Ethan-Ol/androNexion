@@ -23,7 +23,7 @@ import butterknife.OnClick;
 
 public class LoginFragment extends Fragment {
     public static final String TAG = "LoginFragment";
-    private static final String ARG_USERNAME = "username";
+    private static final String ARG_PSEUDO = "pseudo";
 
     @InjectView(R.id.loaderLayout)
     LinearLayout mLoaderLayout;
@@ -36,8 +36,14 @@ public class LoginFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static LoginFragment newInstance(String pseudo) {
+        LoginFragment fragment = new LoginFragment();
+
+        Bundle args = new Bundle();
+        args.putString(ARG_PSEUDO, pseudo);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     public LoginFragment() {
@@ -45,16 +51,17 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((App) getActivity().getApplication()).inject(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.inject(this, v);
+
+        Bundle args = getArguments();
+        if(args != null) {
+            String pseudo = args.getString(ARG_PSEUDO);
+            mUsernameEt.setText(pseudo);
+            mUsernameEt.setSelection(pseudo.length());
+        }
 
         mPasswordEt.setOnKeyListener(new View.OnKeyListener() {
             @Override
