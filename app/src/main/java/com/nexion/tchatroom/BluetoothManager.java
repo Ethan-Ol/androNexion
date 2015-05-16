@@ -7,24 +7,13 @@ import android.bluetooth.BluetoothAdapter;
  * <p/>
  * Check bluetooth availability
  */
-public class BluetoothManager {
-    private static BluetoothManager ourInstance = new BluetoothManager();
+public abstract class BluetoothManager {
 
-    public static BluetoothManager getInstance() {
-        return ourInstance;
+    public static boolean isBluetoothAvailable() {
+        return BluetoothAdapter.getDefaultAdapter() != null;
     }
 
-    private BluetoothAdapter mBluetoothAdapter;
-
-    private BluetoothManager() {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    }
-
-    public boolean isBluetoothAvailable() {
-        return mBluetoothAdapter != null;
-    }
-
-    public boolean isBluetoothEnabled() {
-        return mBluetoothAdapter.isEnabled();
+    public static boolean isBluetoothEnabled() {
+        return BluetoothAdapter.getDefaultAdapter().isEnabled();
     }
 }

@@ -10,4 +10,5 @@
     <color name="item_selected">#ff78c6ff</color>
     <color name="item_not_selected">#ffd5e6ff</color>
     <color name="item_separator">#ff9c8e80</color>
+    <color name="url_link">#3366BB</color>
 </resources>

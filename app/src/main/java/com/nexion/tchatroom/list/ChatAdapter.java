@@ -31,8 +31,6 @@ import butterknife.InjectView;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private static final String TAG = "ChatAdapter";
-    private final static String REG_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-    private final static Pattern PATTERN = Pattern.compile(REG_URL, 0);
 
     private final Context mContext;
     private final ChatRoom mChatRoom;
@@ -88,13 +86,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return mChatRoom.getMessage(position).getType();
     }
 
-    private void onOpenUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        mContext.startActivity(intent);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         private static ChatAdapter sAdapter;
 
@@ -108,7 +100,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public ViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
-            v.setOnClickListener(this);
         }
 
         void refreshView(NexionMessage message) {
@@ -123,15 +114,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
             }
             dateTv.setText(dateText);
-        }
-
-        @Override
-        public void onClick(View v) {
-            String text = messageTv.getText().toString();
-            Matcher matcher = PATTERN.matcher(text);
-            if (matcher.find()) {
-                sAdapter.onOpenUrl(matcher.group());
-            }
         }
     }
 

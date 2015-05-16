@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -29,9 +30,6 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "WaitingRoomActivity";
 
-    @Inject
-    Bus bus;
-
     private BeaconOrganizer beaconOrganizer;
     private Integer mAvailableRoomId;
 
@@ -39,7 +37,6 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
-        ((App) getApplication()).inject(this);
 
         SharedPreferences sharedPref = getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
         if (sharedPref.contains(KeyFields.KEY_USER_ID)) {
@@ -63,36 +60,32 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
                     .commit();
         }
 
-        if(!checkBluetooth()) {
-            requestBluetoothActivation();
+        if(BluetoothManager.isBluetoothAvailable()) {
+            if (!BluetoothManager.isBluetoothEnabled()) {
+                requestBluetoothActivation();
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_LONG).show();
         }
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        bus.register(this);
         Integer roomId;
         if ((roomId = BeaconOrganizer.attachListener(this)) != null) {
             onRoomAvailable(roomId);
         }
 
-        if (checkBluetooth()) {
+        if (BluetoothManager.isBluetoothAvailable() && BluetoothManager.isBluetoothEnabled()) {
             beaconOrganizer.start();
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        checkPlayServices();
-        checkBluetooth();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        bus.unregister(this);
         BeaconOrganizer.detachListener(this);
     }
 
@@ -160,11 +153,6 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
             return false;
         }
         return true;
-    }
-
-    private boolean checkBluetooth() {
-        BluetoothManager bluetoothManager = BluetoothManager.getInstance();
-        return bluetoothManager.isBluetoothEnabled();
     }
 
 

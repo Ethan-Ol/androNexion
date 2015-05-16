@@ -29,6 +29,12 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="TextMessage" parent="Text">
+        <item name="android:textColorLink">@color/url_link</item>
+        <item name="android:autoLink">all</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="TextClickable" parent="Text">
         <item name="android:textColor">@color/clickable_tv</item>
         <item name="android:clickable">true</item>
