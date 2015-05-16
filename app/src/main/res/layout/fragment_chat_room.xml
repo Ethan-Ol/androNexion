@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:cursorVisible="true"
             android:hint="@string/tape_your_message"
             android:inputType="text"
-            android:cursorVisible="true"
             android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
         <ImageButton
@@ -64,7 +64,8 @@
         android:layout_toStartOf="@id/leaveBtn"
         android:background="@drawable/image_button"
         android:contentDescription="@string/exit_desc"
-        android:src="@drawable/ic_menu_blocked_user"/>
+        android:src="@drawable/ic_menu_blocked_user"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/title"

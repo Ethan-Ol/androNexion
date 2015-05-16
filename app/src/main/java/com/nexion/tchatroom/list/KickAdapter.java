@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.model.User;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -22,12 +21,14 @@ import butterknife.InjectView;
  */
 public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
 
-    public List<User> users;
-    public List<User> userSelected;
+    private final KickFragmentListener listener;
+    private final List<User> users;
+    private final List<User> userSelected;
 
-    public KickAdapter(List<User> users) {
+    public KickAdapter(KickFragmentListener listener, List<User> users, List<User> userSelected) {
+        this.listener = listener;
         this.users = users;
-        userSelected = new LinkedList<>();
+        this.userSelected = userSelected;
     }
 
     @Override
@@ -48,13 +49,22 @@ public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
     }
 
     private boolean onUserItemClick(User user) {
+
+        boolean itemSelected;
         if (userSelected.contains(user)) {
             userSelected.remove(user);
-            return false;
+            itemSelected = false;
         } else {
             userSelected.add(user);
-            return true;
+            itemSelected =  true;
         }
+        listener.onItemClicked();
+
+        return itemSelected;
+    }
+
+    public interface KickFragmentListener {
+        void onItemClicked();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

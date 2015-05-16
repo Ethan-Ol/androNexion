@@ -44,5 +44,7 @@
     <string name="has_kicked">%s a été kick</string>
     <string name="title_activity_kick">KickActivity</string>
     <string name="unknown_user">\???</string>
+    <string name="text_cancel">Annuler</string>
+    <string name="text_kick_user">Expluser %s</string>
 
 </resources>

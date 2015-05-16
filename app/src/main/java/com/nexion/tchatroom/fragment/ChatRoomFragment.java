@@ -118,6 +118,10 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
             }
         });
 
+        if(App.DEBUG || mChatRoom.getUser(User.currentUserId).isAdmin()) {
+            mKickBtn.setVisibility(View.VISIBLE);
+        }
+
         return v;
     }
 
@@ -157,7 +161,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
     @OnClick(R.id.leaveBtn)
     void onLeaveRoom() {
-        mListener.leaveRoom();
+        mListener.onRoomLeaved();
     }
 
     @Override
@@ -240,7 +244,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         addMessage(msg);
 
         if (userId == mUser.getId()) {
-            mListener.leaveRoom();
+            mListener.onRoomLeaved();
         }
     }
 
@@ -250,7 +254,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
 
         void sendMessage(String content);
 
-        void leaveRoom();
+        void onRoomLeaved();
 
         void startKickFragment();
     }

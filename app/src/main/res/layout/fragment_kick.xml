@@ -1,7 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="com.nexion.tchatroom.fragment.KickFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -9,16 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/validBtn"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"/>
 
     <Button
         android:id="@+id/validBtn"
         style="@style/ActionBtn"
         android:layout_alignParentBottom="true"
-        android:text="@string/kick"
+        android:layout_marginEnd="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginStart="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginEnd="0dp"/>
+        android:layout_marginStart="0dp"
+        android:lines="1"
+        android:singleLine="true"
+        android:text="@string/text_cancel"/>
 
 </RelativeLayout>

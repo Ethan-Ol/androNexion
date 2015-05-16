@@ -17,13 +17,10 @@ import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
-import com.squareup.otto.Bus;
 
 import org.json.JSONException;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.OnFragmentInteractionListener,
         BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener, KickFragment.OnFragmentInteractionListener {
@@ -43,14 +40,10 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     private APIRequester apiRequester;
     private ChatRoom mChatRoom;
 
-    @Inject
-    Bus bus;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-        ((App) getApplication()).inject(this);
 
         mLoaderPb = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -69,18 +62,6 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        bus.register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        bus.unregister(this);
-    }
-
-    @Override
     public void sendMessage(String content) {
         try {
             apiRequester.postMessage(content);
@@ -90,7 +71,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     }
 
     @Override
-    public void leaveRoom() {
+    public void onRoomLeaved() {
         onBackPressed();
     }
 
@@ -149,7 +130,6 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     @Override
     public void onErrorResponse(VolleyError error) {
         ErrorHandler.toastError(this, error);
-        //finish();
     }
 
     @Override
@@ -161,6 +141,13 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
                 e.printStackTrace();
             }
         }
-        finish();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
     }
 }

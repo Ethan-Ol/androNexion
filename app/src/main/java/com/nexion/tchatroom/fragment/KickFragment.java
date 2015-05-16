@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.list.KickAdapter;
 import com.nexion.tchatroom.model.ChatRoom;
@@ -22,10 +23,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class KickFragment extends Fragment {
+public class KickFragment extends Fragment implements KickAdapter.KickFragmentListener {
 
     public static final String TAG = "KickFragment";
-    public static final String ARG_CURRENT_ROOM_ID = "current_room_id";
 
     private OnFragmentInteractionListener mListener;
 
@@ -33,8 +33,11 @@ public class KickFragment extends Fragment {
         return new KickFragment();
     }
 
-    private User mUser;
-    private ChatRoom mRoom;
+    private final List<User> users = new LinkedList<>();
+    private final List<User> userSelected = new LinkedList<>();
+
+    @InjectView(R.id.validBtn)
+    Button mValidButton;
 
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
@@ -47,12 +50,14 @@ public class KickFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((App) getActivity().getApplication()).inject(this);
 
-        //TODO refacto
-        List<User> kickableUsers = new LinkedList<>();
-        kickableUsers.addAll(mRoom.getUsers().values());
-        mAdapter = new KickAdapter(kickableUsers);
+        ChatRoom chatRoom = mListener.fragmentCreated();
+        for (User user : chatRoom.getUsers().values()) {
+            if (user.isInRoom() && user.getId() != User.currentUserId)
+                users.add(user);
+        }
+
+        mAdapter = new KickAdapter(this, users, userSelected);
     }
 
     @Override
@@ -70,7 +75,8 @@ public class KickFragment extends Fragment {
 
     @OnClick(R.id.validBtn)
     void onValidKick() {
-        mListener.onKick(mAdapter.userSelected);
+        mListener.onKick(userSelected);
+
     }
 
     @Override
@@ -90,7 +96,27 @@ public class KickFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClicked() {
+        switch (userSelected.size()) {
+            case 0:
+                mValidButton.setText(getString(R.string.text_cancel));
+                break;
+
+            default:
+                List<String> pseudoList = new LinkedList<>();
+                for(User user : userSelected) {
+                    pseudoList.add(user.getPseudo());
+                }
+                String pseudoListJoined = TextUtils.join(", ", pseudoList);
+                mValidButton.setText(getString(R.string.text_kick_user, pseudoListJoined));
+                break;
+        }
+    }
+
     public interface OnFragmentInteractionListener {
+        ChatRoom fragmentCreated();
+
         void onKick(List<User> userSelected);
     }
 
