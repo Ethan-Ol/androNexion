@@ -21,6 +21,7 @@ interface JSONFields {
 
     String FIELD_MESSAGES = "messages";
     String FIELD_AUTHOR_ID = "author_id";
+    String FIELD_USER_ID = "user_id";
     String FIELD_CONTENT = "content";
     String FIELD_DATE = "date";
 

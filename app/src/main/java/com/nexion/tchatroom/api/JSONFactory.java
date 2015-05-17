@@ -41,7 +41,7 @@ public class JSONFactory implements JSONFields {
     JSONObject createUserJSON(String token, User user) throws JSONException {
         String str = "{"
                 + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\"" + ","
-                + "\"" + FIELD_AUTHOR_ID + "\"" + ":" + user.getId() + ","
+                + "\"" + FIELD_USER_ID + "\"" + ":" + user.getId() + ","
                 + "\"" + FIELD_KICK_DURATION + "\"" + ":" + 60
                 + "}";
 

@@ -110,10 +110,10 @@ public class APIRequester {
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
     }
 
-    public void kickUser(User user) throws JSONException {
+    public void kickUser(User user, KickListener listener) throws JSONException {
         String page = "/kick.php";
         JSONObject jsonObject = jsonFactory.createUserJSON(token, user);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, null));
+        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, listener));
     }
 
     public void sendGcmKey(String regid) throws JSONException {
@@ -134,5 +134,8 @@ public class APIRequester {
 
     public interface BeaconsRoomInfoListener extends Response.ErrorListener {
         void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms);
+    }
+
+    public interface KickListener extends Response.ErrorListener {
     }
 }
