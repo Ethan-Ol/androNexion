@@ -177,6 +177,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             getSupportFragmentManager()
                     .beginTransaction()
                     .remove(fragment)
+                    .addToBackStack(null)
                     .commit();
         }
     }
