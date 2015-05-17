@@ -58,6 +58,7 @@ public class JSONParser implements JSONFields {
         len = messagesJSONArray.length();
         for (int i = 0; i < len; i++) {
             NexionMessage message = JSONConverter.jsonObjectToMessage(messagesJSONArray.getJSONObject(i));
+
             messages.add(message);
         }
 
