@@ -38,9 +38,9 @@ public class KickFragment extends Fragment implements KickAdapter.KickFragmentLi
 
     @InjectView(R.id.validBtn)
     Button mValidButton;
-
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
+
     private KickAdapter mAdapter;
 
 

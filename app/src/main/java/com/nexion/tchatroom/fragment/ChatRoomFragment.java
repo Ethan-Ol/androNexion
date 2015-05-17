@@ -84,8 +84,6 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         int userAcl = sharedPref.getInt(KEY_USER_ACL, 0);
         mUser = new User(userId, userPseudo, userAcl, true);
 
-        mChatRoom.addUser(mUser);
-
         mAdapter = new ChatAdapter(getActivity(), mChatRoom);
     }
 
