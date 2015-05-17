@@ -31,12 +31,16 @@ public class ErrorHandler {
         }
 
         switch (statusCode) {
+            case 403:
+                msg = context.getString(R.string.error_403);
+                break;
+
             case 404:
                 msg = context.getString(R.string.error_404);
                 break;
 
-            case 403:
-                msg = context.getString(R.string.error_403);
+            case 498:
+                msg = context.getString(R.string.error_498);
                 break;
         }
 

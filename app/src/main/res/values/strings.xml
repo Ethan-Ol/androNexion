@@ -22,6 +22,7 @@
     <string name="text_no_password">Aucun mot de passe</string>
     <string name="text_no_room_found">Aucune salle détectée</string>
     <string name="text_connection_pending">Connexion en cours&#8230;</string>
+    <string name="text_impossible_to_join">Impossible de joindre la salle</string>
 
     <string name="title_activity_kick">KickActivity</string>
     <string name="title_activity_chat_room">ChatRoomActivity</string>
@@ -39,6 +40,7 @@
     <string name="error_unknown">Impossible de joindre le serveur</string>
     <string name="error_5xx">Erreur côté serveur</string>
     <string name="error_3xx">Erreur côté client</string>
+    <string name="error_498">Votre session a expirée</string>
 
     <string name="warning_device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
 </resources>

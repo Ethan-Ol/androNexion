@@ -140,17 +140,25 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
         if(statusCode == null)
             return;
 
-        if (statusCode.equals(403)) {
-            Toast.makeText(getApplicationContext(), R.string.text_token_changed, Toast.LENGTH_LONG).show();
-            getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
-                    .edit()
-                    .remove(KeyFields.KEY_TOKEN)
-                    .apply();
-            startActivity(LoginActivity.newIntent(this));
-            setResult(WaitingRoomActivity.RESULT_LOG_OUT);
-            finish();
-        } else {
-            ErrorHandler.toastError(this, error);
+        switch (statusCode) {
+            case 403:
+                Toast.makeText(getApplicationContext(), R.string.text_impossible_to_join, Toast.LENGTH_LONG).show();
+                finish();
+                break;
+
+            case 498:
+                Toast.makeText(getApplicationContext(), R.string.text_token_changed, Toast.LENGTH_LONG).show();
+                getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
+                        .edit()
+                        .remove(KeyFields.KEY_TOKEN)
+                        .apply();
+                startActivity(LoginActivity.newIntent(this));
+                setResult(WaitingRoomActivity.RESULT_LOG_OUT);
+                finish();
+                break;
+
+            default:
+                ErrorHandler.toastError(this, error);
         }
     }
 
