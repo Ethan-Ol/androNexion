@@ -79,6 +79,8 @@ public class PushService extends IntentService {
                 handleActionJoin(jsonObjectStr);
             } else if (ACTION_LEAVE.equals(action)) {
                 handleActionLeave(jsonObjectStr);
+            } else if (ACTION_KICK.equals(action)) {
+                handleActionKick(jsonObjectStr);
             }
         }
     }
