@@ -3,6 +3,9 @@ package com.nexion.tchatroom.model;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Object which represetn a chat room
+ */
 public class ChatRoom extends Room {
     private final Map<Integer, User> userMap;
     private List<NexionMessage> messages;
