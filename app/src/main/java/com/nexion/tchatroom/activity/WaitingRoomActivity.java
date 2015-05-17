@@ -59,7 +59,7 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
                     .commit();
         }
 
-        if(BluetoothManager.isBluetoothAvailable()) {
+        if (BluetoothManager.isBluetoothAvailable()) {
             if (!BluetoothManager.isBluetoothEnabled()) {
                 requestBluetoothActivation();
             }
@@ -141,8 +141,8 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == CHAT_ROOM_REQUEST_CODE) {
-            if(resultCode == RESULT_LOG_OUT) {
+        if (requestCode == CHAT_ROOM_REQUEST_CODE) {
+            if (resultCode == RESULT_LOG_OUT) {
                 finish();
             }
         }

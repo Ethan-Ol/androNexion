@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nexion.tchatroom.App;
-import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.R;
 
 import butterknife.ButterKnife;
@@ -54,10 +53,9 @@ public class WaitingRoomFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_waiting_room, container, false);
         ButterKnife.inject(this, v);
 
-        if(App.DEBUG) {
+        if (App.DEBUG) {
             mConnectBtn.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mInfoTv.setVisibility(View.VISIBLE);
         }
 
@@ -111,6 +109,7 @@ public class WaitingRoomFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onJoinRoom();
+
         void onLogOut();
     }
 }

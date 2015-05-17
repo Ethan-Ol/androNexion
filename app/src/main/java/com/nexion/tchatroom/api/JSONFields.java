@@ -2,7 +2,7 @@ package com.nexion.tchatroom.api;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Fields used to parse json respond from API
  */
 interface JSONFields {
@@ -17,7 +17,7 @@ interface JSONFields {
     String FIELD_PSEUDO = "pseudo";
     String FIELD_ACL = "acl";
     String FIELD_KICK_DURATION = "duration";
-    String FIELD_IN_ROOM= "in_room";
+    String FIELD_IN_ROOM = "in_room";
 
     String FIELD_MESSAGES = "messages";
     String FIELD_AUTHOR_ID = "author_id";

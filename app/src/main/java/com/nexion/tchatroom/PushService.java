@@ -86,7 +86,7 @@ public class PushService extends IntentService {
     private void handleActionPost(String jsonObjectStr) {
         try {
             JSONObject jobj = new JSONObject(jsonObjectStr);
-            bus.post(new MessageReceivedEvent(jobj.getInt(AUTHOR_ID), jobj.getString(CONTENT), jobj.getInt(DATE)));
+            bus.post(new MessageReceivedEvent(jobj.getInt(AUTHOR_ID), jobj.getString(CONTENT), jobj.getLong(DATE)));
         } catch (JSONException e) {
             e.printStackTrace();
         }

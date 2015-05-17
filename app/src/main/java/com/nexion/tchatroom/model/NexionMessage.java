@@ -24,7 +24,7 @@ public class NexionMessage extends AbstractEntity {
     private String content;
     private Calendar sendAt;
     private Integer authorId;
-    private int type;
+    private Integer type;
     private boolean pending;
 
     public NexionMessage(String content, Long dateTime, Integer authorId) {
@@ -43,6 +43,7 @@ public class NexionMessage extends AbstractEntity {
         }
         this.sendAt = sendAt;
         this.authorId = authorId;
+        this.type = type;
     }
 
     public String getContent() {

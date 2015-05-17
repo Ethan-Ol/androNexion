@@ -11,7 +11,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by DarzuL on 08/03/2015.
- *
+ * <p/>
  * An extended app
  */
 public class App extends Application {

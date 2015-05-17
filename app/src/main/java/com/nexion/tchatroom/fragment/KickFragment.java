@@ -38,9 +38,9 @@ public class KickFragment extends Fragment implements KickAdapter.KickFragmentLi
 
     @InjectView(R.id.validBtn)
     Button mValidButton;
-
     @InjectView(R.id.list)
     RecyclerView mRecyclerView;
+
     private KickAdapter mAdapter;
 
 
@@ -105,7 +105,7 @@ public class KickFragment extends Fragment implements KickAdapter.KickFragmentLi
 
             default:
                 List<String> pseudoList = new LinkedList<>();
-                for(User user : userSelected) {
+                for (User user : userSelected) {
                     pseudoList.add(user.getPseudo());
                 }
                 String pseudoListJoined = TextUtils.join(", ", pseudoList);

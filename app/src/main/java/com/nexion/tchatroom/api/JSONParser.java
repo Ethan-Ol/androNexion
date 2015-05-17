@@ -16,10 +16,10 @@ import java.util.Map;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Transform json to java object
  */
-public class JSONParser implements JSONFields {
+public abstract class JSONParser implements JSONFields {
 
     static String getToken(JSONObject jsonObject) throws JSONException {
         return jsonObject.getString(FIELD_TOKEN);

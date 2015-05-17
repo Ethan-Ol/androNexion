@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Factory to create json to communicate with the API
  */
 public class JSONFactory implements JSONFields {

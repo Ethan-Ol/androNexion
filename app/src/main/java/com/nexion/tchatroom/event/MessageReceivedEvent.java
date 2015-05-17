@@ -11,6 +11,7 @@ public class MessageReceivedEvent {
     public MessageReceivedEvent(int authorId, String content, long dateTime) {
         this.authorId = authorId;
         this.content = content;
+        this.dateTime = dateTime;
     }
 
     public int getAuthorId() {

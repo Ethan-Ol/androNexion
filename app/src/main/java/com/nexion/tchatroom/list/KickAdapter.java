@@ -56,7 +56,7 @@ public class KickAdapter extends RecyclerView.Adapter<KickAdapter.ViewHolder> {
             itemSelected = false;
         } else {
             userSelected.add(user);
-            itemSelected =  true;
+            itemSelected = true;
         }
         listener.onItemClicked();
 

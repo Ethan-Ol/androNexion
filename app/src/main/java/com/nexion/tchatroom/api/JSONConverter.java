@@ -14,10 +14,10 @@ import java.util.List;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Convert JSON to java object
  */
-final class JSONConverter implements JSONFields {
+abstract class JSONConverter implements JSONFields {
 
     static User jsonObjectToUser(JSONObject jsonObject) throws JSONException {
         return new User(jsonObject.getInt(FIELD_ID), jsonObject.getString(FIELD_PSEUDO), jsonObject.getInt(FIELD_ACL), jsonObject.getInt(FIELD_IN_ROOM) == User.IN_ROOM);
