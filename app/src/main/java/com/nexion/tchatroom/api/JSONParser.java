@@ -19,7 +19,7 @@ import java.util.Map;
  * <p/>
  * Transform json to java object
  */
-public class JSONParser implements JSONFields {
+public abstract class JSONParser implements JSONFields {
 
     static String getToken(JSONObject jsonObject) throws JSONException {
         return jsonObject.getString(FIELD_TOKEN);
