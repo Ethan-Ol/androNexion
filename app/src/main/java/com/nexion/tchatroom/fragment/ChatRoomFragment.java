@@ -74,6 +74,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((App) getActivity().getApplication()).inject(this);
+        setRetainInstance(true);
 
         mChatRoom = mListener.fragmentCreated();
 

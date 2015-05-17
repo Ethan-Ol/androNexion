@@ -50,6 +50,7 @@ public class KickFragment extends Fragment implements KickAdapter.KickFragmentLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         ChatRoom chatRoom = mListener.fragmentCreated();
         for (User user : chatRoom.getUsers().values()) {
