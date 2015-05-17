@@ -116,14 +116,6 @@ public class APIRequester {
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject, null, listener));
     }
 
-    public void sendGcmKey(String regid) throws JSONException {
-        String page = "/setDeviceId.php";
-        JSONObject jsonObject = jsonFactory.createGcmJSON(token, regid);
-        queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
-                null,
-                null));
-    }
-
     public interface UserInfoListener extends Response.ErrorListener {
         void onUserConnected(String token, User user);
     }
