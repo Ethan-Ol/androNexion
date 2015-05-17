@@ -47,5 +47,6 @@
     <string name="text_cancel">Annuler</string>
     <string name="text_kick_user">Expluser %s</string>
     <string name="text_log_out">Se déconnecter</string>
+    <string name="token_changed">Votre session a expirée</string>
 
 </resources>

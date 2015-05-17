@@ -6,15 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.R;
 import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.api.ErrorHandler;
 import com.nexion.tchatroom.fragment.ChatRoomFragment;
 import com.nexion.tchatroom.fragment.KickFragment;
+import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.ChatRoom;
 import com.nexion.tchatroom.model.User;
 
@@ -129,7 +130,19 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        ErrorHandler.toastError(this, error);
+        int statusCode = ErrorHandler.getStatusCode(error);
+        if (statusCode == 403) {
+            Toast.makeText(getApplicationContext(), R.string.token_changed, Toast.LENGTH_LONG).show();
+            getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
+                    .edit()
+                    .remove(KeyFields.KEY_TOKEN)
+                    .apply();
+            startActivity(LoginActivity.newIntent(this));
+            setResult(WaitingRoomActivity.RESULT_LOG_OUT);
+            finish();
+        } else {
+            ErrorHandler.toastError(this, error);
+        }
     }
 
     @Override

@@ -20,14 +20,13 @@ import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.manager.PlayServicesManager;
 import com.nexion.tchatroom.model.User;
-import com.squareup.otto.Bus;
-
-import javax.inject.Inject;
 
 public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
     private final static String WAITING_ROOM_FRAGMENT_TAG = "WaitingRoom";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final static int CHAT_ROOM_REQUEST_CODE = 150;
+    public final static int RESULT_LOG_OUT = 151;
     private static final String TAG = "WaitingRoomActivity";
 
     private BeaconOrganizer beaconOrganizer;
@@ -132,12 +131,23 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
 
     private void startChatRoomActivity(int roomId) {
         Intent intent = ChatRoomActivity.newIntent(this, roomId);
-        startActivity(intent);
+        startActivityForResult(intent, CHAT_ROOM_REQUEST_CODE);
     }
 
     private void startLoginActivity() {
         Intent intent = LoginActivity.newIntent(this);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == CHAT_ROOM_REQUEST_CODE) {
+            if(resultCode == RESULT_LOG_OUT) {
+                finish();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private boolean checkPlayServices() {

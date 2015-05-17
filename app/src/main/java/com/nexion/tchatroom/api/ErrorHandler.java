@@ -2,6 +2,7 @@ package com.nexion.tchatroom.api;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -40,7 +41,13 @@ public class ErrorHandler {
         }
 
         if (msg != null) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
+    }
+
+    public static Integer getStatusCode(VolleyError error) {
+        return error.networkResponse == null ? null : error.networkResponse.statusCode;
     }
 }
