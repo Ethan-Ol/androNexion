@@ -24,7 +24,8 @@ import org.json.JSONException;
 import java.util.List;
 
 public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.OnFragmentInteractionListener,
-        BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener, KickFragment.OnFragmentInteractionListener, APIRequester.KickListener {
+        BeaconOrganizer.BeaconOrganizerListener, APIRequester.RoomJoinListener, KickFragment.OnFragmentInteractionListener,
+        APIRequester.KickListener {
 
     private final static String CHAT_ROOM_FRAGMENT_TAG = "ChatRoom";
     private final static String KICK_FRAGMENT_TAG = "Kick";
@@ -88,6 +89,11 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     }
 
     @Override
+    public void onCurrentUserKicked() {
+        finish();
+    }
+
+    @Override
     public void onRoomAvailable(int roomId) {
         // TODO Another room is available
     }
@@ -135,7 +141,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             return;
 
         if (statusCode.equals(403)) {
-            Toast.makeText(getApplicationContext(), R.string.token_changed, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.text_token_changed, Toast.LENGTH_LONG).show();
             getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
                     .edit()
                     .remove(KeyFields.KEY_TOKEN)

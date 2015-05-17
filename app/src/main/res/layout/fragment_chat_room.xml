@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:cursorVisible="true"
-            android:hint="@string/tape_your_message"
+            android:hint="@string/hint_tape_your_message"
             android:inputType="text"
             android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
@@ -53,7 +53,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@drawable/image_button"
-        android:contentDescription="@string/kick_user"
+        android:contentDescription="@string/desc_kick_user"
         android:src="@android:drawable/ic_menu_directions"/>
 
     <ImageButton
@@ -63,7 +63,7 @@
         android:layout_toLeftOf="@id/leaveBtn"
         android:layout_toStartOf="@id/leaveBtn"
         android:background="@drawable/image_button"
-        android:contentDescription="@string/exit_desc"
+        android:contentDescription="@string/desc_exit"
         android:src="@drawable/ic_menu_blocked_user"
         android:visibility="gone"/>
 
@@ -76,7 +76,7 @@
         android:layout_marginLeft="48dip"
         android:layout_marginRight="96dip"
         android:layout_marginStart="48dip"
-        android:contentDescription="@string/title_room_desc"
+        android:contentDescription="@string/desc_room_title"
         android:gravity="center"
         android:singleLine="true"/>
 

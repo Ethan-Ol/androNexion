@@ -64,7 +64,7 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
                 requestBluetoothActivation();
             }
         } else {
-            Toast.makeText(this, getString(R.string.device_without_bluetooth), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.warning_device_without_bluetooth), Toast.LENGTH_LONG).show();
         }
 
     }

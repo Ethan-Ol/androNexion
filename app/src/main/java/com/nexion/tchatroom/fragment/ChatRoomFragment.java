@@ -221,28 +221,38 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     public void onUserJoined(JoinReceivedEvent event) {
         User user = event.getUser();
         mChatRoom.addUser(user);
-        addMessage(new NexionMessage(getString(R.string.has_joined_room, user.getPseudo()), null, null, NexionMessage.MESSAGE_FROM_BOT));
+        addMessage(new NexionMessage(getString(R.string.text_has_joined_room, user.getPseudo()), null, null, NexionMessage.MESSAGE_FROM_BOT));
     }
 
     @Subscribe
     public void onUserLeft(LeaveReceivedEvent event) {
-        String pseudo = mChatRoom.getUser(event.getUserId()).getPseudo();
+        User user = mChatRoom.getUser(event.getUserId());
+        if(user == null) {
+            return;
+        }
+
+        String pseudo = user.getPseudo();
         mChatRoom.removeUser(event.getUserId());
-        NexionMessage msg = new NexionMessage(getString(R.string.has_left_room, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
+        NexionMessage msg = new NexionMessage(getString(R.string.text_has_left_room, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
     }
 
     @Subscribe
     public void onUserKicked(KickReceivedEvent event) {
         int userId = event.getUserId();
-        String pseudo = mChatRoom.getUser(userId).getPseudo();
+        User user = mChatRoom.getUser(userId);
+        if(user == null) {
+            return;
+        }
+
+        String pseudo = user.getPseudo();
         mChatRoom.removeUser(userId);
 
-        NexionMessage msg = new NexionMessage(getString(R.string.has_kicked, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
+        NexionMessage msg = new NexionMessage(getString(R.string.text_has_kicked, pseudo), null, null, NexionMessage.MESSAGE_FROM_BOT);
         addMessage(msg);
 
         if (userId == mUser.getId()) {
-            mListener.onRoomLeaved();
+            mListener.onCurrentUserKicked();
         }
     }
 
@@ -255,5 +265,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         void onRoomLeaved();
 
         void startKickFragment();
+
+        void onCurrentUserKicked();
     }
 }

@@ -100,12 +100,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         void refreshView(NexionMessage message) {
             User author = sAdapter.mChatRoom.getUser(message.getAuthorId());
-            pseudoTv.setText(author == null ? sAdapter.mContext.getString(R.string.unknown_user) : author.getPseudo());
+            pseudoTv.setText(author == null ? sAdapter.mContext.getString(R.string.text_unknown_user) : author.getPseudo());
             messageTv.setText(message.getContent());
 
             String dateText;
             if (message.getSendAt() == null) {
-                dateText = sAdapter.mContext.getString(R.string.pending);
+                dateText = sAdapter.mContext.getString(R.string.text_pending);
             } else {
                 dateText = DateFormat.getTimeInstance(DateFormat.SHORT).format(message.getSendAt().getTime());
             }

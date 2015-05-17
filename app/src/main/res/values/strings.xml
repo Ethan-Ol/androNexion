@@ -1,26 +1,38 @@
 <resources>
     <string name="app_name">Nexion</string>
-    <string name="username_hint">Nom d\'utilisateur</string>
-    <string name="password_hint">Mot de passe</string>
-    <string name="connection_btn">Connexion</string>
+
+    <string name="hint_username">Nom d\'utilisateur</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_tape_your_message">Tapez votre message !</string>
+
+    <string name="action_kick">Expulser</string>
+    <string name="action_connection">Connexion</string>
+    <string name="action_join_room">Rejoindre la salle</string>
+
+    <string name="text_pending">Pending</string>
+    <string name="text_unknown_user">\???</string>
+    <string name="text_cancel">Annuler</string>
+    <string name="text_kick_user">Expluser %s</string>
+    <string name="text_log_out">Se déconnecter</string>
+    <string name="text_token_changed">Votre session a expirée</string>
+    <string name="text_has_joined_room">%s a rejoind la salle</string>
+    <string name="text_has_left_room">%s a quitté la salle</string>
+    <string name="text_has_kicked">%s a été kick</string>
     <string name="text_no_username">Aucun nom d\'utilisateur</string>
     <string name="text_no_password">Aucun mot de passe</string>
-
     <string name="text_no_room_found">Aucune salle détectée</string>
-    <string name="join_room">Rejoindre la salle</string>
+    <string name="text_connection_pending">Connexion en cours&#8230;</string>
 
-    <string name="tape_your_message">Tapez votre message !</string>
+    <string name="title_activity_kick">KickActivity</string>
+    <string name="title_activity_chat_room">ChatRoomActivity</string>
+    <string name="title_activity_waiting_room">WaitingRoomActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+
     <string name="desc_send_btn">Button to send a message</string>
-
     <string name="desc_logo">Logo de l\'application</string>
-    <string name="progress_login_msg">Connexion</string>
-
-    <string name="title_activity_activity_test_beacon">ActivityTestBeacon</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="connection">Connexion en cours&#8230;</string>
+    <string name="desc_exit">Quitter le tchat</string>
+    <string name="desc_kick_user">Expulser un utilisateur</string>
+    <string name="desc_room_title">Titre de la salle</string>
 
     <string name="error_404">Page introuvable</string>
     <string name="error_403">Mauvais nom d\'utilisateur ou mot de passe</string>
@@ -28,25 +40,5 @@
     <string name="error_5xx">Erreur côté serveur</string>
     <string name="error_3xx">Erreur côté client</string>
 
-    <string name="device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
-    <string name="exit_desc">Quitter le tchat</string>
-    <string name="kick_user">Expulser un utilisateur</string>
-    <string name="kick">Expulser</string>
-    <string name="pending">Pending</string>
-    <string name="title_activity_chat_room">ChatRoomActivity</string>
-    <string name="title_activity_waiting_room">WaitingRoomActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_room_desc">Titre de la salle</string>
-    <string name="has_joined_room">%s a rejoind la salle</string>
-    <string name="has_left_room">%s a quitté la salle</string>
-    <string name="has_kicked">%s a été kick</string>
-    <string name="title_activity_kick">KickActivity</string>
-    <string name="unknown_user">\???</string>
-    <string name="text_cancel">Annuler</string>
-    <string name="text_kick_user">Expluser %s</string>
-    <string name="text_log_out">Se déconnecter</string>
-    <string name="token_changed">Votre session a expirée</string>
-
+    <string name="warning_device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
 </resources>

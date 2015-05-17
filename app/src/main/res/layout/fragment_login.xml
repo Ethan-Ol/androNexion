@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:cursorVisible="true"
-            android:hint="@string/username_hint"
+            android:hint="@string/hint_username"
             android:inputType="textVisiblePassword|textNoSuggestions"
             android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dip"
             android:cursorVisible="true"
-            android:hint="@string/password_hint"
+            android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:textCursorDrawable="@drawable/edit_text_cursor"/>
 
@@ -45,7 +45,7 @@
             style="@style/ActionBtn"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dip"
-            android:text="@string/connection_btn"/>
+            android:text="@string/action_connection"/>
     </LinearLayout>
 
     <include

@@ -7,6 +7,8 @@ import com.squareup.otto.Bus;
 
 /**
  * Created by DarzuL on 15/03/2015.
+ *
+ * Custom bus to send event from thread to the main thread
  */
 public class AndroidBus extends Bus {
 
