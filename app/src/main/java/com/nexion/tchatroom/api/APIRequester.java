@@ -39,9 +39,9 @@ public class APIRequester {
         this.jsonFactory = new JSONFactory();
     }
 
-    public void requestToken(String login, String password, final UserInfoListener listener) throws JSONException {
+    public void requestToken(String login, String password, String regid, final UserInfoListener listener) throws JSONException {
         String page = "/getToken.php";
-        JSONObject jsonObject = jsonFactory.createLoginJSON(login, password);
+        JSONObject jsonObject = jsonFactory.createLoginJSON(login, password, regid);
         queue.add(new JsonObjectRequest(Request.Method.POST, url + page, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -12,10 +12,11 @@ import org.json.JSONObject;
  */
 public class JSONFactory implements JSONFields {
 
-    JSONObject createLoginJSON(String login, String password) throws JSONException {
+    JSONObject createLoginJSON(String login, String password, String deviceId) throws JSONException {
         String str = "{"
                 + "\"" + FIELD_LOGIN + "\"" + ":" + "\"" + login + "\"" + ","
-                + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\""
+                + "\"" + FIELD_PASSWORD + "\"" + ":" + "\"" + password + "\"" + ","
+                + "\"" + FIELD_DEVICE_ID + "\"" + ":" + "\"" + deviceId + "\""
                 + "}";
 
         return new JSONObject(str);
@@ -42,7 +43,7 @@ public class JSONFactory implements JSONFields {
         String str = "{"
                 + "\"" + FIELD_TOKEN + "\"" + ":" + "\"" + token + "\"" + ","
                 + "\"" + FIELD_USER_ID + "\"" + ":" + user.getId() + ","
-                + "\"" + FIELD_KICK_DURATION + "\"" + ":" + 60
+                + "\"" + FIELD_KICK_DURATION + "\"" + ":" + 1
                 + "}";
 
         return new JSONObject(str);

@@ -11,6 +11,7 @@ interface JSONFields {
 
     String FIELD_LOGIN = "login";
     String FIELD_PASSWORD = "password";
+    String FIELD_DEVICE_ID = "device_id";
     String FIELD_TOKEN = "token";
 
     String FIELD_USERS = "users";

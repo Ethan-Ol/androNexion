@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nexion.tchatroom.activity.LoginActivity;
 import com.nexion.tchatroom.api.APIRequester;
 
 import org.json.JSONException;
@@ -30,22 +29,15 @@ public class PlayServicesManager {
     private final AtomicInteger msgId = new AtomicInteger();
     private GoogleCloudMessaging gcm;
     private String regid;
-    private APIRequester apiRequester;
 
 
-    public PlayServicesManager(Context context, APIRequester apiRequester) {
+    public PlayServicesManager(Context context) {
         this.context = context;
-        this.apiRequester = apiRequester;
         gcm = GoogleCloudMessaging.getInstance(context);
-        regid = getRegistrationId(context);
-
-        if (regid.isEmpty()) {
-            registerInBackground();
-        }
     }
 
-    private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+    public String getRegistrationId(Context context) {
+        final SharedPreferences prefs = context.getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -61,11 +53,6 @@ public class PlayServicesManager {
         return registrationId;
     }
 
-    private SharedPreferences getGCMPreferences(Context context) {
-        return context.getSharedPreferences(LoginActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-    }
-
     private static int getAppVersion(Context context) {
         try {
             PackageInfo packageInfo = context.getPackageManager()
@@ -77,7 +64,7 @@ public class PlayServicesManager {
         }
     }
 
-    private void registerInBackground() {
+    public void registerInBackground(final PlayServicesListener listener) {
         new AsyncTask() {
             @Override
             protected String doInBackground(Object[] params) {
@@ -88,9 +75,8 @@ public class PlayServicesManager {
                     }
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
-                    sendRegistrationIdToBackend();
-
                     storeRegistrationId(context, regid);
+                    listener.onRegistrationFinish(regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                 }
@@ -99,21 +85,17 @@ public class PlayServicesManager {
         }.execute(null, null, null);
     }
 
-    private void sendRegistrationIdToBackend() {
-        try {
-            apiRequester.sendGcmKey(regid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        final SharedPreferences prefs = context.getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
+    }
+
+    public interface PlayServicesListener {
+        void onRegistrationFinish(String newRegId);
     }
 }

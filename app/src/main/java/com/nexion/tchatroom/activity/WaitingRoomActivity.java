@@ -9,22 +9,17 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
-import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.KeyFields;
-import com.nexion.tchatroom.manager.PlayServicesManager;
 import com.nexion.tchatroom.model.User;
 
 public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
     private final static String WAITING_ROOM_FRAGMENT_TAG = "WaitingRoom";
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final static int CHAT_ROOM_REQUEST_CODE = 150;
     public final static int RESULT_LOG_OUT = 151;
     private static final String TAG = "WaitingRoomActivity";
@@ -46,10 +41,6 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         }
 
         beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
-        APIRequester apiRequester = new APIRequester(getApplicationContext());
-        if (checkPlayServices()) {
-            new PlayServicesManager(getApplicationContext(), apiRequester);
-        }
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_FRAGMENT_TAG);
         if (fragment == null) {
@@ -148,21 +139,6 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
     }
 
 

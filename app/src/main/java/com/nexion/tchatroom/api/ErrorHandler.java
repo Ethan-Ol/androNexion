@@ -45,9 +45,7 @@ public class ErrorHandler {
         }
 
         if (msg != null) {
-            Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
