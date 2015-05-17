@@ -116,7 +116,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
             }
         });
 
-        if(App.DEBUG || mChatRoom.getUser(User.currentUserId).isAdmin()) {
+        if (App.DEBUG || mChatRoom.getUser(User.currentUserId).isAdmin()) {
             mKickBtn.setVisibility(View.VISIBLE);
         }
 

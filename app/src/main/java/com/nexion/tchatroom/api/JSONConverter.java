@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Convert JSON to java object
  */
 final class JSONConverter implements JSONFields {

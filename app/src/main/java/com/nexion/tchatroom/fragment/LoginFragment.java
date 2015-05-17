@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.R;
 
 import butterknife.ButterKnife;
@@ -57,7 +56,7 @@ public class LoginFragment extends Fragment {
         ButterKnife.inject(this, v);
 
         Bundle args = getArguments();
-        if(args != null) {
+        if (args != null) {
             String pseudo = args.getString(ARG_PSEUDO);
             mUsernameEt.setText(pseudo);
             mUsernameEt.setSelection(pseudo.length());

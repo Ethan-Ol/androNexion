@@ -1,8 +1,6 @@
 package com.nexion.tchatroom.list;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +14,6 @@ import com.nexion.tchatroom.model.NexionMessage;
 import com.nexion.tchatroom.model.User;
 
 import java.text.DateFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

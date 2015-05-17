@@ -68,6 +68,7 @@ public class ChatRoom extends Room {
 
     /**
      * Find the message type
+     *
      * @param author The message's author
      * @return The message's type
      */

@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * Created by DarzuL on 14/03/2015.
- *
+ * <p/>
  * Transform json to java object
  */
 public class JSONParser implements JSONFields {
