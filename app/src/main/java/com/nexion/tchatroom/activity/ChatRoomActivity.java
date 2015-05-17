@@ -146,7 +146,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
                 finish();
                 break;
 
-            case 498:
+            case 419:
                 Toast.makeText(getApplicationContext(), R.string.text_token_changed, Toast.LENGTH_LONG).show();
                 getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)
                         .edit()

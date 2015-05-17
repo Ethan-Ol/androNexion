@@ -39,8 +39,8 @@ public class ErrorHandler {
                 msg = context.getString(R.string.error_404);
                 break;
 
-            case 498:
-                msg = context.getString(R.string.error_498);
+            case 419:
+                msg = context.getString(R.string.error_419);
                 break;
         }
 
