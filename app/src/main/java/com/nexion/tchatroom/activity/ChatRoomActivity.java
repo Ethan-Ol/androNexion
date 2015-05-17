@@ -146,6 +146,10 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
                 finish();
                 break;
 
+            case 405:
+                Toast.makeText(getApplicationContext(), R.string.text_impossible_to_kick, Toast.LENGTH_LONG).show();
+                break;
+
             case 419:
                 Toast.makeText(getApplicationContext(), R.string.text_token_changed, Toast.LENGTH_LONG).show();
                 getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE)

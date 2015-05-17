@@ -43,4 +43,5 @@
     <string name="error_419">Votre session a expirée</string>
 
     <string name="warning_device_without_bluetooth">L\'application ne peut pas fonctionner si vous n\'avez de bluetooth !</string>
+    <string name="text_impossible_to_kick">Impossible d\'expulser cet utilisateur</string>
 </resources>
