@@ -39,7 +39,7 @@ public class NexionMessage extends AbstractEntity {
             pending = true;
         } else {
             sendAt = Calendar.getInstance();
-            sendAt.setTimeInMillis(dateTime);
+            sendAt.setTimeInMillis(dateTime * 1000); // The received time is in second
         }
         this.sendAt = sendAt;
         this.authorId = authorId;
