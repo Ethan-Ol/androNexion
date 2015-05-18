@@ -13,17 +13,20 @@ import com.nexion.tchatroom.App;
 import com.nexion.tchatroom.BeaconOrganizer;
 import com.nexion.tchatroom.BluetoothManager;
 import com.nexion.tchatroom.R;
+import com.nexion.tchatroom.api.APIRequester;
 import com.nexion.tchatroom.fragment.WaitingRoomFragment;
 import com.nexion.tchatroom.manager.KeyFields;
 import com.nexion.tchatroom.model.User;
+
+import org.json.JSONException;
 
 public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFragment.OnFragmentInteractionListener, BeaconOrganizer.BeaconOrganizerListener {
 
     private final static String WAITING_ROOM_FRAGMENT_TAG = "WaitingRoom";
     private final static int CHAT_ROOM_REQUEST_CODE = 150;
-    public final static int RESULT_LOG_OUT = 151;
     private static final String TAG = "WaitingRoomActivity";
 
+    private APIRequester apiRequester;
     private BeaconOrganizer beaconOrganizer;
     private Integer mAvailableRoomId;
 
@@ -31,6 +34,8 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
+
+        apiRequester = new APIRequester(this);
 
         SharedPreferences sharedPref = getSharedPreferences(KeyFields.PREF_FILE, Context.MODE_PRIVATE);
         if (sharedPref.contains(KeyFields.KEY_USER_ID)) {
@@ -133,8 +138,18 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CHAT_ROOM_REQUEST_CODE) {
-            if (resultCode == RESULT_LOG_OUT) {
-                finish();
+            switch (resultCode) {
+                case ChatRoomActivity.RESULT_LOG_OUT:
+                    finish();
+                    break;
+
+                case ChatRoomActivity.RESULT_LEAVE_ROOM:
+                    try {
+                        apiRequester.leaveRoom();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
 

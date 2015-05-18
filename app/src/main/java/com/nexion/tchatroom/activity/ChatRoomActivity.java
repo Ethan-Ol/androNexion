@@ -30,6 +30,8 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     private final static String CHAT_ROOM_FRAGMENT_TAG = "ChatRoom";
     private final static String KICK_FRAGMENT_TAG = "Kick";
     private final static String EXTRA_ROOM_ID = "room_id";
+    public final static int RESULT_LOG_OUT = 1500;
+    public final static int RESULT_LEAVE_ROOM = 1501;
 
     public static Intent newIntent(Context context, int roomId) {
         Intent intent = new Intent(context.getApplicationContext(), ChatRoomActivity.class);
@@ -76,8 +78,19 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     }
 
     @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
+        if (fragment == null) {
+            onRoomLeaved();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onRoomLeaved() {
-        onBackPressed();
+        setResult(RESULT_LEAVE_ROOM);
+        finish();
     }
 
     @Override
@@ -150,7 +163,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
                         .remove(KeyFields.KEY_TOKEN)
                         .apply();
                 startActivity(LoginActivity.newIntent(this));
-                setResult(WaitingRoomActivity.RESULT_LOG_OUT);
+                setResult(RESULT_LOG_OUT);
                 finish();
                 break;
 
@@ -170,16 +183,5 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
         }
 
         onBackPressed();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        try {
-            apiRequester.leaveRoom();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
