@@ -50,7 +50,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnFragm
             PlayServicesManager psm = new PlayServicesManager(getApplicationContext());
             regid = psm.getRegistrationId(this);
 
-            if(regid.isEmpty()) {
+            if (regid.isEmpty()) {
                 showLoading();
                 psm.registerInBackground(this);
             }

@@ -2,7 +2,6 @@ package com.nexion.tchatroom.api;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;

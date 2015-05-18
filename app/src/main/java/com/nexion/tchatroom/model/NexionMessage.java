@@ -1,6 +1,9 @@
 package com.nexion.tchatroom.model;
 
 
+import android.os.Bundle;
+
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -14,7 +17,13 @@ import java.util.Calendar;
  * 2 -> Message from teacher
  * 3 -> Message from bot
  */
-public class NexionMessage extends AbstractEntity {
+public class NexionMessage extends AbstractEntity implements Serializable {
+
+    private static final String STATE_CONTENT = "content";
+    private static final String STATE_TIME = "time";
+    private static final String STATE_AUTHOR_ID = "author_id";
+    private static final String STATE_TYPE = "type";
+    private static final String STATE_PENDING = "pending";
 
     public static final int MESSAGE_FROM_USER = 0;
     public static final int MESSAGE_FROM_TEACHER = 1;

@@ -8,9 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nexion.tchatroom.api.APIRequester;
-
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;

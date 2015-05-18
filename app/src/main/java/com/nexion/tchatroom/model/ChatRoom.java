@@ -1,12 +1,19 @@
 package com.nexion.tchatroom.model;
 
+import android.os.Bundle;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Object which represetn a chat room
  */
-public class ChatRoom extends Room {
+public class ChatRoom extends Room implements Serializable {
+
+    private static final String STATE_MESSAGES = "messages";
+    private static final String STATE_USERS = "users";
+
     private final Map<Integer, User> userMap;
     private List<NexionMessage> messages;
 

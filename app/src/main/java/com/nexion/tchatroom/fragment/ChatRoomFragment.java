@@ -228,7 +228,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     @Subscribe
     public void onUserLeft(LeaveReceivedEvent event) {
         User user = mChatRoom.getUser(event.getUserId());
-        if(user == null) {
+        if (user == null) {
             return;
         }
 
@@ -242,7 +242,7 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
     public void onUserKicked(KickReceivedEvent event) {
         int userId = event.getUserId();
         User user = mChatRoom.getUser(userId);
-        if(user == null) {
+        if (user == null) {
             return;
         }
 

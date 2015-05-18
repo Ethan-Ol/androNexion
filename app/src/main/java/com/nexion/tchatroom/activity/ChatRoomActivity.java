@@ -30,6 +30,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     private final static String CHAT_ROOM_FRAGMENT_TAG = "ChatRoom";
     private final static String KICK_FRAGMENT_TAG = "Kick";
     private final static String EXTRA_ROOM_ID = "room_id";
+    private final static String STATE_CHAT_ROOM = "chat_room_saved_state";
     public final static int RESULT_LOG_OUT = 1500;
     public final static int RESULT_LEAVE_ROOM = 1501;
 
@@ -53,7 +54,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
 
         apiRequester = new APIRequester(getApplicationContext());
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             if (!getIntent().hasExtra(EXTRA_ROOM_ID)) {
                 finish();
             }
@@ -65,6 +66,8 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else {
+            mChatRoom = (ChatRoom) savedInstanceState.getSerializable(STATE_CHAT_ROOM);
         }
     }
 
@@ -143,7 +146,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     @Override
     public void onErrorResponse(VolleyError error) {
         Integer statusCode = ErrorHandler.getStatusCode(error);
-        if(statusCode == null)
+        if (statusCode == null)
             return;
 
         switch (statusCode) {
@@ -183,5 +186,11 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
         }
 
         onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(STATE_CHAT_ROOM, mChatRoom);
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

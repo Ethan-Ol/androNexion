@@ -1,6 +1,15 @@
 package com.nexion.tchatroom.model;
 
-public class User extends AbstractEntity {
+import android.os.Bundle;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class User extends AbstractEntity implements Serializable {
+
+    private static final String STATE_PSEUDO = "pseudo";
+    private static final String STATE_ACL = "acl";
+    private static final String STATE_IN_ROOM = "in_room";
 
     public static final int ACL_TEACHER = 1;
     public static final int ACL_STUDENT = 0;
@@ -32,5 +41,15 @@ public class User extends AbstractEntity {
 
     public boolean isInRoom() {
         return inRoom;
+    }
+
+    public Bundle save() {
+        Bundle savedState = new Bundle();
+
+        savedState.putString(STATE_PSEUDO, pseudo);
+        savedState.putInt(STATE_ACL, acl);
+        savedState.putBoolean(STATE_IN_ROOM, inRoom);
+
+        return savedState;
     }
 }
