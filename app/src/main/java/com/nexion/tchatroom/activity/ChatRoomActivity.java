@@ -50,16 +50,19 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
         mLoaderPb = (ProgressBar) findViewById(R.id.progressBar);
 
         apiRequester = new APIRequester(getApplicationContext());
-        if (!getIntent().hasExtra(EXTRA_ROOM_ID)) {
-            finish();
-        }
 
-        int roomId = getIntent().getIntExtra(EXTRA_ROOM_ID, 0);
-        try {
-            mLoaderPb.setVisibility(View.VISIBLE);
-            apiRequester.joinRoom(roomId, "", this);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(savedInstanceState == null) {
+            if (!getIntent().hasExtra(EXTRA_ROOM_ID)) {
+                finish();
+            }
+
+            int roomId = getIntent().getIntExtra(EXTRA_ROOM_ID, 0);
+            try {
+                mLoaderPb.setVisibility(View.VISIBLE);
+                apiRequester.joinRoom(roomId, "", this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -84,6 +87,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, KickFragment.newInstance(), KICK_FRAGMENT_TAG)
+                    .addToBackStack(null)
                     .commit();
         }
     }
@@ -102,17 +106,6 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
     public void onRoomUnavailable() {
         startActivity(new Intent(getApplicationContext(), WaitingRoomActivity.class));
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        try {
-            apiRequester.leaveRoom();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        super.onBackPressed();
     }
 
     @Override
@@ -181,8 +174,18 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             getSupportFragmentManager()
                     .beginTransaction()
                     .remove(fragment)
-                    .addToBackStack(null)
                     .commit();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        try {
+            apiRequester.leaveRoom();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
