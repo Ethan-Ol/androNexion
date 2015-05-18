@@ -169,13 +169,7 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             }
         }
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(KICK_FRAGMENT_TAG);
-        if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(fragment)
-                    .commit();
-        }
+        onBackPressed();
     }
 
     @Override

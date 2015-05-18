@@ -77,7 +77,6 @@ public class KickFragment extends Fragment implements KickAdapter.KickFragmentLi
     @OnClick(R.id.validBtn)
     void onValidKick() {
         mListener.onKick(userSelected);
-
     }
 
     @Override
