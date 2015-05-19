@@ -54,7 +54,11 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
 
         apiRequester = new APIRequester(getApplicationContext());
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState != null) {
+            mChatRoom = (ChatRoom) savedInstanceState.getSerializable(STATE_CHAT_ROOM);
+        }
+
+        if (mChatRoom == null) {
             if (!getIntent().hasExtra(EXTRA_ROOM_ID)) {
                 finish();
             }
@@ -66,8 +70,6 @@ public class ChatRoomActivity extends BaseActivity implements ChatRoomFragment.O
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else {
-            mChatRoom = (ChatRoom) savedInstanceState.getSerializable(STATE_CHAT_ROOM);
         }
     }
 
