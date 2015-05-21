@@ -35,6 +35,9 @@ public class ScanService extends IntentService {
         App app = (App) getApplication();
         app.inject(this);
         mBeaconOrganizer = app.getBeaconOrganizer();
+        if(mBeaconOrganizer == null) {
+            return;
+        }
 
         if (intent != null) {
             final String action = intent.getAction();

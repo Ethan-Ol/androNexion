@@ -202,6 +202,9 @@ public class BeaconOrganizer implements BeaconConsumer, APIRequester.BeaconsRoom
     @Override
     public void onBeaconsRoomInfoReceived(List<BeaconRoom> rooms) {
         this.mRooms = rooms;
+        stop();
+        start();
+        Log.i(TAG," rooms : " + rooms);
     }
 
     @Override

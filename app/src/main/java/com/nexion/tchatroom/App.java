@@ -36,12 +36,14 @@ public class App extends Application {
         objectGraph = ObjectGraph.create(new AppModule());
         objectGraph.inject(this);
         objectGraph.injectStatics();
-
-        mBeaconOrganizer = new BeaconOrganizer(this);
     }
 
     public void inject(Object object) {
         objectGraph.inject(object);
+    }
+
+    public void setBeaconOrganizer(BeaconOrganizer beaconOrganizer) {
+        mBeaconOrganizer = beaconOrganizer;
     }
 
     public BeaconOrganizer getBeaconOrganizer() {

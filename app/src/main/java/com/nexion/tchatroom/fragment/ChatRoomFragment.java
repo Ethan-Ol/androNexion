@@ -257,6 +257,11 @@ public class ChatRoomFragment extends Fragment implements KeyFields {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     public interface OnFragmentInteractionListener {
 
         ChatRoom fragmentCreated();

@@ -45,7 +45,12 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
             finish();
         }
 
-        beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
+        if(savedInstanceState == null) {
+            beaconOrganizer = new BeaconOrganizer(this);
+            ((App) getApplication()).setBeaconOrganizer(new BeaconOrganizer(this));
+        } else {
+            beaconOrganizer = ((App) getApplication()).getBeaconOrganizer();
+        }
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(WAITING_ROOM_FRAGMENT_TAG);
         if (fragment == null) {
@@ -82,6 +87,7 @@ public class WaitingRoomActivity extends BaseActivity implements WaitingRoomFrag
     public void onStop() {
         super.onStop();
         BeaconOrganizer.detachListener(this);
+        beaconOrganizer.stop();
     }
 
     @Override
